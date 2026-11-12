@@ -1,0 +1,115 @@
+name: Render long-form video
+
+# Free compute: GitHub-hosted ubuntu runners (4 vCPU). Public repos = unlimited minutes.
+# Each matrix job renders one equal slice of the film; the last job concatenates and muxes the audio.
+#
+# The film is a pure function of time, so slice boundaries do not need to fall on cuts.
+
+on:
+  workflow_dispatch:
+    inputs:
+      preset:
+        description: "draft = fast/low quality preview, final = delivery"
+        type: choice
+        options: [final, draft]
+        default: final
+
+permissions:
+  contents: read
+
+env:
+  SEGMENTS: 8
+
+jobs:
+  # Fast fail: boots headless Chrome and draws the whole timeline before spending render minutes.
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: longform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - id: chrome
+        uses: browser-actions/setup-chrome@v1
+      - name: Timeline check
+        env:
+          CHROME: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tools/capture.mjs check
+
+  render:
+    needs: check
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        segment: [0, 1, 2, 3, 4, 5, 6, 7]
+    defaults:
+      run:
+        working-directory: longform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - id: chrome
+        uses: browser-actions/setup-chrome@v1
+      - name: Render segment ${{ matrix.segment }}
+        env:
+          CHROME: ${{ steps.chrome.outputs.chrome-path }}
+        run: >
+          node tools/capture.mjs video renders/seg_${{ matrix.segment }}.mp4
+          --segment=${{ matrix.segment }}/${{ env.SEGMENTS }}
+          --long --noaudio
+          ${{ inputs.preset == 'draft' && '--draft' || '' }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: seg-${{ matrix.segment }}
+          path: longform/renders/seg_${{ matrix.segment }}.mp4
+          retention-days: 3
+          if-no-files-found: error
+
+  finish:
+    needs: render
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: segs
+          pattern: seg-*
+          merge-multiple: true
+
+      - name: Concatenate segments
+        run: |
+          set -euo pipefail
+          cd segs
+          : > list.txt
+          for i in $(seq 0 $((SEGMENTS - 1))); do echo "file 'seg_$i.mp4'" >> list.txt; done
+          ffmpeg -v error -y -f concat -safe 0 -i list.txt -c copy ../video_only.mp4
+
+      - name: Mux the full soundtrack
+        run: |
+          set -euo pipefail
+          ffmpeg -v error -y \
+            -i video_only.mp4 -i longform/data/mix.wav \
+            -map 0:v -map 1:a \
+            -c:v copy -c:a aac -b:a 192k -shortest -movflags +faststart \
+            longform/renders/final.mp4
+
+      - name: Verify duration
+        run: |
+          set -euo pipefail
+          WANT=$(node -p "require('./longform/data/lines.json').duration")
+          GOT=$(ffprobe -v error -show_entries format=duration -of csv=p=0 longform/renders/final.mp4)
+          echo "expected ${WANT}s, got ${GOT}s"
+          node -e "const [a,b]=[${WANT},${GOT}]; if (Math.abs(a-b) > 0.25) { console.error('duration drift'); process.exit(1) }"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: final-video
+          path: longform/renders/final.mp4
+          retention-days: 7

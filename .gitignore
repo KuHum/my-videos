@@ -1,0 +1,5 @@
+# renders and QA frames are build output
+longform/renders/*
+longform/review/*
+!longform/renders/.gitkeep
+!longform/review/.gitkeep

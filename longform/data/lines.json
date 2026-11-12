@@ -1,0 +1,37 @@
+{
+ "duration": 17.527,
+ "voice": "en-US-ChristopherNeural",
+ "speed": 1.0,
+ "lines": [
+  {
+   "i": 0,
+   "text": "On October first, the government ran out of money.",
+   "start": 0.396,
+   "end": 3.384
+  },
+  {
+   "i": 1,
+   "text": "Not all of it. Just the parts Congress hadn't funded.",
+   "start": 3.589,
+   "end": 7.376
+  },
+  {
+   "i": 2,
+   "text": "So hundreds of thousands of federal workers were sent home.",
+   "start": 7.604,
+   "end": 10.654
+  },
+  {
+   "i": 3,
+   "text": "Or told to keep working, for no pay.",
+   "start": 10.905,
+   "end": 13.28
+  },
+  {
+   "i": 4,
+   "text": "And every day it lasted, the bill grew.",
+   "start": 13.539,
+   "end": 15.989
+  }
+ ]
+}

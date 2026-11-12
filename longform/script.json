@@ -1,0 +1,21 @@
+{
+  "title": "Government Shutdown: Explained — opening chapter",
+  "voice": "en-US-ChristopherNeural",
+  "speed": 1.0,
+  "lead": 0.5,
+  "outro": 1.2,
+  "gap": 0.3,
+  "music": "bed",
+  "sources": [
+    "Congressional Research Service, 'Shutdown of the Federal Government: Causes, Processes, and Effects' (RL34680): appropriations lapse at the start of the fiscal year on October 1 without enacted funding",
+    "US Office of Personnel Management guidance on furloughs and excepted (essential) employees during a lapse in appropriations",
+    "AP and Reuters reporting on federal shutdowns: hundreds of thousands of employees furloughed, others required to work without pay until funding is restored"
+  ],
+  "lines": [
+    { "text": "On October first, the government ran out of money.", "caps": "On *October first, | the government | ran out of *money." },
+    { "text": "Not all of it. Just the parts Congress hadn't funded.", "caps": "Not *all of it. | Just the parts | Congress *hadn't funded." },
+    { "text": "So hundreds of thousands of federal workers were sent home.", "caps": "*Hundreds of thousands | of federal workers | were sent *home." },
+    { "text": "Or told to keep working, for no pay.", "caps": "Or told to | keep *working, | for *no pay." },
+    { "text": "And every day it lasted, the bill grew.", "caps": "Every *day it lasted, | the bill *grew." }
+  ]
+}

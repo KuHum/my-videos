@@ -1,6 +1,6 @@
 // Paper Atlas: the COMPONENT ZOO. History told with paper cut-outs on aged parchment: every shape is cut paper
 // (light edge + soft drop shadow), maps are stylized, routes are crimson, dates ride on gold ribbons.
-import { ctx, W, H, TAU, lerp, clamp, rnd, rr, circle, ell, line } from './lib.js';
+import { ctx, setCtx, W, H, TAU, lerp, clamp, rnd, rr, circle, ell, line } from './lib.js';
 
 export const P = {
   parch: '#E9DCBC', parchDark: '#D6C39B', ink: '#3E2C1E', sepia: '#8A6A48', crimson: '#A8322D', gold: '#C8952F',
@@ -8,12 +8,14 @@ export const P = {
   royal: '#3D5A80', green: '#4F6D4A', wine: '#7A2E3A', stone: '#B9A98C', stoneDark: '#9C8C70', sky: '#E7D7AE',
 };
 const SERIF = 'Caladea';
+const _cardCache = new Map();
 
 // ═════════════════════════ CUT PAPER ═════════════════════════
 /** draw a path as a piece of cut paper: soft shadow, light paper edge, then the fill. path() builds the path. */
 export function cut(path, fill, { shadow = 1, edge = 6 } = {}) {
   ctx.save();
-  if (shadow) { ctx.shadowColor = 'rgba(70,45,20,0.35)'; ctx.shadowBlur = 14 * shadow; ctx.shadowOffsetX = 6 * shadow; ctx.shadowOffsetY = 9 * shadow; path(); ctx.fillStyle = fill; ctx.fill(); }
+  // a hard offset shadow instead of shadowBlur: blur is the most expensive Canvas2D op by far.
+  if (shadow) { ctx.save(); ctx.translate(6 * shadow, 9 * shadow); path(); ctx.fillStyle = 'rgba(70,45,20,0.22)'; ctx.fill(); ctx.restore(); }
   ctx.restore();
   if (edge) { path(); ctx.strokeStyle = P.edge; ctx.lineWidth = edge; ctx.lineJoin = 'round'; ctx.stroke(); }
   path(); ctx.fillStyle = fill; ctx.fill();
@@ -23,7 +25,19 @@ export const P_circ = (x, y, r) => () => { ctx.beginPath(); ctx.arc(x, y, r, 0, 
 export const P_poly = (pts) => () => { ctx.beginPath(); pts.forEach((p, i) => (i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]))); ctx.closePath(); };
 
 /** aged parchment page: base, blotches, fibres, darker edges */
+const _parchCache = new Map();
 export function parchment(seed = 0) {
+  // cached: the paper texture is static per seed, and painting it every frame is the single biggest cost.
+  const key = 'p' + seed;
+  let c = _parchCache.get(key);
+  if (!c) {
+    c = document.createElement('canvas'); c.width = W; c.height = H;
+    const prev = ctx; setCtx(c.getContext('2d')); _parchment(seed); setCtx(prev);
+    _parchCache.set(key, c);
+  }
+  ctx.drawImage(c, 0, 0);
+}
+function _parchment(seed) {
   ctx.fillStyle = P.parch; ctx.fillRect(-300, -300, W + 600, H + 600);
   for (let i = 0; i < 14; i++) { const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 1); ctx.save(); ctx.translate(rnd(i + seed) * W, rnd(i + 30 + seed) * H); ctx.scale(160 + rnd(i + 5) * 260, 120 + rnd(i + 9) * 200); g.addColorStop(0, 'rgba(160,120,70,0.13)'); g.addColorStop(1, 'rgba(160,120,70,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, 1, 0, TAU); ctx.fill(); ctx.restore(); }
   ctx.strokeStyle = 'rgba(120,90,50,0.08)'; ctx.lineWidth = 2; for (let i = 0; i < 160; i++) { const x = rnd(i * 2 + seed) * W, y = rnd(i * 3 + seed) * H; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + 30 + rnd(i) * 60, y + (rnd(i + 1) - 0.5) * 10); ctx.stroke(); }
@@ -150,14 +164,25 @@ export function photoCard(img, x, y, w, o = {}) {
   const crop = o.crop || { x: 0, y: 0, w: 1, h: 1 };
   const sw = img.width * crop.w, sh = img.height * crop.h;
   const h = o.h ?? w * sh / sw;
+  // render the matted card once, then just blit + rotate it
+  const key = img.src + '|' + crop.x + ',' + crop.y + ',' + crop.w + ',' + crop.h + '|' + Math.round(w) + '|' + Math.round(h) + '|' + mat;
+  let card = _cardCache.get(key);
+  if (!card) {
+    card = document.createElement('canvas');
+    card.width = Math.ceil(w + mat * 2); card.height = Math.ceil(h + mat * 2);
+    const prev = ctx; setCtx(card.getContext('2d'));
+    ctx.translate(card.width / 2, card.height / 2);
+    cut(P_rr(-w / 2 - mat, -h / 2 - mat, w + mat * 2, h + mat * 2, 3), '#F1E7CF', { shadow: 1, edge: 0 });
+    ctx.save();
+    ctx.beginPath(); ctx.rect(-w / 2, -h / 2, w, h); ctx.clip();
+    ctx.drawImage(img, img.width * crop.x, img.height * crop.y, sw, sh, -w / 2, -h / 2, w, h);
+    ctx.strokeStyle = 'rgba(62,44,30,0.32)'; ctx.lineWidth = 2; ctx.strokeRect(-w / 2, -h / 2, w, h);
+    ctx.restore();
+    setCtx(prev);
+    _cardCache.set(key, card);
+  }
   ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
-  cut(P_rr(-w / 2 - mat, -h / 2 - mat, w + mat * 2, h + mat * 2, 3), '#F1E7CF', { shadow: 1, edge: 0 });
-  ctx.save();
-  ctx.beginPath(); ctx.rect(-w / 2, -h / 2, w, h); ctx.clip();
-  // the sepia grade is baked into assets/photos/sepia at build time (a live ctx.filter costs ~10x per frame)
-  ctx.drawImage(img, img.width * crop.x, img.height * crop.y, sw, sh, -w / 2, -h / 2, w, h);
-  ctx.strokeStyle = 'rgba(62,44,30,0.32)'; ctx.lineWidth = 2; ctx.strokeRect(-w / 2, -h / 2, w, h);
-  ctx.restore();
+  ctx.drawImage(card, -card.width / 2, -card.height / 2);
   ctx.restore();
   return { w: w + mat * 2, h: h + mat * 2 };
 }

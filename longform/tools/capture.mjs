@@ -25,6 +25,8 @@ const CHROME = [process.env.CHROME, '/Applications/Google Chrome.app/Contents/Ma
   'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe'].find((p) => p && fs.existsSync(p));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const args = process.argv.slice(2), flags = new Set(args.filter((a) => a.startsWith('--')));
+// --720 renders the canvas at 1280x720 and upscales to 1080p in ffmpeg: the JPEG encode is ~5x cheaper
+if (flags.has('--720')) process.env.SCALE = '0.6667';
 const [mode, ...rest] = args.filter((a) => !a.startsWith('--'));
 
 const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json', '.otf': 'font/otf',
@@ -55,7 +57,7 @@ async function openPage(port) {
   let dbg;
   for (let i = 0; i < 200 && !dbg; i++) { try { dbg = fs.readFileSync(path.join(prof, 'DevToolsActivePort'), 'utf8').split('\n')[0].trim(); } catch { await sleep(100); } }
   if (!dbg) throw new Error('Chrome did not start (' + CHROME + ')\n' + chromeErr.trim());
-  const r = await fetch(`http://127.0.0.1:${dbg}/json/new?${encodeURIComponent(`http://127.0.0.1:${port}/index.html?capture=1${process.env.QS || ''}`)}`, { method: 'PUT' });
+  const r = await fetch(`http://127.0.0.1:${dbg}/json/new?${encodeURIComponent(`http://127.0.0.1:${port}/index.html?capture=1${process.env.QS || ''}${process.env.SCALE ? '&scale=' + process.env.SCALE : ''}`)}`, { method: 'PUT' });
   const target = await r.json();
   const ws = new WebSocket(target.webSocketDebuggerUrl);
   await new Promise((res, rej) => { ws.onopen = res; ws.onerror = rej; });
@@ -124,6 +126,7 @@ else {
       const ffArgs = ['-v', 'error', '-y', '-f', 'image2pipe', '-framerate', String(FPS), '-i', '-'];
       if (!noAudio) ffArgs.push(...(hasMix ? ['-ss', String(a0), '-t', String(a1 - a0), '-i', mix] : ['-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=stereo']), '-map', '0:v', '-map', '1:a');
       ffArgs.push('-c:v', 'libx264', '-preset', flags.has('--draft') ? 'ultrafast' : 'veryfast', '-crf', flags.has('--draft') ? '28' : '18', '-pix_fmt', 'yuv420p');
+      if ((+(process.env.SCALE || 1)) < 1) ffArgs.push('-vf', 'scale=1920:1080:flags=lanczos');
       if (!noAudio) ffArgs.push('-c:a', 'aac', '-b:a', '192k', '-shortest');
       ffArgs.push('-movflags', '+faststart', out);
       const ff = spawn('ffmpeg', ffArgs, { stdio: ['pipe', 'inherit', 'inherit'] });
@@ -132,14 +135,15 @@ else {
       ff.on('close', (code) => { if (code) console.error(`\nffmpeg exited ${code}${ffErr ? ': ' + ffErr : ''}`); });
       const t0 = Date.now();
       const long = flags.has('--long');
-      let prevFp = null, lastBuf = null, held = 0, uniq = 0;
+      let lastBuf = null, held = 0, uniq = 0;
       for (let i = 0; i < n; i++) {
         const t = a0 + i / FPS;
         let b;
         if (long) {
-          const fp = await P.ev(`OP.fingerprint(${t})`);
-          if (fp === prevFp && lastBuf) { b = lastBuf; held++; }
-          else { b = jpg(await P.ev(FRAME(t, flags.has('--draft') ? 0.8 : 0.93))); prevFp = fp; lastBuf = b; uniq++; }
+          const d = await P.ev(`OP.captureFrame(${t}, ${flags.has('--draft') ? 0.8 : 0.93})`);
+          if (d) { b = jpg(d); lastBuf = b; uniq++; }
+          else if (lastBuf) { b = lastBuf; held++; }
+          else { b = jpg(await P.ev(FRAME(t, 0.93))); lastBuf = b; uniq++; }
         } else {
           b = jpg(await P.ev(FRAME(t, flags.has('--draft') ? 0.8 : 0.93)));
         }
@@ -150,6 +154,11 @@ else {
       if (ff.exitCode) process.exitCode = 1;
       const stat = long ? `, ${uniq} unique / ${held} held (${Math.round(100 * uniq / Math.max(1, n))}% captured)` : '';
       console.log(`\r${out} (${n} frames, ${noAudio ? 'VIDEO ONLY (--noaudio)' : hasMix ? 'with data/mix.wav' : 'SILENT: no data/mix.wav'}${stat}, ${((Date.now() - t0) / 1000).toFixed(0)} s)`);
-    } else console.log('modes: check · cues · sheet · frames · video · preview');
+    } else if (mode === 'bench') {
+      const n = +(rest[0] || 20);
+      const r = await P.ev(`(() => { const t0=performance.now(); for(let i=0;i<${n};i++) OP.draw(50+i*0.04); const t1=performance.now(); for(let i=0;i<${n};i++) OP.frame(50+i*0.04, 0.93); const t2=performance.now(); return { drawMs:+((t1-t0)/${n}).toFixed(1), frameMs:+((t2-t1)/${n}).toFixed(1) }; })()`);
+      const q = await P.ev(`(() => { OP.draw(60); const out={}; for (const f of [0.5,0.65,0.75,0.85,0.93]) { const t0=performance.now(); for(let i=0;i<10;i++) OP.frame(60+i*0.05, f); out[f]=+((performance.now()-t0)/10).toFixed(0); } return out; })()`);
+      console.log(JSON.stringify(r), 'quality_ms', JSON.stringify(q));
+    } else console.log('modes: check · cues · sheet · frames · video · preview · bench');
   } finally { P.close(); srv.close(); }
 }

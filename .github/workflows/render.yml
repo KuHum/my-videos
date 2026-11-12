@@ -76,7 +76,7 @@ jobs:
         run: >
           node tools/capture.mjs video renders/seg_${{ matrix.segment }}.mp4
           --segment=${{ matrix.segment }}/8
-          --long --noaudio
+          --long --noaudio --720
           ${{ inputs.preset == 'draft' && '--draft' || '' }}
       - uses: actions/upload-artifact@v4
         with:

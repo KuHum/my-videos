@@ -7,12 +7,15 @@ import { buildShots } from './shots.js';
 import { loadPhotos } from './core/photos.js';
 
 const cv = document.getElementById('cv');
+// optional reduced-resolution rendering (faster on CPU-only machines); the film is still composed at 1920x1080
+const SCALE = Math.max(0.35, Math.min(1, +(new URLSearchParams(location.search).get('scale') || 1)));
+if (SCALE !== 1) { cv.width = Math.round(W * SCALE); cv.height = Math.round(H * SCALE); }
 setCtx(cv.getContext('2d'));
 const OP = (window.OP = { ready: false });
 
 function draw(t) {
   t = clamp(t, 0, T.dur - 1e-4);
-  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.letterSpacing = '0px';
+  ctx.setTransform(SCALE, 0, 0, SCALE, 0, 0); ctx.globalAlpha = 1; ctx.letterSpacing = '0px';
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
   const S = OP._shots; let i = S.length - 1; while (i > 0 && S[i].at > t) i--;
   const sh = S[i], end = i < S.length - 1 ? S[i + 1].at : T.dur, d = end - sh.at, lt = t - sh.at;
@@ -52,13 +55,24 @@ function draw(t) {
     // picture is genuinely unchanged, so the encoder can hold the last frame instead of re-capturing it.
     const fcv = document.createElement('canvas'); fcv.width = 96; fcv.height = 54;
     const fctx = fcv.getContext('2d', { willReadFrequently: true });
-    OP.fingerprint = (t) => {
-      draw(t); fctx.drawImage(cv, 0, 0, 96, 54);
+    const hashFrame = () => {
+      fctx.drawImage(cv, 0, 0, 96, 54);
       const d = fctx.getImageData(0, 0, 96, 54).data;
       let h = 2166136261;
       for (let i = 0; i < d.length; i += 4) { h ^= d[i] * 3 + d[i + 1] * 5 + d[i + 2] * 7; h = Math.imul(h, 16777619); }
       return (h >>> 0).toString(36);
     };
+    let lastFp = null;
+    OP.fingerprint = (t) => { draw(t); return hashFrame(); };
+    // long-form: draw ONCE per frame; return null when the picture is identical to the previous frame
+    OP.captureFrame = (t, q = 0.93) => {
+      draw(t);
+      const fp = hashFrame();
+      if (fp === lastFp) return null;
+      lastFp = fp;
+      return cv.toDataURL('image/jpeg', q);
+    };
+    OP.resetHold = () => { lastFp = null; };
     OP.shots = () => shots.map((s, i) => ({ id: s.id, at: +s.at.toFixed(3), end: +(i < shots.length - 1 ? shots[i + 1].at : T.dur).toFixed(3), note: s.note || '' }));
     OP.captions = () => captionList().map((c) => ({ s: +c.s.toFixed(3), e: +c.e.toFixed(3), text: c.words.map((w) => (w.hi ? '*' : '') + w.txt).join(' ') }));
     OP.cues = () => cues.slice().sort((a, b) => a.t - b.t);

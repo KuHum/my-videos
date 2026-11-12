@@ -57,6 +57,28 @@ node tools/capture.mjs frames review/f "2.0,12.0"
 node tools/capture.mjs video renders/out.mp4 --long
 ```
 
+
+## Fast iteration loop (use this)
+
+1. **Budget first** — `node tools/budget.mjs 10` in `longform/`. It prints the word count, the estimated
+   runtime and how many words to add or cut. Do this *before* synthesising, so you never voice a script
+   that comes out at the wrong length.
+2. **Check the shots** — `node tools/capture.mjs check`. Draws the whole timeline; throws on any bad shot.
+3. **Render an excerpt, not the film** — a 30 s slice costs ~30 s:
+   `node tools/capture.mjs video renders/draft.mp4 120 150 --long --720 --draft`
+4. **Look at it** — `node tools/capture.mjs sheet review/all.jpg 2 6`.
+5. **Only now push a tag.** CI renders the whole film in ~7 minutes.
+
+Do not push a tag to test a pipeline change: the CI smoke test (a 1-second render) covers that in ~15 s.
+
+## When CI fails
+
+```bash
+gh run view --log-failed
+```
+
+Read the real error before changing anything. Guessing at CI errors without logs cost hours the first time.
+
 ## Cloud render
 
 Push the repo to GitHub, then **Actions → Render long-form video → Run workflow**.

@@ -150,7 +150,9 @@ else {
         if (!noAudio) ffArgs.push('-c:a', 'aac', '-b:a', '192k', '-shortest');
         ffArgs.push('-movflags', '+faststart', out);
         const r = spawnSync('ffmpeg', ffArgs, { stdio: ['ignore', 'inherit', 'inherit'] });
-        if (r.status) { console.error('ffmpeg failed: ' + (r.stderr || '')); process.exitCode = 1; }
+        if (r.error) { console.error('ffmpeg could not start: ' + r.error.message); process.exitCode = 1; throw r.error; }
+        if (r.status) { console.error('ffmpeg failed with exit ' + r.status); process.exitCode = 1; throw new Error('ffmpeg exit ' + r.status); }
+        if (!fs.existsSync(out) || fs.statSync(out).size < 1000) { console.error('encoder produced no file: ' + out); process.exitCode = 1; throw new Error('no output file'); }
       } finally {
         fs.rmSync(frameDir, { recursive: true, force: true });
       }

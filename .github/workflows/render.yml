@@ -24,7 +24,13 @@ jobs:
       - id: chrome
         uses: browser-actions/setup-chrome@v1
       - name: Ensure ffmpeg
-        run: ffmpeg -version | head -1 || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          ffmpeg -version | head -1
+          command -v ffmpeg
 
       - name: Render all eight segments
         env:

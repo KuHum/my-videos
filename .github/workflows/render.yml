@@ -19,7 +19,7 @@ on:
       - "render-*"
 
 permissions:
-  contents: read
+  contents: write
 
 env:
   SEGMENTS: 8
@@ -49,8 +49,34 @@ jobs:
           CHROME: ${{ steps.chrome.outputs.chrome-path }}
         run: node tools/capture.mjs check
 
-  render:
+  probe:
     needs: check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: longform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - id: chrome
+        uses: browser-actions/setup-chrome@v1
+      - name: Benchmark canvas + encode on the runner
+        env:
+          CHROME: ${{ steps.chrome.outputs.chrome-path }}
+        run: SCALE=0.6667 node tools/capture.mjs bench 8 | tee bench.txt
+      - name: Publish benchmark
+        if: always()
+        run: |
+          git config user.name ci
+          git config user.email ci@local
+          git add -f bench.txt
+          git commit -m "bench" || true
+          git push -f origin HEAD:refs/heads/log-bench
+
+  render:
+    needs: probe
     runs-on: ubuntu-latest
     timeout-minutes: 90
     strategy:
@@ -73,11 +99,19 @@ jobs:
       - name: Render segment ${{ matrix.segment }}
         env:
           CHROME: ${{ steps.chrome.outputs.chrome-path }}
-        run: >
-          node tools/capture.mjs video renders/seg_${{ matrix.segment }}.mp4
-          --segment=${{ matrix.segment }}/8
-          --long --noaudio --720
-          ${{ inputs.preset == 'draft' && '--draft' || '' }}
+        run: |
+          set -o pipefail
+          timeout 1500 node tools/capture.mjs video renders/seg_${{ matrix.segment }}.mp4 \
+            --segment=${{ matrix.segment }}/8 --long --noaudio --720 \
+            ${{ inputs.preset == 'draft' && '--draft' || '' }} 2>&1 | tee render-${{ matrix.segment }}.log
+      - name: Publish render log
+        if: always()
+        run: |
+          git config user.name ci
+          git config user.email ci@local
+          git add -f render-${{ matrix.segment }}.log
+          git commit -m "log ${{ matrix.segment }}" || true
+          git push -f origin HEAD:refs/heads/log-seg-${{ matrix.segment }}
       - uses: actions/upload-artifact@v4
         with:
           name: seg-${{ matrix.segment }}

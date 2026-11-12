@@ -130,8 +130,9 @@ else {
       if (!noAudio) ffArgs.push('-c:a', 'aac', '-b:a', '192k', '-shortest');
       ffArgs.push('-movflags', '+faststart', out);
       const ff = spawn('ffmpeg', ffArgs, { stdio: ['pipe', 'inherit', 'inherit'] });
-      let ffErr = '';
-      ff.on('error', (e) => { ffErr = String(e.message || e); });
+      let ffErr = '', ffDead = false;
+      ff.on('error', (e) => { ffErr = String(e.message || e); ffDead = true; });
+      ff.on('close', () => { ffDead = true; });
       ff.on('close', (code) => { if (code) console.error(`\nffmpeg exited ${code}${ffErr ? ': ' + ffErr : ''}`); });
       const t0 = Date.now();
       const long = flags.has('--long');
@@ -147,8 +148,11 @@ else {
         } else {
           b = jpg(await P.ev(FRAME(t, flags.has('--draft') ? 0.8 : 0.93)));
         }
-        if (!ff.stdin.write(b)) await new Promise((r) => ff.stdin.once('drain', r));
-        if (i % 150 === 0) process.stdout.write(`\r${i}/${n} frames`);
+        try {
+          if (!ff.stdin.write(b)) await Promise.race([new Promise((r) => ff.stdin.once('drain', r)), new Promise((r) => ff.once('close', r))]);
+        } catch (e) { ffErr = String(e.message || e); ffDead = true; }
+        if (ffDead) { console.error(`\nffmpeg stopped at frame ${i}/${n}${ffErr ? ': ' + ffErr : ''}`); break; }
+        if (i % 25 === 0) console.log(`frame ${i}/${n} (${uniq} captured, ${held} held)`);
       }
       ff.stdin.end(); await new Promise((r) => ff.on('close', r));
       if (ff.exitCode) process.exitCode = 1;

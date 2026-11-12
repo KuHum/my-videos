@@ -16,7 +16,7 @@ the WordBoundary events, so line times are exact to the word. "gap" (on a senten
 pause after that sentence. Write numbers the way they're SAID. words.py is kept only as a pass-through
 / for --audio own recordings; voice.py already writes the word timings.
 """
-import argparse, asyncio, edge_tts, json, os, re, subprocess, sys, tempfile
+import argparse, asyncio, edge_tts, hashlib, json, os, re, subprocess, sys, tempfile
 from difflib import SequenceMatcher
 from pathlib import Path
 import numpy as np
@@ -105,6 +105,23 @@ def align_times(script_words, heard):
     return times
 
 
+CACHE = Path(__file__).resolve().parent.parent / 'data' / 'voice-cache'
+
+
+async def speak_cached(text, voice, rate):
+    """Same synthesis as speak_retry, but memoised per sentence so a DNS blip mid-run
+    costs nothing on the next attempt."""
+    CACHE.mkdir(parents=True, exist_ok=True)
+    k = hashlib.sha1(f'{voice}|{rate}|{text}'.encode()).hexdigest()
+    mp3f, jsonf = CACHE / f'{k}.mp3', CACHE / f'{k}.json'
+    if mp3f.exists() and jsonf.exists():
+        return mp3f.read_bytes(), [tuple(w) for w in json.loads(jsonf.read_text())]
+    mp3, words = await speak_retry(text, voice, rate)
+    mp3f.write_bytes(mp3)
+    jsonf.write_text(json.dumps(words))
+    return mp3, words
+
+
 async def run(P, S, voice, speed):
     # group the lines into whole sentences (a line ending in . ? ! closes one; "break": true forces a close)
     groups, cur = [], []
@@ -115,7 +132,7 @@ async def run(P, S, voice, speed):
     out = [np.zeros(int(float(S.get('lead', 0.4)) * SR))]; t = len(out[0]) / SR
     lines = [None] * len(S['lines']); all_words = []
     for g in groups:
-        mp3, heard = await speak_retry(' '.join(S['lines'][i]['text'] for i in g), voice, rate)
+        mp3, heard = await speak_cached(' '.join(S['lines'][i]['text'] for i in g), voice, rate)
         x, front = trim(mp3_to_float(mp3)); off = front / SR
         n = len(x) / SR
         # map the heard words onto the script tokens (script spelling wins; keep words on their line)

@@ -5,3 +5,4 @@ longform/review/*
 !longform/review/.gitkeep
 longform/data/mix.wav
 agency-inspiration/
+longform/data/voice-cache/

@@ -105,6 +105,19 @@ def align_times(script_words, heard):
     return times
 
 
+# Spoken form only. Captions keep the real spelling (words.json is built from the script tokens).
+PRONOUNCE = {
+    'muteesa': 'Moo-teh-sah',
+    'rubaga': 'Roo-bah-gah',
+    'nalubaale': 'Nah-loo-baa-leh',
+    'bunyoro': 'Boon-yoh-roh',
+}
+
+
+def respell(text):
+    return re.sub(r"[A-Za-z']+", lambda m: PRONOUNCE.get(m.group(0).lower(), m.group(0)), text)
+
+
 CACHE = Path(__file__).resolve().parent.parent / 'data' / 'voice-cache'
 
 
@@ -132,7 +145,7 @@ async def run(P, S, voice, speed):
     out = [np.zeros(int(float(S.get('lead', 0.4)) * SR))]; t = len(out[0]) / SR
     lines = [None] * len(S['lines']); all_words = []
     for g in groups:
-        mp3, heard = await speak_cached(' '.join(S['lines'][i]['text'] for i in g), voice, rate)
+        mp3, heard = await speak_cached(' '.join(respell(S['lines'][i]['text']) for i in g), voice, rate)
         x, front = trim(mp3_to_float(mp3)); off = front / SR
         n = len(x) / SR
         # map the heard words onto the script tokens (script spelling wins; keep words on their line)

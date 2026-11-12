@@ -112,16 +112,21 @@ jobs:
           git add -f render-${{ matrix.segment }}.log
           git commit -m "log ${{ matrix.segment }}" || true
           git push -f origin HEAD:refs/heads/log-seg-${{ matrix.segment }}
-      - name: Publish segment
+      - name: Publish segment URL
         if: always()
         run: |
-          if [ -f renders/seg_${{ matrix.segment }}.mp4 ]; then
-            git config user.name ci
-            git config user.email ci@local
-            git add -f renders/seg_${{ matrix.segment }}.mp4
-            git commit -m "segment ${{ matrix.segment }}" || true
-            git push -f origin HEAD:refs/heads/seg-${{ matrix.segment }}
-          fi
+          set -euo pipefail
+          ls -lh renders >&2 || true
+          URL=$(curl -s -F "reqtype=fileupload" -F "time=72h" \
+            -F "fileToUpload=@renders/seg_${{ matrix.segment }}.mp4" \
+            https://litterbox.catbox.moe/resources/internals/api.php)
+          echo "seg ${{ matrix.segment }}: $URL"
+          printf '%s\n' "$URL" > segurl-${{ matrix.segment }}.txt
+          git config user.name ci
+          git config user.email ci@local
+          git add -f segurl-${{ matrix.segment }}.txt
+          git commit -m "segurl ${{ matrix.segment }}" || true
+          git push -f origin HEAD:refs/heads/segurl-${{ matrix.segment }}
 
   finish:
     needs: render
@@ -132,13 +137,15 @@ jobs:
         run: |
           ffmpeg -version | head -1 || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
 
-      - name: Collect segments from branches
+      - name: Collect segments
         run: |
           set -euo pipefail
           mkdir -p segs
           for i in $(seq 0 7); do
-            git fetch -q --depth 1 origin refs/heads/seg-$i
-            git show FETCH_HEAD:longform/renders/seg_$i.mp4 > segs/seg_$i.mp4
+            git fetch -q --depth 1 origin refs/heads/segurl-$i
+            URL=$(git show FETCH_HEAD:segurl-$i.txt | tr -d '[:space:]')
+            echo "seg $i <- $URL"
+            curl -sL --retry 3 --max-time 300 "$URL" -o segs/seg_$i.mp4
           done
           ls -lh segs
 

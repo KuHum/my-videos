@@ -48,7 +48,7 @@ jobs:
             -c:a aac -b:a 192k -shortest -movflags +faststart \
             renders/final.mp4
           ls -lh renders/final.mp4
-          ffprobe -v error -show_entries format=duration,size -of default=nw=1 renders/final.mp4
+          stat -c 'final bytes: %s' renders/final.mp4
 
       - name: Publish the finished film
         run: |

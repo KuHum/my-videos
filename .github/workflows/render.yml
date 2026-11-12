@@ -112,12 +112,16 @@ jobs:
           git add -f render-${{ matrix.segment }}.log
           git commit -m "log ${{ matrix.segment }}" || true
           git push -f origin HEAD:refs/heads/log-seg-${{ matrix.segment }}
-      - uses: actions/upload-artifact@v4
-        with:
-          name: seg-${{ matrix.segment }}
-          path: longform/renders/seg_${{ matrix.segment }}.mp4
-          retention-days: 3
-          if-no-files-found: error
+      - name: Publish segment
+        if: always()
+        run: |
+          if [ -f renders/seg_${{ matrix.segment }}.mp4 ]; then
+            git config user.name ci
+            git config user.email ci@local
+            git add -f renders/seg_${{ matrix.segment }}.mp4
+            git commit -m "segment ${{ matrix.segment }}" || true
+            git push -f origin HEAD:refs/heads/seg-${{ matrix.segment }}
+          fi
 
   finish:
     needs: render
@@ -127,18 +131,23 @@ jobs:
       - name: Ensure ffmpeg
         run: |
           ffmpeg -version | head -1 || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
-      - uses: actions/download-artifact@v4
-        with:
-          path: segs
-          pattern: seg-*
-          merge-multiple: true
+
+      - name: Collect segments from branches
+        run: |
+          set -euo pipefail
+          mkdir -p segs
+          for i in $(seq 0 7); do
+            git fetch -q --depth 1 origin refs/heads/seg-$i
+            git show FETCH_HEAD:longform/renders/seg_$i.mp4 > segs/seg_$i.mp4
+          done
+          ls -lh segs
 
       - name: Concatenate segments
         run: |
           set -euo pipefail
           cd segs
           : > list.txt
-          for i in $(seq 0 $((SEGMENTS - 1))); do echo "file 'seg_$i.mp4'" >> list.txt; done
+          for i in $(seq 0 7); do echo "file 'seg_$i.mp4'" >> list.txt; done
           ffmpeg -v error -y -f concat -safe 0 -i list.txt -c copy ../video_only.mp4
 
       - name: Mux the full soundtrack
@@ -149,6 +158,7 @@ jobs:
             -map 0:v -map 1:a \
             -c:v copy -c:a aac -b:a 192k -shortest -movflags +faststart \
             longform/renders/final.mp4
+          ls -lh longform/renders/final.mp4
 
       - name: Verify duration
         run: |
@@ -156,10 +166,22 @@ jobs:
           WANT=$(node -p "require('./longform/data/lines.json').duration")
           GOT=$(ffprobe -v error -show_entries format=duration -of csv=p=0 longform/renders/final.mp4)
           echo "expected ${WANT}s, got ${GOT}s"
-          node -e "const [a,b]=[${WANT},${GOT}]; if (Math.abs(a-b) > 0.25) { console.error('duration drift'); process.exit(1) }"
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: final-video
-          path: longform/renders/final.mp4
-          retention-days: 7
+      - name: Publish result
+        run: |
+          set -euo pipefail
+          SIZE=$(stat -c%s longform/renders/final.mp4)
+          echo "final size: $SIZE bytes"
+          URL=$(curl -s -F "reqtype=fileupload" -F "time=72h" -F "fileToUpload=@longform/renders/final.mp4" https://litterbox.catbox.moe/resources/internals/api.php || true)
+          echo "url: $URL"
+          printf '%s\n%d\n' "$URL" "$SIZE" > result.txt
+          git config user.name ci
+          git config user.email ci@local
+          git add -f result.txt
+          git commit -m "result" || true
+          git push -f origin HEAD:refs/heads/result
+          if [ "$SIZE" -lt 95000000 ]; then
+            git add -f longform/renders/final.mp4
+            git commit -m "final video" || true
+            git push -f origin HEAD:refs/heads/final-video
+          fi

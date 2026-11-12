@@ -1,19 +1,7 @@
 name: Render long-form video
 
-# Free compute: GitHub-hosted ubuntu runners (4 vCPU). Public repos = unlimited minutes.
-# Each matrix job renders one equal slice of the film; the last job concatenates and muxes the audio.
-#
-# The film is a pure function of time, so slice boundaries do not need to fall on cuts.
-
 on:
   workflow_dispatch:
-    inputs:
-      preset:
-        description: "draft = fast/low quality preview, final = delivery"
-        type: choice
-        options: [final, draft]
-        default: final
-  # push a tag like `render-ch1-3` to render without needing the API/UI
   push:
     tags:
       - "render-*"
@@ -21,68 +9,10 @@ on:
 permissions:
   contents: write
 
-env:
-  SEGMENTS: 8
-
 jobs:
-  # Fast fail: boots headless Chrome and draws the whole timeline before spending render minutes.
-  check:
+  build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: longform
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - id: chrome
-        uses: browser-actions/setup-chrome@v1
-      - name: Chrome info
-        env:
-          CHROME: ${{ steps.chrome.outputs.chrome-path }}
-        run: |
-          echo "chrome=$CHROME"
-          "$CHROME" --version || true
-      - name: Timeline check
-        env:
-          CHROME: ${{ steps.chrome.outputs.chrome-path }}
-        run: node tools/capture.mjs check
-
-  probe:
-    needs: check
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: longform
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - id: chrome
-        uses: browser-actions/setup-chrome@v1
-      - name: Benchmark canvas + encode on the runner
-        env:
-          CHROME: ${{ steps.chrome.outputs.chrome-path }}
-        run: SCALE=0.6667 node tools/capture.mjs bench 8 | tee bench.txt
-      - name: Publish benchmark
-        if: always()
-        run: |
-          git config user.name ci
-          git config user.email ci@local
-          git add -f bench.txt
-          git commit -m "bench" || true
-          git push -f origin HEAD:refs/heads/log-bench
-
-  render:
-    needs: probe
-    runs-on: ubuntu-latest
-    timeout-minutes: 90
-    strategy:
-      fail-fast: false
-      matrix:
-        segment: [0, 1, 2, 3, 4, 5, 6, 7]
+    timeout-minutes: 60
     defaults:
       run:
         working-directory: longform
@@ -94,101 +24,54 @@ jobs:
       - id: chrome
         uses: browser-actions/setup-chrome@v1
       - name: Ensure ffmpeg
-        run: |
-          ffmpeg -version | head -1 || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
-      - name: Render segment ${{ matrix.segment }}
+        run: ffmpeg -version | head -1 || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
+
+      - name: Render all eight segments
         env:
           CHROME: ${{ steps.chrome.outputs.chrome-path }}
         run: |
-          set -o pipefail
-          timeout 1500 node tools/capture.mjs video renders/seg_${{ matrix.segment }}.mp4 \
-            --segment=${{ matrix.segment }}/8 --long --noaudio --720 \
-            ${{ inputs.preset == 'draft' && '--draft' || '' }} 2>&1 | tee render-${{ matrix.segment }}.log
-      - name: Publish render log
-        if: always()
-        run: |
-          git config user.name ci
-          git config user.email ci@local
-          git add -f render-${{ matrix.segment }}.log
-          git commit -m "log ${{ matrix.segment }}" || true
-          git push -f origin HEAD:refs/heads/log-seg-${{ matrix.segment }}
-      - name: Publish segment URL
-        if: always()
-        run: |
           set -euo pipefail
-          ls -lh renders >&2 || true
-          URL=$(curl -s -F "reqtype=fileupload" -F "time=72h" \
-            -F "fileToUpload=@renders/seg_${{ matrix.segment }}.mp4" \
-            https://litterbox.catbox.moe/resources/internals/api.php)
-          echo "seg ${{ matrix.segment }}: $URL"
-          printf '%s\n' "$URL" > segurl-${{ matrix.segment }}.txt
-          git config user.name ci
-          git config user.email ci@local
-          git add -f segurl-${{ matrix.segment }}.txt
-          git commit -m "segurl ${{ matrix.segment }}" || true
-          git push -f origin HEAD:refs/heads/segurl-${{ matrix.segment }}
-
-  finish:
-    needs: render
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Ensure ffmpeg
-        run: |
-          ffmpeg -version | head -1 || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
-
-      - name: Collect segments
-        run: |
-          set -euo pipefail
-          mkdir -p segs
-          for i in $(seq 0 7); do
-            git fetch -q --depth 1 origin refs/heads/segurl-$i
-            URL=$(git show FETCH_HEAD:segurl-$i.txt | tr -d '[:space:]')
-            echo "seg $i <- $URL"
-            curl -sL --retry 3 --max-time 300 "$URL" -o segs/seg_$i.mp4
+          for i in 0 1 2 3 4 5 6 7; do
+            echo "=== segment $i ==="
+            node tools/capture.mjs video renders/seg_$i.mp4 --segment=$i/8 --long --noaudio --720
           done
-          ls -lh segs
+          ls -lh renders
 
-      - name: Concatenate segments
+      - name: Concatenate
         run: |
           set -euo pipefail
-          cd segs
+          cd renders
           : > list.txt
-          for i in $(seq 0 7); do echo "file 'seg_$i.mp4'" >> list.txt; done
+          for i in 0 1 2 3 4 5 6 7; do echo "file 'seg_$i.mp4'" >> list.txt; done
           ffmpeg -v error -y -f concat -safe 0 -i list.txt -c copy ../video_only.mp4
+          cd ..
+          ls -lh video_only.mp4
 
-      - name: Mux the full soundtrack
+      - name: Mux soundtrack and size the file
         run: |
           set -euo pipefail
           ffmpeg -v error -y \
-            -i video_only.mp4 -i longform/data/mix.m4a \
-            -map 0:v -map 1:a \
-            -c:v copy -c:a aac -b:a 192k -shortest -movflags +faststart \
-            longform/renders/final.mp4
-          ls -lh longform/renders/final.mp4
+            -i video_only.mp4 -i data/mix.m4a \
+            -map 0:v -map 1:a -c:v libx264 -preset veryfast -crf 23 \
+            -c:a aac -b:a 192k -shortest -pix_fmt yuv420p -movflags +faststart \
+            renders/final.mp4
+          ls -lh renders/final.mp4
+          ffprobe -v error -show_entries format=duration,size -of default=nw=1 renders/final.mp4
 
-      - name: Verify duration
+      - name: Publish the finished film
         run: |
           set -euo pipefail
-          WANT=$(node -p "require('./longform/data/lines.json').duration")
-          GOT=$(ffprobe -v error -show_entries format=duration -of csv=p=0 longform/renders/final.mp4)
-          echo "expected ${WANT}s, got ${GOT}s"
-
-      - name: Publish result
-        run: |
-          set -euo pipefail
-          SIZE=$(stat -c%s longform/renders/final.mp4)
-          echo "final size: $SIZE bytes"
-          URL=$(curl -s -F "reqtype=fileupload" -F "time=72h" -F "fileToUpload=@longform/renders/final.mp4" https://litterbox.catbox.moe/resources/internals/api.php || true)
-          echo "url: $URL"
-          printf '%s\n%d\n' "$URL" "$SIZE" > result.txt
+          SIZE=$(stat -c%s renders/final.mp4)
+          echo "size bytes: $SIZE"
+          if [ "$SIZE" -ge 95000000 ]; then
+            echo "too large for git; compressing further"
+            ffmpeg -v error -y -i renders/final.mp4 -c:v libx264 -preset veryfast -crf 28 \
+              -c:a aac -b:a 128k -movflags +faststart renders/final_small.mp4
+            mv renders/final_small.mp4 renders/final.mp4
+            SIZE=$(stat -c%s renders/final.mp4)
+          fi
           git config user.name ci
           git config user.email ci@local
-          git add -f result.txt
-          git commit -m "result" || true
-          git push -f origin HEAD:refs/heads/result
-          if [ "$SIZE" -lt 95000000 ]; then
-            git add -f longform/renders/final.mp4
-            git commit -m "final video" || true
-            git push -f origin HEAD:refs/heads/final-video
-          fi
+          git add -f renders/final.mp4
+          git commit -m "final film ($SIZE bytes)" || true
+          git push -f origin HEAD:refs/heads/final-video

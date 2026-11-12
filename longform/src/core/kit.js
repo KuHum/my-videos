@@ -154,9 +154,8 @@ export function photoCard(img, x, y, w, o = {}) {
   cut(P_rr(-w / 2 - mat, -h / 2 - mat, w + mat * 2, h + mat * 2, 3), '#F1E7CF', { shadow: 1, edge: 0 });
   ctx.save();
   ctx.beginPath(); ctx.rect(-w / 2, -h / 2, w, h); ctx.clip();
-  ctx.filter = `sepia(${sepia}) contrast(1.06) brightness(0.97)`;
+  // the sepia grade is baked into assets/photos/sepia at build time (a live ctx.filter costs ~10x per frame)
   ctx.drawImage(img, img.width * crop.x, img.height * crop.y, sw, sh, -w / 2, -h / 2, w, h);
-  ctx.filter = 'none';
   ctx.strokeStyle = 'rgba(62,44,30,0.32)'; ctx.lineWidth = 2; ctx.strokeRect(-w / 2, -h / 2, w, h);
   ctx.restore();
   ctx.restore();

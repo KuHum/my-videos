@@ -38,6 +38,12 @@ jobs:
           node-version: "22"
       - id: chrome
         uses: browser-actions/setup-chrome@v1
+      - name: Chrome info
+        env:
+          CHROME: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
+          echo "chrome=$CHROME"
+          "$CHROME" --version || true
       - name: Timeline check
         env:
           CHROME: ${{ steps.chrome.outputs.chrome-path }}

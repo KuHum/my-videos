@@ -179,7 +179,7 @@ export function buildShots() {
   } });
   cue(0.1, 'whoosh'); cue(0.45, 'pop', { gain: 0.5 });
 
-  add({ id: 'S06', at: at(12), cam: [960, 470], zoom: 0.05, hold: [2.0, 99], draw(lt, d, t) {
+  add({ id: 'S06', at: at(14), cam: [960, 470], zoom: 0.05, hold: [2.0, 99], draw(lt, d, t) {
     lakePage(6); lake(820, 560, 380, 220, 2.3);
     const p = eo(seg(lt, 0.2, 1.8));
     if (p > 0) {
@@ -192,14 +192,14 @@ export function buildShots() {
   } });
   cue(0.2, 'whoosh'); cue(1.35, 'pop', { gain: 0.6 });
 
-  add({ id: 'S07', at: at(13), cam: [960, 480], zoom: 0.05, hold: [2.6, 99], draw(lt, d, t) {
+  add({ id: 'S07', at: at(15), cam: [960, 480], zoom: 0.05, hold: [2.6, 99], draw(lt, d, t) {
     K.parchment(7);
     const icons = [[400, iconBanana], [760, iconCow], [1120, iconTusk], [1500, (x, y) => { ctx.save(); ctx.translate(x, y); cut(P_rr(-70, -90, 140, 180, 8), '#C9A86A', { shadow: 0.7, edge: 5 }); for (let i = 0; i < 3; i++) line([[-56, -50 + i * 44], [56, -50 + i * 44]], 'rgba(62,44,30,0.3)', 6); ctx.restore(); }]];
     icons.forEach(([x, fn], i) => { const p = eob(seg(lt, 0.1 + i * 0.32, 0.45 + i * 0.32)); if (p > 0) { ctx.save(); ctx.translate(x, 470); ctx.scale(1.55 * p, 1.55 * p); ctx.translate(-x, -470); fn(x, 470); ctx.restore(); } });
   } });
   cue(0.1, 'whoosh'); for (let i = 0; i < 4; i++) cue(0.15 + i * 0.32, 'pop', { gain: 0.4 });
 
-  add({ id: 'S08', at: at(14), cam: [960, 470], zoom: 0.05, hold: [2.8, 99], draw(lt, d, t) {
+  add({ id: 'S08', at: at(16), cam: [960, 470], zoom: 0.05, hold: [2.8, 99], draw(lt, d, t) {
     lakePage(8); lake(620, 520, 300, 190, 3.1);
     const route = [[780, 520], [1050, 470], [1300, 420], [1560, 380], [1780, 350]];
     const p = eo(seg(lt, 0.25, 2.1)); if (p > 0) K.dashedRoute(route, p);
@@ -209,7 +209,7 @@ export function buildShots() {
   } });
   cue(0.2, 'whoosh'); cue(0.35, 'slide', { dur: 1.8, gain: 0.6 }); cue(1.75, 'pop', { gain: 0.6 });
 
-  add({ id: 'S09', at: at(16), cam: [960, 480], zoom: 0.05, hold: [2.8, 99], draw(lt, d, t) {
+  add({ id: 'S09', at: at(18), cam: [960, 480], zoom: 0.05, hold: [2.8, 99], draw(lt, d, t) {
     K.parchment(9);
     const p = eob(seg(lt, 0.15, 0.6));
     if (p > 0) { ctx.save(); ctx.globalAlpha = p; crescent(960, 320, 120 * p + 0.01); ctx.restore(); }
@@ -222,7 +222,7 @@ export function buildShots() {
   cue(0.15, 'whoosh'); cue(0.2, 'pop', { gain: 0.6 }); cue(1.55, 'pop', { gain: 0.5 });
 
   // ── 3 · the threat ──
-  add({ id: 'S10', at: at(19), cam: [960, 470], zoom: 0.05, hold: [2.4, 99], draw(lt, d, t) {
+  add({ id: 'S10', at: at(21), cam: [960, 470], zoom: 0.05, hold: [2.4, 99], draw(lt, d, t) {
     lakePage(10); lake(980, 560, 360, 220, 5.3);
     K.label('BUGANDA', 980, 760, 46);
     const e = eo(seg(lt, 0.15, 1.1));
@@ -233,7 +233,7 @@ export function buildShots() {
   } });
   cue(0.15, 'whoosh'); cue(0.2, 'slide', { dur: 1.4, gain: 0.6 }); cue(0.6, 'slide', { dur: 1.2, gain: 0.5 });
 
-  add({ id: 'S11', at: at(22), cam: [960, 480], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
+  add({ id: 'S11', at: at(24), cam: [960, 480], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
     K.parchment(11);
     K.photoCard(IMG.pictureHistory, 960, 430, 760, { crop: { x: 0.67, y: 0.02, w: 0.33, h: 0.28 }, rot: 0.01, mat: 26 });
     K.ribbon('1862', 1450, 720, eob(seg(lt, 0.9, 1.2)), 70);
@@ -241,14 +241,14 @@ export function buildShots() {
   } });
   cue(0.1, 'whoosh'); cue(0.95, 'pop', { gain: 0.6 });
 
-  add({ id: 'S12', at: at(25), cam: [960, 480], zoom: 0.06, hold: [2.2, 99], draw(lt, d, t) {
+  add({ id: 'S12', at: at(28), cam: [960, 480], zoom: 0.06, hold: [2.2, 99], draw(lt, d, t) {
     K.parchment(12);
     globe(960, 450, 300, eob(seg(lt, 0.1, 0.7)));
     const s = eob(seg(lt, 1.1, 1.4)); if (s > 0) K.slip('THE WORLD WAS GETTING BIGGER', 960, 810, s, -0.01, 38);
   } });
   cue(0.1, 'whoosh'); cue(1.15, 'pop', { gain: 0.6 });
 
-  add({ id: 'S13', at: at(26), cam: [960, 470], zoom: 0.05, hold: [2.4, 99], draw(lt, d, t) {
+  add({ id: 'S13', at: at(29), cam: [960, 470], zoom: 0.05, hold: [2.4, 99], draw(lt, d, t) {
     K.parchment(13);
     cut(P_rr(940, 300, 40, 420, 8), P.sepia, { shadow: 0.8, edge: 5 });
     cut(P_rr(760, 700, 400, 40, 8), P.sepia, { shadow: 0.7, edge: 5 });
@@ -265,7 +265,7 @@ export function buildShots() {
   } });
   cue(0.1, 'whoosh'); cue(0.7, 'tock', { gain: 0.5 }); cue(1.05, 'pop', { gain: 0.5 });
 
-  add({ id: 'S14', at: at(27), cam: [960, 470], zoom: 0.05, hold: [3.0, 99], draw(lt, d, t) {
+  add({ id: 'S14', at: at(30), cam: [960, 470], zoom: 0.05, hold: [3.0, 99], draw(lt, d, t) {
     K.parchment(14);
     K.photoCard(IMG.pictureHistory, 960, 430, 900, { crop: { x: 0.02, y: 0.02, w: 0.55, h: 0.30 }, rot: -0.01, mat: 26 });
     K.ribbon('APRIL 1875', 960, 780, eob(seg(lt, 0.8, 1.15)), 66);
@@ -273,7 +273,7 @@ export function buildShots() {
   cue(0.1, 'whoosh'); cue(0.85, 'pop', { gain: 0.6 });
 
   // ── 4 · Stanley ──
-  add({ id: 'S15', at: at(28), cam: [960, 460], zoom: 0.05, hold: [1.6, 99], draw(lt, d, t) {
+  add({ id: 'S15', at: at(31), cam: [960, 460], zoom: 0.05, hold: [1.6, 99], draw(lt, d, t) {
     K.parchment(15);
     const p = eob(seg(lt, 0.05, 0.5));
     if (p > 0) { ctx.save(); ctx.translate(960, 420); ctx.scale(0.85 + 0.15 * p, 0.85 + 0.15 * p); ctx.translate(-960, -420); K.photoCard(IMG.stanleyPortrait, 960, 420, 420, { rot: -0.01, mat: 26 }); ctx.restore(); }
@@ -281,14 +281,14 @@ export function buildShots() {
   } });
   cue(0.1, 'whoosh'); cue(0.85, 'pop', { gain: 0.6 });
 
-  add({ id: 'S16', at: at(32), cam: [960, 470], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
+  add({ id: 'S16', at: at(35), cam: [960, 470], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
     K.parchment(16);
     iconBook(720, 430, 1.5, true);
     const s = eob(seg(lt, 0.6, 0.95)); if (s > 0) K.slip('HE COULD READ', 1250, 430, s, -0.02, 44);
   } });
   cue(0.1, 'whoosh'); cue(0.65, 'pop', { gain: 0.5 });
 
-  add({ id: 'S17', at: at(34), cam: [960, 470], zoom: 0.05, hold: [2.0, 99], draw(lt, d, t) {
+  add({ id: 'S17', at: at(37), cam: [960, 470], zoom: 0.05, hold: [2.0, 99], draw(lt, d, t) {
     K.parchment(17);
     K.ribbon('VICTORIA', 700, 300, eob(seg(lt, 0.1, 0.45)), 62);
     gear(1200, 420, eob(seg(lt, 0.5, 0.85)));
@@ -296,14 +296,14 @@ export function buildShots() {
   } });
   cue(0.1, 'whoosh'); cue(0.15, 'pop', { gain: 0.5 }); cue(0.55, 'pop', { gain: 0.5 });
 
-  add({ id: 'S18', at: at(36), cam: [960, 480], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
+  add({ id: 'S18', at: at(39), cam: [960, 480], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
     K.parchment(18);
     K.photoCard(IMG.letter, 900, 430, 700, { crop: { x: 0.02, y: 0.0, w: 0.9, h: 1.0 }, rot: 0.015, mat: 24 });
     const s = eob(seg(lt, 0.7, 1.05)); if (s > 0) K.slip('TO QUEEN VICTORIA', 900, 810, s, -0.01, 40);
   } });
   cue(0.1, 'whoosh'); cue(0.75, 'pop', { gain: 0.6 });
 
-  add({ id: 'S19', at: at(38), cam: [960, 470], zoom: 0.05, hold: [2.6, 99], draw(lt, d, t) {
+  add({ id: 'S19', at: at(42), cam: [960, 470], zoom: 0.05, hold: [2.6, 99], draw(lt, d, t) {
     K.parchment(19);
     iconBook(640, 430, 1.2, true);
     gear(1000, 430, 0.85);
@@ -312,7 +312,7 @@ export function buildShots() {
   } });
   cue(0.1, 'whoosh'); for (let i = 0; i < 3; i++) cue(0.55 + i * 0.3, 'pop', { gain: 0.45 });
 
-  add({ id: 'S20', at: at(40), cam: [960, 480], zoom: 0.04, hold: [2.2, 99], draw(lt, d, t) {
+  add({ id: 'S20', at: at(44), cam: [960, 480], zoom: 0.04, hold: [2.2, 99], draw(lt, d, t) {
     K.parchment(20);
     newspaper(960, 430, 1.25 * eob(seg(lt, 0.1, 0.5)), -0.02);
     const s = eob(seg(lt, 1.4, 1.75)); if (s > 0) K.ribbon('15 NOVEMBER 1875', 960, 800, s, 46);
@@ -320,7 +320,7 @@ export function buildShots() {
   cue(0.1, 'whoosh'); cue(1.45, 'pop', { gain: 0.6 });
 
   // ── 5 · the appeal ──
-  add({ id: 'S21', at: at(43), cam: [960, 470], zoom: 0.05, hold: [2.2, 99], draw(lt, d, t) {
+  add({ id: 'S21', at: at(47), cam: [960, 470], zoom: 0.05, hold: [2.2, 99], draw(lt, d, t) {
     K.parchment(21);
     lakePage(21);
     const n = 26, p = eo(seg(lt, 0.2, 2.0));
@@ -329,7 +329,7 @@ export function buildShots() {
   } });
   cue(0.2, 'whoosh'); cue(2.15, 'pop', { gain: 0.5 });
 
-  add({ id: 'S22', at: at(47), cam: [960, 470], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
+  add({ id: 'S22', at: at(51), cam: [960, 470], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
     K.parchment(22);
     coin(880, 470, 80, '£');
     const s = eob(seg(lt, 0.5, 0.85)); if (s > 0) K.ribbon('£5,000', 1180, 470, s, 64);
@@ -337,7 +337,7 @@ export function buildShots() {
   } });
   cue(0.1, 'whoosh'); cue(0.55, 'pop', { gain: 0.6 });
 
-  add({ id: 'S23', at: at(49), cam: [960, 500], zoom: 0.05, hold: [2.0, 99], draw(lt, d, t) {
+  add({ id: 'S23', at: at(54), cam: [960, 500], zoom: 0.05, hold: [2.0, 99], draw(lt, d, t) {
     K.parchment(23);
     cut(P_rr(-300, 700, W + 600, 500, 0), P.sea, { shadow: 0, edge: 0 });
     K.ship(960, 760, 1.1, Math.sin(lt * 1.4) * 0.03);
@@ -345,7 +345,7 @@ export function buildShots() {
   } });
   cue(0.1, 'whoosh'); cue(0.75, 'pop', { gain: 0.6 });
 
-  add({ id: 'S24', at: at(51), cam: [960, 460], zoom: 0.05, hold: [2.4, 99], draw(lt, d, t) {
+  add({ id: 'S24', at: at(56), cam: [960, 460], zoom: 0.05, hold: [2.4, 99], draw(lt, d, t) {
     K.parchment(24);
     K.photoCard(IMG.mackayPortrait, 760, 430, 340, { rot: -0.01, mat: 26 });
     const s = eob(seg(lt, 0.6, 0.95)); if (s > 0) K.slip('ALEXANDER MACKAY', 1300, 330, s, 0.02, 40);
@@ -354,7 +354,7 @@ export function buildShots() {
   cue(0.1, 'whoosh'); cue(0.65, 'pop', { gain: 0.5 }); cue(1.35, 'pop', { gain: 0.6 });
 
   // ── 6 · the road ──
-  add({ id: 'S25', at: at(55), cam: [960, 470], zoom: 0.05, hold: [2.4, 99], draw(lt, d, t) {
+  add({ id: 'S25', at: at(60), cam: [960, 470], zoom: 0.05, hold: [2.4, 99], draw(lt, d, t) {
     lakePage(25);
     K.label('THE COAST', 250, 160, 34); K.label('BUGANDA', 960, 520, 34);
     const route = [[300, 220], [560, 330], [760, 430], [960, 520]];
@@ -363,7 +363,7 @@ export function buildShots() {
   } });
   cue(0.2, 'whoosh'); cue(0.3, 'slide', { dur: 1.8, gain: 0.6 });
 
-  add({ id: 'S26', at: at(61), cam: [960, 470], zoom: 0.04, hold: [1.8, 99], draw(lt, d, t) {
+  add({ id: 'S26', at: at(67), cam: [960, 470], zoom: 0.04, hold: [1.8, 99], draw(lt, d, t) {
     K.parchment(26);
     cut(P_rr(-300, 720, W + 600, 500, 0), '#CDB98E', { shadow: 0, edge: 0 });
     K.figure({ x: 760, y: 820, h: 430, role: 'merchant', dir: 1 });
@@ -373,14 +373,14 @@ export function buildShots() {
   } });
   cue(0.1, 'whoosh'); cue(0.65, 'pop', { gain: 0.6 });
 
-  add({ id: 'S27', at: at(66), cam: [960, 470], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
+  add({ id: 'S27', at: at(72), cam: [960, 470], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
     lakePage(27); lake(1050, 480, 340, 210, 6.1);
     mapX(760, 640, eob(seg(lt, 0.3, 0.7)));
     K.slip('UKEREWE', 760, 760, eob(seg(lt, 0.5, 0.85)), 0.02, 40);
   } });
   cue(0.1, 'whoosh'); cue(0.35, 'thud', { gain: 0.5 }); cue(0.55, 'pop', { gain: 0.5 });
 
-  add({ id: 'S28', at: at(68), cam: [960, 480], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
+  add({ id: 'S28', at: at(74), cam: [960, 480], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
     K.parchment(28);
     K.photoCard(IMG.mackayBook, 960, 470, 820, { crop: { x: 0.48, y: 0.10, w: 0.50, h: 0.80 }, rot: -0.01, mat: 26 });
     K.slip('MACKAY', 960, 830, eob(seg(lt, 0.6, 0.95)), -0.02, 40);
@@ -388,13 +388,13 @@ export function buildShots() {
   cue(0.1, 'whoosh'); cue(0.65, 'pop', { gain: 0.6 });
 
   // ── 7 · what they did ──
-  add({ id: 'S29', at: at(70), cam: [960, 470], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
+  add({ id: 'S29', at: at(76), cam: [960, 470], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
     K.parchment(29);
     K.slip('THE PART THAT GETS LEFT OUT', 960, 400, eob(seg(lt, 0.1, 0.5)), -0.02, 46);
   } });
   cue(0.1, 'whoosh');
 
-  add({ id: 'S30', at: at(72), cam: [960, 480], zoom: 0.05, hold: [2.6, 99], draw(lt, d, t) {
+  add({ id: 'S30', at: at(78), cam: [960, 480], zoom: 0.05, hold: [2.6, 99], draw(lt, d, t) {
     K.parchment(30);
     crescent(620, 430, 90 * eob(seg(lt, 0.1, 0.4)));
     crossShape(960, 470, eob(seg(lt, 0.4, 0.7)));
@@ -403,22 +403,22 @@ export function buildShots() {
   } });
   cue(0.1, 'whoosh'); for (let i = 0; i < 3; i++) cue(0.15 + i * 0.3, 'pop', { gain: 0.45 });
 
-  add({ id: 'S31', at: at(77), cam: [960, 470], zoom: 0.05, hold: [2.2, 99], draw(lt, d, t) {
+  add({ id: 'S31', at: at(83), cam: [960, 470], zoom: 0.05, hold: [2.2, 99], draw(lt, d, t) {
     K.parchment(31);
     cut(P_rr(-300, 760, W + 600, 400, 0), '#CDB98E', { shadow: 0, edge: 0 });
     const p = eob(seg(lt, 0.1, 0.5));
-    if (p > 0) { ctx.save(); ctx.translate(960, 470); ctx.scale(p, p); press(960, 620, 1.0); ctx.restore(); }
+    if (p > 0) { ctx.save(); ctx.translate(960, 620); ctx.scale(p, p); press(0, 0, 1.0); ctx.restore(); }
     const s = eob(seg(lt, 1.1, 1.45)); if (s > 0) K.slip('THE PRINTING PRESS', 960, 840, s, -0.01, 38);
   } });
   cue(0.1, 'whoosh'); cue(1.15, 'pop', { gain: 0.6 });
 
-  add({ id: 'S32', at: at(79), cam: [960, 480], zoom: 0.05, hold: [2.0, 99], draw(lt, d, t) {
+  add({ id: 'S32', at: at(85), cam: [960, 480], zoom: 0.05, hold: [2.0, 99], draw(lt, d, t) {
     K.parchment(32);
     K.photoCard(IMG.mackayBook, 960, 470, 900, { crop: { x: 0.02, y: 0.03, w: 0.46, h: 0.9 }, rot: 0.01, mat: 26 });
   } });
   cue(0.1, 'whoosh');
 
-  add({ id: 'S33', at: at(81), cam: [960, 470], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
+  add({ id: 'S33', at: at(88), cam: [960, 470], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
     K.parchment(33);
     gear(620, 430, eob(seg(lt, 0.1, 0.45)) * 0.9);
     iconBook(960, 430, eob(seg(lt, 0.45, 0.8)) * 1.1, true);
@@ -427,7 +427,7 @@ export function buildShots() {
   } });
   cue(0.1, 'whoosh'); for (let i = 0; i < 3; i++) cue(0.15 + i * 0.33, 'pop', { gain: 0.4 });
 
-  add({ id: 'S34', at: at(83), cam: [960, 470], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
+  add({ id: 'S34', at: at(90), cam: [960, 470], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
     K.parchment(34);
     K.slip('LUGANDA', 960, 300, eob(seg(lt, 0.1, 0.45)), -0.02, 56);
     for (let i = 0; i < 5; i++) line([[600, 470 + i * 50], [1320, 470 + i * 50]], 'rgba(62,44,30,0.35)', 6);
@@ -436,14 +436,14 @@ export function buildShots() {
   cue(0.1, 'whoosh'); cue(0.75, 'pop', { gain: 0.5 });
 
   // ── 8 · the door ──
-  add({ id: 'S35', at: at(85), cam: [960, 470], zoom: 0.05, hold: [2.0, 99], draw(lt, d, t) {
+  add({ id: 'S35', at: at(92), cam: [960, 470], zoom: 0.05, hold: [2.0, 99], draw(lt, d, t) {
     K.parchment(35);
     doorPaper(eo(seg(lt, 0.2, 1.6)));
     K.slip('AN INVITATION', 960, 120, eob(seg(lt, 0.9, 1.2)), -0.01, 42);
   } });
   cue(0.1, 'whoosh'); cue(0.25, 'slide', { dur: 1.2, gain: 0.6 }); cue(0.95, 'pop', { gain: 0.5 });
 
-  add({ id: 'S36', at: at(87), cam: [960, 470], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
+  add({ id: 'S36', at: at(94), cam: [960, 470], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
     K.parchment(36);
     K.figure({ x: 760, y: 800, h: 400, role: 'scholar', dir: 1 });
     K.figure({ x: 1160, y: 800, h: 400, role: 'guard', dir: -1 });
@@ -452,7 +452,7 @@ export function buildShots() {
   } });
   cue(0.1, 'whoosh'); cue(0.65, 'pop', { gain: 0.5 }); cue(1.05, 'pop', { gain: 0.5 });
 
-  add({ id: 'S37', at: at(89), cam: [960, 470], zoom: 0.05, hold: [2.0, 99], draw(lt, d, t) {
+  add({ id: 'S37', at: at(96), cam: [960, 470], zoom: 0.05, hold: [2.0, 99], draw(lt, d, t) {
     K.parchment(37);
     crescent(620, 430, 86, P.royal);
     crossShape(960, 470, 1, P.wine);
@@ -461,21 +461,21 @@ export function buildShots() {
   } });
   cue(0.1, 'whoosh');
 
-  add({ id: 'S38', at: at(93), cam: [960, 470], zoom: 0.04, hold: [1.8, 99], draw(lt, d, t) {
+  add({ id: 'S38', at: at(100), cam: [960, 470], zoom: 0.04, hold: [1.8, 99], draw(lt, d, t) {
     K.parchment(38);
     K.photoCard(IMG.muteesaCourt, 960, 470, 1000, { rot: 0.008, mat: 26 });
     const s = eob(seg(lt, 0.6, 0.95)); if (s > 0) K.slip('"YOU ARE A MAN."', 960, 830, s, -0.01, 36);
   } });
   cue(0.1, 'whoosh'); cue(0.65, 'pop', { gain: 0.6 });
 
-  add({ id: 'S39', at: at(94), cam: [960, 470], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
+  add({ id: 'S39', at: at(101), cam: [960, 470], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
     K.parchment(39);
     K.photoCard(IMG.monument, 960, 450, 420, { crop: { x: 0.05, y: 0.05, w: 0.9, h: 0.75 }, rot: -0.01, mat: 26 });
     K.ribbon('1884', 960, 800, eob(seg(lt, 0.5, 0.85)), 64);
   } });
   cue(0.1, 'whoosh'); cue(0.55, 'pop', { gain: 0.6 });
 
-  add({ id: 'S40', at: at(96), cam: [960, 470], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
+  add({ id: 'S40', at: at(103), cam: [960, 470], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
     K.parchment(40);
     cut(P_rr(-300, 780, W + 600, 400, 0), '#CDB98E', { shadow: 0, edge: 0 });
     K.figure({ x: 760, y: 820, h: 460, role: 'king', dir: 1 });
@@ -484,7 +484,7 @@ export function buildShots() {
   } });
   cue(0.1, 'whoosh'); cue(0.75, 'pop', { gain: 0.5 });
 
-  add({ id: 'S41', at: at(97), cam: [960, 470], zoom: 0.05, hold: [2.2, 99], draw(lt, d, t) {
+  add({ id: 'S41', at: at(105), cam: [960, 470], zoom: 0.05, hold: [2.2, 99], draw(lt, d, t) {
     lakePage(41); lake(900, 500, 340, 210, 7.3);
     const p = eo(seg(lt, 0.2, 2.0));
     ctx.save(); ctx.globalAlpha = 0.45 * p; ctx.fillStyle = P.crimson;
@@ -493,7 +493,7 @@ export function buildShots() {
   } });
   cue(0.2, 'whoosh'); cue(1.25, 'pop', { gain: 0.5 });
 
-  add({ id: 'S42', at: at(100), cam: [960, 470], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
+  add({ id: 'S42', at: at(108), cam: [960, 470], zoom: 0.05, hold: [1.8, 99], draw(lt, d, t) {
     K.parchment(42);
     doorPaper(1 - eo(seg(lt, 0.2, 1.6)));
     K.slip('WHAT CAME WITH THEM', 960, 120, eob(seg(lt, 0.9, 1.2)), -0.01, 38);
@@ -501,21 +501,21 @@ export function buildShots() {
   cue(0.1, 'whoosh'); cue(0.25, 'slide', { dur: 1.2, gain: 0.5 }); cue(0.95, 'pop', { gain: 0.5 });
 
   // ── 9 · close ──
-  add({ id: 'S43', at: at(101), cam: [960, 480], zoom: 0.05, hold: [2.0, 99], draw(lt, d, t) {
+  add({ id: 'S43', at: at(109), cam: [960, 480], zoom: 0.05, hold: [2.0, 99], draw(lt, d, t) {
     K.parchment(43);
     K.photoCard(IMG.letter, 900, 430, 700, { crop: { x: 0.02, y: 0.0, w: 0.9, h: 1.0 }, rot: -0.015, mat: 24 });
     const s = eob(seg(lt, 0.6, 0.95)); if (s > 0) { ctx.save(); ctx.globalAlpha = clamp(s * 1.4); K.seal(1360, 680, 0.85, 'M'); ctx.restore(); }
   } });
   cue(0.1, 'whoosh'); cue(0.65, 'pop', { gain: 0.6 });
 
-  add({ id: 'S44', at: at(102), cam: [960, 460], zoom: 0.06, hold: [1.4, 99], draw(lt, d, t) {
+  add({ id: 'S44', at: at(110), cam: [960, 460], zoom: 0.06, hold: [1.4, 99], draw(lt, d, t) {
     K.parchment(44);
     K.photoCard(IMG.muteesaPortrait, 960, 400, 340, { rot: 0.01, mat: 30 });
     K.ribbon('MUTEESA I', 960, 790, eob(seg(lt, 0.6, 0.95)), 56);
   } });
   cue(0.1, 'whoosh'); cue(0.65, 'pop', { gain: 0.6 });
 
-  add({ id: 'S45', at: at(104), cam: [960, 470], zoom: 0.05, hold: [2.6, 99], draw(lt, d, t) {
+  add({ id: 'S45', at: at(112), cam: [960, 470], zoom: 0.05, hold: [2.6, 99], draw(lt, d, t) {
     K.parchment(45);
     globe(960, 420, 260, eob(seg(lt, 0.1, 0.7)));
     const s = eob(seg(lt, 0.9, 1.25)); if (s > 0) K.slip('STILL BEING ASKED', 960, 780, s, -0.01, 44);

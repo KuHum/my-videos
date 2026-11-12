@@ -117,7 +117,7 @@ else {
       if (r.status) throw new Error('ffmpeg: ' + r.stderr); console.log(`${out} (${n} frames, every ${step} s)`);
     } else if (mode === 'video') {
       const out = path.resolve(ROOT, rest[0] || 'renders/video.mp4'); fs.mkdirSync(path.dirname(out), { recursive: true });
-      const mix = path.join(ROOT, 'data/mix.wav'), hasMix = fs.existsSync(mix);
+      const mix = ['data/mix.wav', 'data/mix.m4a'].map((f) => path.join(ROOT, f)).find((f) => fs.existsSync(f)), hasMix = !!mix;
       // --segment=i/n splits the film into n equal jobs (for CI matrix rendering); otherwise use [start end]
       let a0 = rest[1] ? +rest[1] : 0, a1 = rest[2] ? Math.min(+rest[2], dur) : dur;
       const segArg = args.find((a) => a.startsWith('--segment='));

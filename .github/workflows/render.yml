@@ -111,7 +111,7 @@ jobs:
         run: |
           set -euo pipefail
           ffmpeg -v error -y \
-            -i video_only.mp4 -i longform/data/mix.wav \
+            -i video_only.mp4 -i longform/data/mix.m4a \
             -map 0:v -map 1:a \
             -c:v copy -c:a aac -b:a 192k -shortest -movflags +faststart \
             longform/renders/final.mp4

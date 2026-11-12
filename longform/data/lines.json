@@ -1,175 +1,691 @@
 {
- "duration": 154.281,
+ "duration": 580.071,
  "voice": "en-GB-RyanNeural",
- "speed": 1.0,
+ "speed": 0.92,
  "lines": [
   {
    "i": 0,
    "text": "In 1875, a king in the heart of Africa decided to write to a queen he had never met.",
-   "start": 0.472,
-   "end": 5.684
+   "start": 0.452,
+   "end": 6.118
   },
   {
    "i": 1,
    "text": "He did not write it himself. A European explorer held the pen, but the words were his.",
-   "start": 5.928,
-   "end": 11.69
+   "start": 6.328,
+   "end": 12.596
   },
   {
    "i": 2,
    "text": "He did not ask for soldiers, or money, or protection. He asked for teachers.",
-   "start": 11.904,
-   "end": 17.229
+   "start": 12.778,
+   "end": 18.57
   },
   {
    "i": 3,
    "text": "That letter crossed the ocean, landed on the desk of a missionary society in London, and brought the first Christian missionaries to Uganda.",
-   "start": 17.508,
-   "end": 24.395
+   "start": 18.808,
+   "end": 26.295
   },
   {
    "i": 4,
    "text": "It is one of the most consequential letters ever written in this part of the world, and almost nobody remembers what it actually said.",
-   "start": 24.651,
-   "end": 30.938
+   "start": 26.529,
+   "end": 33.363
   },
   {
    "i": 5,
    "text": "This is the story of Kabaka Muteesa the First, and why he really sent for them.",
-   "start": 31.179,
-   "end": 35.579
+   "start": 33.575,
+   "end": 38.357
   },
   {
    "i": 6,
    "text": "Before the letter, there was Buganda.",
-   "start": 35.786,
-   "end": 37.748
+   "start": 38.535,
+   "end": 40.668
   },
   {
    "i": 7,
    "text": "A kingdom on the northern shore of a lake so vast that the first Europeans to see it thought they had found an inland sea.",
-   "start": 38.011,
-   "end": 43.686
+   "start": 40.904,
+   "end": 47.073
   },
   {
    "i": 8,
    "text": "The Baganda called it Nalubaale. We call it Lake Victoria.",
-   "start": 43.92,
-   "end": 47.982
+   "start": 47.269,
+   "end": 51.689
   },
   {
    "i": 9,
    "text": "At the head of the kingdom sat the kabaka. Not a chief, not a governor, but a king whose word could raise an army or end a life.",
-   "start": 48.242,
-   "end": 55.667
+   "start": 51.923,
+   "end": 59.998
   },
   {
    "i": 10,
    "text": "Beneath him were the chiefs, the court, the pages who served at the palace, and a capital that moved with the king.",
-   "start": 55.902,
-   "end": 61.64
+   "start": 60.189,
+   "end": 66.426
   },
   {
    "i": 11,
    "text": "Muteesa the First had ruled since 1856.",
-   "start": 61.875,
-   "end": 64.907
+   "start": 66.637,
+   "end": 69.933
   },
   {
    "i": 12,
-   "text": "By the 1870s, his authority reached from the lake shore out toward the edges of Bunyoro.",
-   "start": 65.215,
-   "end": 70.277
+   "text": "The capital was not a city of stone. It was a vast compound of thatched houses and courtyards, rebuilt whenever the king decided to move.",
+   "start": 70.226,
+   "end": 79.049
   },
   {
    "i": 13,
-   "text": "Buganda was rich. Bananas, barkcloth, cattle, ivory.",
-   "start": 70.502,
-   "end": 75.677
+   "text": "At any hour, hundreds of pages, guards and chiefs waited to be called. To be near the kabaka was to be near power, and everybody knew it.",
+   "start": 79.271,
+   "end": 88.854
   },
   {
    "i": 14,
-   "text": "It was also connected. Trade routes ran east to the Swahili coast, where the merchants of Zanzibar came looking for ivory and for slaves.",
-   "start": 75.969,
-   "end": 84.144
+   "text": "By the 1870s, his authority reached from the lake shore out toward the edges of Bunyoro.",
+   "start": 89.065,
+   "end": 94.568
   },
   {
    "i": 15,
-   "text": "And those traders brought more than goods. They brought a religion.",
-   "start": 84.383,
-   "end": 88.371
+   "text": "Buganda was rich. Bananas, barkcloth, cattle, ivory.",
+   "start": 94.758,
+   "end": 100.387
   },
   {
    "i": 16,
-   "text": "By the time Muteesa was king, Arab traders from the coast had been at his court for years.",
-   "start": 88.594,
-   "end": 93.344
+   "text": "It was also connected. Trade routes ran east to the Swahili coast, where the merchants of Zanzibar came looking for ivory and for slaves.",
+   "start": 100.641,
+   "end": 109.531
   },
   {
    "i": 17,
-   "text": "They prayed, they read the Quran, they wore long white robes, and Muteesa had learned to read Arabic.",
-   "start": 93.576,
-   "end": 99.076
+   "text": "And those traders brought more than goods. They brought a religion.",
+   "start": 109.756,
+   "end": 114.095
   },
   {
    "i": 18,
-   "text": "Islam was not a rumour in Buganda. It was already inside the palace.",
-   "start": 99.314,
-   "end": 104.252
+   "text": "By the time Muteesa was king, Arab traders from the coast had been at his court for years.",
+   "start": 114.279,
+   "end": 119.442
   },
   {
    "i": 19,
-   "text": "But Muteesa was not only curious. He was afraid.",
-   "start": 104.501,
-   "end": 108.551
+   "text": "They prayed, they read the Quran, they wore long white robes, and Muteesa had learned to read Arabic.",
+   "start": 119.639,
+   "end": 125.617
   },
   {
    "i": 20,
-   "text": "To the north, Egypt was pushing south up the Nile, reaching for the lakes and the kingdoms around them.",
-   "start": 108.807,
-   "end": 113.769
+   "text": "Islam was not a rumour in Buganda. It was already inside the palace.",
+   "start": 125.822,
+   "end": 131.193
   },
   {
    "i": 21,
-   "text": "To the west, Bunyoro, Buganda's old rival, was waiting for any sign of weakness.",
-   "start": 113.991,
-   "end": 118.854
+   "text": "But Muteesa was not only curious. He was afraid.",
+   "start": 131.409,
+   "end": 135.815
   },
   {
    "i": 22,
-   "text": "And Muteesa had already met Europeans.",
-   "start": 119.101,
-   "end": 121.538
+   "text": "To the north, Egypt was pushing south up the Nile, reaching for the lakes and the kingdoms around them.",
+   "start": 136.042,
+   "end": 141.436
   },
   {
    "i": 23,
-   "text": "In 1862, John Speke and James Grant had reached his court, searching for the source of the Nile.",
-   "start": 121.792,
-   "end": 127.53
+   "text": "To the west, Bunyoro, Buganda's old rival, was waiting for any sign of weakness.",
+   "start": 141.63,
+   "end": 146.915
   },
   {
    "i": 24,
-   "text": "He had seen what they carried. Guns, cloth, instruments, books.",
-   "start": 127.729,
-   "end": 133.079
+   "text": "And Muteesa had already met Europeans.",
+   "start": 147.159,
+   "end": 149.808
   },
   {
    "i": 25,
-   "text": "He understood something very clearly. The world was getting bigger, and kings who stayed small would be swallowed.",
-   "start": 133.328,
-   "end": 139.716
+   "text": "In 1862, John Speke and James Grant had reached his court, searching for the source of the Nile.",
+   "start": 150.042,
+   "end": 156.279
   },
   {
    "i": 26,
-   "text": "So he did what a smart king does. He looked for an ally who could bring him the things he lacked, without bringing an army that could take his throne.",
-   "start": 139.962,
-   "end": 147.5
+   "text": "He had also learned something else from those visitors. Europeans did not arrive alone. They arrived with maps, with treaties, and with the confidence of people who expected to be obeyed.",
+   "start": 156.431,
+   "end": 168.854
   },
   {
    "i": 27,
+   "text": "He had seen what they carried. Guns, cloth, instruments, books.",
+   "start": 169.047,
+   "end": 174.866
+  },
+  {
+   "i": 28,
+   "text": "He understood something very clearly. The world was getting bigger, and kings who stayed small would be swallowed.",
+   "start": 175.063,
+   "end": 182.011
+  },
+  {
+   "i": 29,
+   "text": "So he did what a smart king does. He looked for an ally who could bring him the things he lacked, without bringing an army that could take his throne.",
+   "start": 182.22,
+   "end": 190.417
+  },
+  {
+   "i": 30,
    "text": "Then, in April 1875, another European walked into his court.",
-   "start": 147.72,
-   "end": 152.508
+   "start": 190.603,
+   "end": 195.806
+  },
+  {
+   "i": 31,
+   "text": "His name was Henry Morton Stanley.",
+   "start": 196.003,
+   "end": 198.163
+  },
+  {
+   "i": 32,
+   "text": "Stanley was a journalist and an explorer. Famous, ambitious, and not a man to let the facts spoil a good story.",
+   "start": 198.425,
+   "end": 206.269
+  },
+  {
+   "i": 33,
+   "text": "He had come looking for Livingstone, and he had found him.",
+   "start": 206.49,
+   "end": 209.574
+  },
+  {
+   "i": 34,
+   "text": "Now he had come to Buganda, and what he found there impressed him.",
+   "start": 209.74,
+   "end": 213.395
+  },
+  {
+   "i": 35,
+   "text": "He wrote about a king who could read, who asked questions, who wanted to know how things worked.",
+   "start": 213.555,
+   "end": 219.031
+  },
+  {
+   "i": 36,
+   "text": "The two men talked for days.",
+   "start": 219.253,
+   "end": 221.115
+  },
+  {
+   "i": 37,
+   "text": "Stanley told him about Europe, about Britain, about a queen called Victoria and the machines her country was building.",
+   "start": 221.336,
+   "end": 228.102
+  },
+  {
+   "i": 38,
+   "text": "And then he did something that would echo for a century.",
+   "start": 228.303,
+   "end": 231.034
+  },
+  {
+   "i": 39,
+   "text": "At Muteesa's request, Stanley wrote a letter to Queen Victoria.",
+   "start": 231.282,
+   "end": 235.181
+  },
+  {
+   "i": 40,
+   "text": "The letter was short, formal, and carefully vague. It did not promise conversion. It promised friendship, and it asked for men who could make things work.",
+   "start": 235.413,
+   "end": 245.974
+  },
+  {
+   "i": 41,
+   "text": "It asked for teachers. People who could read and write, build and mend, explain the world and teach others to explain it.",
+   "start": 246.179,
+   "end": 253.955
+  },
+  {
+   "i": 42,
+   "text": "What Muteesa wanted was what Europe had. Engineers, doctors, teachers, and the tools and guns they brought with them.",
+   "start": 254.176,
+   "end": 262.482
+  },
+  {
+   "i": 43,
+   "text": "He wanted his kingdom to catch up before it was overtaken.",
+   "start": 262.648,
+   "end": 265.923
+  },
+  {
+   "i": 44,
+   "text": "And then Stanley went further. He did not simply carry the letter.",
+   "start": 266.12,
+   "end": 270.73
+  },
+  {
+   "i": 45,
+   "text": "He published his own appeal in the Daily Telegraph, on the fifteenth of November, 1875.",
+   "start": 270.951,
+   "end": 277.011
+  },
+  {
+   "i": 46,
+   "text": "It was a masterpiece of Victorian advertising.",
+   "start": 277.219,
+   "end": 279.909
+  },
+  {
+   "i": 47,
+   "text": "Stanley described a kingdom ripe for the gospel.",
+   "start": 280.093,
+   "end": 282.797
+  },
+  {
+   "i": 48,
+   "text": "Two million people, he claimed. A king ready to listen. A field white for harvest.",
+   "start": 283.0,
+   "end": 290.3
+  },
+  {
+   "i": 49,
+   "text": "He asked for practical men. Men who could teach, build, farm and mend, not just preachers.",
+   "start": 290.493,
+   "end": 297.509
+  },
+  {
+   "i": 50,
+   "text": "Britain read it, and Britain responded.",
+   "start": 297.732,
+   "end": 300.219
+  },
+  {
+   "i": 51,
+   "text": "Within days, an anonymous donor gave five thousand pounds, a fortune, for a mission to the lakes.",
+   "start": 300.429,
+   "end": 306.693
+  },
+  {
+   "i": 52,
+   "text": "Eight days after the appeal, the Church Missionary Society agreed to send one.",
+   "start": 306.93,
+   "end": 311.495
+  },
+  {
+   "i": 53,
+   "text": "The appeal did not ask for money. It asked for men. That distinction mattered in Victorian Britain, where missionary societies measured success in souls and in subscriptions.",
+   "start": 311.705,
+   "end": 323.135
+  },
+  {
+   "i": 54,
+   "text": "Eight missionaries sailed from England in April 1876.",
+   "start": 323.336,
+   "end": 327.006
+  },
+  {
+   "i": 55,
+   "text": "None of them knew what was waiting for them.",
+   "start": 327.289,
+   "end": 329.463
+  },
+  {
+   "i": 56,
+   "text": "One of them, a young engineer named Alexander Mackay, stood up at the farewell and said something remarkable.",
+   "start": 329.624,
+   "end": 335.82
+  },
+  {
+   "i": 57,
+   "text": "Within six months, he told the committee, you will probably hear that one of us is dead.",
+   "start": 336.02,
+   "end": 341.061
+  },
+  {
+   "i": 58,
+   "text": "Do not be discouraged. Send someone else.",
+   "start": 341.284,
+   "end": 344.834
+  },
+  {
+   "i": 59,
+   "text": "He was right.",
+   "start": 345.028,
+   "end": 345.925
+  },
+  {
+   "i": 60,
+   "text": "The road to Buganda was one of the deadliest in Africa.",
+   "start": 346.112,
+   "end": 349.114
+  },
+  {
+   "i": 61,
+   "text": "There was no railway and no road.",
+   "start": 349.307,
+   "end": 351.521
+  },
+  {
+   "i": 62,
+   "text": "The route ran from the coast opposite Zanzibar, eight hundred miles inland, through low country thick with fever, and then by canoe up Lake Victoria.",
+   "start": 351.733,
+   "end": 360.293
+  },
+  {
+   "i": 63,
+   "text": "By the time the party reached the lake, sickness had already taken its toll.",
+   "start": 360.52,
+   "end": 364.718
+  },
+  {
+   "i": 64,
+   "text": "One of them was dead.",
+   "start": 364.918,
+   "end": 366.1
+  },
+  {
+   "i": 65,
+   "text": "Three, including Mackay, had been sent back to the coast to recover.",
+   "start": 366.309,
+   "end": 370.399
+  },
+  {
+   "i": 66,
+   "text": "For weeks the party crawled through country where the tsetse fly killed the oxen and fever killed the men. Porters deserted. Supplies ran out. The lake, when it finally appeared, was a relief and a warning.",
+   "start": 370.611,
+   "end": 384.827
+  },
+  {
+   "i": 67,
+   "text": "On the thirtieth of June, 1877, two men crossed the water and climbed up to the capital at Rubaga.",
+   "start": 385.017,
+   "end": 391.525
+  },
+  {
+   "i": 68,
+   "text": "Lieutenant Shergold Smith and the Reverend Charles Thomas Wilson.",
+   "start": 391.757,
+   "end": 395.357
+  },
+  {
+   "i": 69,
+   "text": "Muteesa received them at his palace.",
+   "start": 395.548,
+   "end": 397.736
+  },
+  {
+   "i": 70,
+   "text": "He gave them land near the court, as he had promised, and he listened.",
+   "start": 397.96,
+   "end": 401.9
+  },
+  {
+   "i": 71,
+   "text": "Then the road took its price.",
+   "start": 402.127,
+   "end": 403.771
+  },
+  {
+   "i": 72,
+   "text": "Smith went back south to join a colleague at Ukerewe, and both were killed there in a local quarrel.",
+   "start": 403.993,
+   "end": 409.36
+  },
+  {
+   "i": 73,
+   "text": "Wilson was left alone in Buganda for a year.",
+   "start": 409.542,
+   "end": 412.477
+  },
+  {
+   "i": 74,
+   "text": "In late 1878, Alexander Mackay finally arrived.",
+   "start": 412.688,
+   "end": 416.818
+  },
+  {
+   "i": 75,
+   "text": "The engineer, the carpenter, the man who could fix a gun and build a press.",
+   "start": 417.01,
+   "end": 421.507
+  },
+  {
+   "i": 76,
+   "text": "This is the part that usually gets left out.",
+   "start": 421.739,
+   "end": 424.144
+  },
+  {
+   "i": 77,
+   "text": "The missionaries did not arrive to a kingdom waiting to be converted.",
+   "start": 424.356,
+   "end": 427.929
+  },
+  {
+   "i": 78,
+   "text": "They arrived at a court that was already religiously crowded.",
+   "start": 428.142,
+   "end": 431.321
+  },
+  {
+   "i": 79,
+   "text": "Muteesa listened to them. He also listened to the Muslims.",
+   "start": 431.539,
+   "end": 435.782
+  },
+  {
+   "i": 80,
+   "text": "He compared, he questioned, he argued.",
+   "start": 435.964,
+   "end": 438.926
+  },
+  {
+   "i": 81,
+   "text": "By all accounts, he was fascinated.",
+   "start": 439.126,
+   "end": 441.558
+  },
+  {
+   "i": 82,
+   "text": "But what he wanted most were the things they could do.",
+   "start": 441.76,
+   "end": 444.328
+  },
+  {
+   "i": 83,
+   "text": "Mackay set up a printing press, the first in the region.",
+   "start": 444.564,
+   "end": 447.811
+  },
+  {
+   "i": 84,
+   "text": "He began printing reading sheets and portions of scripture in Swahili, the language of the coast.",
+   "start": 448.007,
+   "end": 453.578
+  },
+  {
+   "i": 85,
+   "text": "Literacy spread first among the pages and the chiefs at court.",
+   "start": 453.786,
+   "end": 457.332
+  },
+  {
+   "i": 86,
+   "text": "Young Baganda learned to read and write letters that had never existed in their own language before.",
+   "start": 457.56,
+   "end": 462.587
+  },
+  {
+   "i": 87,
+   "text": "The press changed what a page could carry. A message that once travelled by messenger could now be printed hundreds of times, and read aloud in places the missionaries never visited.",
+   "start": 462.834,
+   "end": 473.124
+  },
+  {
+   "i": 88,
+   "text": "Mackay mended guns. He built. He taught.",
+   "start": 473.319,
+   "end": 478.214
+  },
+  {
+   "i": 89,
+   "text": "And he began the slow, enormous work of putting Luganda into written form.",
+   "start": 478.446,
+   "end": 483.202
+  },
+  {
+   "i": 90,
+   "text": "The missionaries had come to change the kingdom's soul.",
+   "start": 483.395,
+   "end": 486.112
+  },
+  {
+   "i": 91,
+   "text": "What they changed first was its paperwork.",
+   "start": 486.289,
+   "end": 488.721
+  },
+  {
+   "i": 92,
+   "text": "Because an invitation is never only an invitation.",
+   "start": 488.93,
+   "end": 491.743
+  },
+  {
+   "i": 93,
+   "text": "The same road that carried teachers also carried traders, soldiers, and empire.",
+   "start": 491.941,
+   "end": 496.778
+  },
+  {
+   "i": 94,
+   "text": "Two years after the Protestants, the Catholic White Fathers arrived.",
+   "start": 497.002,
+   "end": 500.942
+  },
+  {
+   "i": 95,
+   "text": "French, and rivals to the British mission.",
+   "start": 501.139,
+   "end": 503.693
+  },
+  {
+   "i": 96,
+   "text": "Now Buganda's court had three faiths competing for the king's ear.",
+   "start": 503.893,
+   "end": 507.493
+  },
+  {
+   "i": 97,
+   "text": "Islam, Protestant, and Catholic.",
+   "start": 507.711,
+   "end": 510.524
+  },
+  {
+   "i": 98,
+   "text": "And Muteesa played them against each other.",
+   "start": 510.747,
+   "end": 513.029
+  },
+  {
+   "i": 99,
+   "text": "He had learned, very early, that being needed is a kind of power.",
+   "start": 513.244,
+   "end": 517.157
+  },
+  {
+   "i": 100,
+   "text": "Mackay, the old king said to him one day, you are a man.",
+   "start": 517.386,
+   "end": 521.217
+  },
+  {
+   "i": 101,
+   "text": "In 1884, Muteesa died.",
+   "start": 521.429,
+   "end": 524.215
+  },
+  {
+   "i": 102,
+   "text": "His son Mwanga took the throne.",
+   "start": 524.384,
+   "end": 526.123
+  },
+  {
+   "i": 103,
+   "text": "Young, suspicious, and far less skilled at balancing the forces his father had invited.",
+   "start": 526.319,
+   "end": 531.618
+  },
+  {
+   "i": 104,
+   "text": "Each mission wanted the king's favour, and each could offer something the others could not: Arabic learning, English books, French protection. Muteesa let them compete, because competition made him the prize.",
+   "start": 531.829,
+   "end": 544.673
+  },
+  {
+   "i": 105,
+   "text": "Within a decade, Buganda's independence would be gone.",
+   "start": 544.906,
+   "end": 548.113
+  },
+  {
+   "i": 106,
+   "text": "Swallowed by the scramble for Africa that Muteesa had sensed coming and tried to outrun.",
+   "start": 548.323,
+   "end": 553.079
+  },
+  {
+   "i": 107,
+   "text": "He had invited the teachers to keep his kingdom strong.",
+   "start": 553.278,
+   "end": 556.375
+  },
+  {
+   "i": 108,
+   "text": "He could not control what came with them.",
+   "start": 556.569,
+   "end": 558.594
+  },
+  {
+   "i": 109,
+   "text": "One letter. One king. One request for teachers.",
+   "start": 558.775,
+   "end": 563.901
+  },
+  {
+   "i": 110,
+   "text": "Kabaka Muteesa the First never committed to the new faith.",
+   "start": 564.134,
+   "end": 567.381
+  },
+  {
+   "i": 111,
+   "text": "But he opened a door that no one in Buganda could close again.",
+   "start": 567.582,
+   "end": 571.005
+  },
+  {
+   "i": 112,
+   "text": "And the question he was asking is still being asked today.",
+   "start": 571.199,
+   "end": 574.419
+  },
+  {
+   "i": 113,
+   "text": "How do you keep your kingdom free in a world that is getting smaller?",
+   "start": 574.62,
+   "end": 578.193
   }
  ]
 }

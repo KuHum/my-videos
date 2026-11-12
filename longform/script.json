@@ -1,7 +1,7 @@
 {
   "title": "The King Who Invited the Missionaries",
   "voice": "en-GB-RyanNeural",
-  "speed": 1.0,
+  "speed": 0.92,
   "lead": 0.6,
   "outro": 1.5,
   "gap": 0.32,
@@ -15,119 +15,347 @@
     "Dictionary of African Christian Biography, 'Mackay, Alexander M.' — printing press, gun repair, Luganda orthography"
   ],
   "lines": [
-    { "text": "In 1875, a king in the heart of Africa decided to write to a queen he had never met." },
-    { "text": "He did not write it himself. A European explorer held the pen, but the words were his." },
-    { "text": "He did not ask for soldiers, or money, or protection. He asked for teachers." },
-    { "text": "That letter crossed the ocean, landed on the desk of a missionary society in London, and brought the first Christian missionaries to Uganda." },
-    { "text": "It is one of the most consequential letters ever written in this part of the world, and almost nobody remembers what it actually said." },
-    { "text": "This is the story of Kabaka Muteesa the First, and why he really sent for them." },
-
-    { "text": "Before the letter, there was Buganda." },
-    { "text": "A kingdom on the northern shore of a lake so vast that the first Europeans to see it thought they had found an inland sea." },
-    { "text": "The Baganda called it Nalubaale. We call it Lake Victoria." },
-    { "text": "At the head of the kingdom sat the kabaka. Not a chief, not a governor, but a king whose word could raise an army or end a life." },
-    { "text": "Beneath him were the chiefs, the court, the pages who served at the palace, and a capital that moved with the king." },
-    { "text": "Muteesa the First had ruled since 1856." },
-    { "text": "By the 1870s, his authority reached from the lake shore out toward the edges of Bunyoro." },
-    { "text": "Buganda was rich. Bananas, barkcloth, cattle, ivory." },
-    { "text": "It was also connected. Trade routes ran east to the Swahili coast, where the merchants of Zanzibar came looking for ivory and for slaves." },
-    { "text": "And those traders brought more than goods. They brought a religion." },
-    { "text": "By the time Muteesa was king, Arab traders from the coast had been at his court for years." },
-    { "text": "They prayed, they read the Quran, they wore long white robes, and Muteesa had learned to read Arabic." },
-    { "text": "Islam was not a rumour in Buganda. It was already inside the palace." },
-
-    { "text": "But Muteesa was not only curious. He was afraid." },
-    { "text": "To the north, Egypt was pushing south up the Nile, reaching for the lakes and the kingdoms around them." },
-    { "text": "To the west, Bunyoro, Buganda's old rival, was waiting for any sign of weakness." },
-    { "text": "And Muteesa had already met Europeans." },
-    { "text": "In 1862, John Speke and James Grant had reached his court, searching for the source of the Nile." },
-    { "text": "He had seen what they carried. Guns, cloth, instruments, books." },
-    { "text": "He understood something very clearly. The world was getting bigger, and kings who stayed small would be swallowed." },
-    { "text": "So he did what a smart king does. He looked for an ally who could bring him the things he lacked, without bringing an army that could take his throne." },
-    { "text": "Then, in April 1875, another European walked into his court." },
-
-    { "text": "His name was Henry Morton Stanley." },
-    { "text": "Stanley was a journalist and an explorer. Famous, ambitious, and not a man to let the facts spoil a good story." },
-    { "text": "He had come looking for Livingstone, and he had found him." },
-    { "text": "Now he had come to Buganda, and what he found there impressed him." },
-    { "text": "He wrote about a king who could read, who asked questions, who wanted to know how things worked." },
-    { "text": "The two men talked for days." },
-    { "text": "Stanley told him about Europe, about Britain, about a queen called Victoria and the machines her country was building." },
-    { "text": "And then he did something that would echo for a century." },
-    { "text": "At Muteesa's request, Stanley wrote a letter to Queen Victoria." },
-    { "text": "It asked for teachers. People who could read and write, build and mend, explain the world and teach others to explain it." },
-    { "text": "What Muteesa wanted was what Europe had. Engineers, doctors, teachers, and the tools and guns they brought with them." },
-    { "text": "He wanted his kingdom to catch up before it was overtaken." },
-    { "text": "And then Stanley went further. He did not simply carry the letter." },
-    { "text": "He published his own appeal in the Daily Telegraph, on the fifteenth of November, 1875." },
-
-    { "text": "It was a masterpiece of Victorian advertising." },
-    { "text": "Stanley described a kingdom ripe for the gospel." },
-    { "text": "Two million people, he claimed. A king ready to listen. A field white for harvest." },
-    { "text": "He asked for practical men. Men who could teach, build, farm and mend, not just preachers." },
-    { "text": "Britain read it, and Britain responded." },
-    { "text": "Within days, an anonymous donor gave five thousand pounds, a fortune, for a mission to the lakes." },
-    { "text": "Eight days after the appeal, the Church Missionary Society agreed to send one." },
-    { "text": "Eight missionaries sailed from England in April 1876." },
-    { "text": "None of them knew what was waiting for them." },
-    { "text": "One of them, a young engineer named Alexander Mackay, stood up at the farewell and said something remarkable." },
-    { "text": "Within six months, he told the committee, you will probably hear that one of us is dead." },
-    { "text": "Do not be discouraged. Send someone else." },
-    { "text": "He was right." },
-
-    { "text": "The road to Buganda was one of the deadliest in Africa." },
-    { "text": "There was no railway and no road." },
-    { "text": "The route ran from the coast opposite Zanzibar, eight hundred miles inland, through low country thick with fever, and then by canoe up Lake Victoria." },
-    { "text": "By the time the party reached the lake, sickness had already taken its toll." },
-    { "text": "One of them was dead." },
-    { "text": "Three, including Mackay, had been sent back to the coast to recover." },
-    { "text": "On the thirtieth of June, 1877, two men crossed the water and climbed up to the capital at Rubaga." },
-    { "text": "Lieutenant Shergold Smith and the Reverend Charles Thomas Wilson." },
-    { "text": "Muteesa received them at his palace." },
-    { "text": "He gave them land near the court, as he had promised, and he listened." },
-    { "text": "Then the road took its price." },
-    { "text": "Smith went back south to join a colleague at Ukerewe, and both were killed there in a local quarrel." },
-    { "text": "Wilson was left alone in Buganda for a year." },
-    { "text": "In late 1878, Alexander Mackay finally arrived." },
-    { "text": "The engineer, the carpenter, the man who could fix a gun and build a press." },
-
-    { "text": "This is the part that usually gets left out." },
-    { "text": "The missionaries did not arrive to a kingdom waiting to be converted." },
-    { "text": "They arrived at a court that was already religiously crowded." },
-    { "text": "Muteesa listened to them. He also listened to the Muslims." },
-    { "text": "He compared, he questioned, he argued." },
-    { "text": "By all accounts, he was fascinated." },
-    { "text": "But what he wanted most were the things they could do." },
-    { "text": "Mackay set up a printing press, the first in the region." },
-    { "text": "He began printing reading sheets and portions of scripture in Swahili, the language of the coast." },
-    { "text": "Literacy spread first among the pages and the chiefs at court." },
-    { "text": "Young Baganda learned to read and write letters that had never existed in their own language before." },
-    { "text": "Mackay mended guns. He built. He taught." },
-    { "text": "And he began the slow, enormous work of putting Luganda into written form." },
-    { "text": "The missionaries had come to change the kingdom's soul." },
-    { "text": "What they changed first was its paperwork." },
-
-    { "text": "Because an invitation is never only an invitation." },
-    { "text": "The same road that carried teachers also carried traders, soldiers, and empire." },
-    { "text": "Two years after the Protestants, the Catholic White Fathers arrived." },
-    { "text": "French, and rivals to the British mission." },
-    { "text": "Now Buganda's court had three faiths competing for the king's ear." },
-    { "text": "Islam, Protestant, and Catholic." },
-    { "text": "And Muteesa played them against each other." },
-    { "text": "He had learned, very early, that being needed is a kind of power." },
-    { "text": "Mackay, the old king said to him one day, you are a man." },
-    { "text": "In 1884, Muteesa died." },
-    { "text": "His son Mwanga took the throne." },
-    { "text": "Young, suspicious, and far less skilled at balancing the forces his father had invited." },
-    { "text": "Within a decade, Buganda's independence would be gone." },
-    { "text": "Swallowed by the scramble for Africa that Muteesa had sensed coming and tried to outrun." },
-    { "text": "He had invited the teachers to keep his kingdom strong." },
-    { "text": "He could not control what came with them." },
-
-    { "text": "One letter. One king. One request for teachers." },
-    { "text": "Kabaka Muteesa the First never committed to the new faith." },
-    { "text": "But he opened a door that no one in Buganda could close again." },
-    { "text": "And the question he was asking is still being asked today." },
-    { "text": "How do you keep your kingdom free in a world that is getting smaller?" }
+    {
+      "text": "In 1875, a king in the heart of Africa decided to write to a queen he had never met."
+    },
+    {
+      "text": "He did not write it himself. A European explorer held the pen, but the words were his."
+    },
+    {
+      "text": "He did not ask for soldiers, or money, or protection. He asked for teachers."
+    },
+    {
+      "text": "That letter crossed the ocean, landed on the desk of a missionary society in London, and brought the first Christian missionaries to Uganda."
+    },
+    {
+      "text": "It is one of the most consequential letters ever written in this part of the world, and almost nobody remembers what it actually said."
+    },
+    {
+      "text": "This is the story of Kabaka Muteesa the First, and why he really sent for them."
+    },
+    {
+      "text": "Before the letter, there was Buganda."
+    },
+    {
+      "text": "A kingdom on the northern shore of a lake so vast that the first Europeans to see it thought they had found an inland sea."
+    },
+    {
+      "text": "The Baganda called it Nalubaale. We call it Lake Victoria."
+    },
+    {
+      "text": "At the head of the kingdom sat the kabaka. Not a chief, not a governor, but a king whose word could raise an army or end a life."
+    },
+    {
+      "text": "Beneath him were the chiefs, the court, the pages who served at the palace, and a capital that moved with the king."
+    },
+    {
+      "text": "Muteesa the First had ruled since 1856."
+    },
+    {
+      "text": "The capital was not a city of stone. It was a vast compound of thatched houses and courtyards, rebuilt whenever the king decided to move."
+    },
+    {
+      "text": "At any hour, hundreds of pages, guards and chiefs waited to be called. To be near the kabaka was to be near power, and everybody knew it."
+    },
+    {
+      "text": "By the 1870s, his authority reached from the lake shore out toward the edges of Bunyoro."
+    },
+    {
+      "text": "Buganda was rich. Bananas, barkcloth, cattle, ivory."
+    },
+    {
+      "text": "It was also connected. Trade routes ran east to the Swahili coast, where the merchants of Zanzibar came looking for ivory and for slaves."
+    },
+    {
+      "text": "And those traders brought more than goods. They brought a religion."
+    },
+    {
+      "text": "By the time Muteesa was king, Arab traders from the coast had been at his court for years."
+    },
+    {
+      "text": "They prayed, they read the Quran, they wore long white robes, and Muteesa had learned to read Arabic."
+    },
+    {
+      "text": "Islam was not a rumour in Buganda. It was already inside the palace."
+    },
+    {
+      "text": "But Muteesa was not only curious. He was afraid."
+    },
+    {
+      "text": "To the north, Egypt was pushing south up the Nile, reaching for the lakes and the kingdoms around them."
+    },
+    {
+      "text": "To the west, Bunyoro, Buganda's old rival, was waiting for any sign of weakness."
+    },
+    {
+      "text": "And Muteesa had already met Europeans."
+    },
+    {
+      "text": "In 1862, John Speke and James Grant had reached his court, searching for the source of the Nile."
+    },
+    {
+      "text": "He had also learned something else from those visitors. Europeans did not arrive alone. They arrived with maps, with treaties, and with the confidence of people who expected to be obeyed."
+    },
+    {
+      "text": "He had seen what they carried. Guns, cloth, instruments, books."
+    },
+    {
+      "text": "He understood something very clearly. The world was getting bigger, and kings who stayed small would be swallowed."
+    },
+    {
+      "text": "So he did what a smart king does. He looked for an ally who could bring him the things he lacked, without bringing an army that could take his throne."
+    },
+    {
+      "text": "Then, in April 1875, another European walked into his court."
+    },
+    {
+      "text": "His name was Henry Morton Stanley."
+    },
+    {
+      "text": "Stanley was a journalist and an explorer. Famous, ambitious, and not a man to let the facts spoil a good story."
+    },
+    {
+      "text": "He had come looking for Livingstone, and he had found him."
+    },
+    {
+      "text": "Now he had come to Buganda, and what he found there impressed him."
+    },
+    {
+      "text": "He wrote about a king who could read, who asked questions, who wanted to know how things worked."
+    },
+    {
+      "text": "The two men talked for days."
+    },
+    {
+      "text": "Stanley told him about Europe, about Britain, about a queen called Victoria and the machines her country was building."
+    },
+    {
+      "text": "And then he did something that would echo for a century."
+    },
+    {
+      "text": "At Muteesa's request, Stanley wrote a letter to Queen Victoria."
+    },
+    {
+      "text": "The letter was short, formal, and carefully vague. It did not promise conversion. It promised friendship, and it asked for men who could make things work."
+    },
+    {
+      "text": "It asked for teachers. People who could read and write, build and mend, explain the world and teach others to explain it."
+    },
+    {
+      "text": "What Muteesa wanted was what Europe had. Engineers, doctors, teachers, and the tools and guns they brought with them."
+    },
+    {
+      "text": "He wanted his kingdom to catch up before it was overtaken."
+    },
+    {
+      "text": "And then Stanley went further. He did not simply carry the letter."
+    },
+    {
+      "text": "He published his own appeal in the Daily Telegraph, on the fifteenth of November, 1875."
+    },
+    {
+      "text": "It was a masterpiece of Victorian advertising."
+    },
+    {
+      "text": "Stanley described a kingdom ripe for the gospel."
+    },
+    {
+      "text": "Two million people, he claimed. A king ready to listen. A field white for harvest."
+    },
+    {
+      "text": "He asked for practical men. Men who could teach, build, farm and mend, not just preachers."
+    },
+    {
+      "text": "Britain read it, and Britain responded."
+    },
+    {
+      "text": "Within days, an anonymous donor gave five thousand pounds, a fortune, for a mission to the lakes."
+    },
+    {
+      "text": "Eight days after the appeal, the Church Missionary Society agreed to send one."
+    },
+    {
+      "text": "The appeal did not ask for money. It asked for men. That distinction mattered in Victorian Britain, where missionary societies measured success in souls and in subscriptions."
+    },
+    {
+      "text": "Eight missionaries sailed from England in April 1876."
+    },
+    {
+      "text": "None of them knew what was waiting for them."
+    },
+    {
+      "text": "One of them, a young engineer named Alexander Mackay, stood up at the farewell and said something remarkable."
+    },
+    {
+      "text": "Within six months, he told the committee, you will probably hear that one of us is dead."
+    },
+    {
+      "text": "Do not be discouraged. Send someone else."
+    },
+    {
+      "text": "He was right."
+    },
+    {
+      "text": "The road to Buganda was one of the deadliest in Africa."
+    },
+    {
+      "text": "There was no railway and no road."
+    },
+    {
+      "text": "The route ran from the coast opposite Zanzibar, eight hundred miles inland, through low country thick with fever, and then by canoe up Lake Victoria."
+    },
+    {
+      "text": "By the time the party reached the lake, sickness had already taken its toll."
+    },
+    {
+      "text": "One of them was dead."
+    },
+    {
+      "text": "Three, including Mackay, had been sent back to the coast to recover."
+    },
+    {
+      "text": "For weeks the party crawled through country where the tsetse fly killed the oxen and fever killed the men. Porters deserted. Supplies ran out. The lake, when it finally appeared, was a relief and a warning."
+    },
+    {
+      "text": "On the thirtieth of June, 1877, two men crossed the water and climbed up to the capital at Rubaga."
+    },
+    {
+      "text": "Lieutenant Shergold Smith and the Reverend Charles Thomas Wilson."
+    },
+    {
+      "text": "Muteesa received them at his palace."
+    },
+    {
+      "text": "He gave them land near the court, as he had promised, and he listened."
+    },
+    {
+      "text": "Then the road took its price."
+    },
+    {
+      "text": "Smith went back south to join a colleague at Ukerewe, and both were killed there in a local quarrel."
+    },
+    {
+      "text": "Wilson was left alone in Buganda for a year."
+    },
+    {
+      "text": "In late 1878, Alexander Mackay finally arrived."
+    },
+    {
+      "text": "The engineer, the carpenter, the man who could fix a gun and build a press."
+    },
+    {
+      "text": "This is the part that usually gets left out."
+    },
+    {
+      "text": "The missionaries did not arrive to a kingdom waiting to be converted."
+    },
+    {
+      "text": "They arrived at a court that was already religiously crowded."
+    },
+    {
+      "text": "Muteesa listened to them. He also listened to the Muslims."
+    },
+    {
+      "text": "He compared, he questioned, he argued."
+    },
+    {
+      "text": "By all accounts, he was fascinated."
+    },
+    {
+      "text": "But what he wanted most were the things they could do."
+    },
+    {
+      "text": "Mackay set up a printing press, the first in the region."
+    },
+    {
+      "text": "He began printing reading sheets and portions of scripture in Swahili, the language of the coast."
+    },
+    {
+      "text": "Literacy spread first among the pages and the chiefs at court."
+    },
+    {
+      "text": "Young Baganda learned to read and write letters that had never existed in their own language before."
+    },
+    {
+      "text": "The press changed what a page could carry. A message that once travelled by messenger could now be printed hundreds of times, and read aloud in places the missionaries never visited."
+    },
+    {
+      "text": "Mackay mended guns. He built. He taught."
+    },
+    {
+      "text": "And he began the slow, enormous work of putting Luganda into written form."
+    },
+    {
+      "text": "The missionaries had come to change the kingdom's soul."
+    },
+    {
+      "text": "What they changed first was its paperwork."
+    },
+    {
+      "text": "Because an invitation is never only an invitation."
+    },
+    {
+      "text": "The same road that carried teachers also carried traders, soldiers, and empire."
+    },
+    {
+      "text": "Two years after the Protestants, the Catholic White Fathers arrived."
+    },
+    {
+      "text": "French, and rivals to the British mission."
+    },
+    {
+      "text": "Now Buganda's court had three faiths competing for the king's ear."
+    },
+    {
+      "text": "Islam, Protestant, and Catholic."
+    },
+    {
+      "text": "And Muteesa played them against each other."
+    },
+    {
+      "text": "He had learned, very early, that being needed is a kind of power."
+    },
+    {
+      "text": "Mackay, the old king said to him one day, you are a man."
+    },
+    {
+      "text": "In 1884, Muteesa died."
+    },
+    {
+      "text": "His son Mwanga took the throne."
+    },
+    {
+      "text": "Young, suspicious, and far less skilled at balancing the forces his father had invited."
+    },
+    {
+      "text": "Each mission wanted the king's favour, and each could offer something the others could not: Arabic learning, English books, French protection. Muteesa let them compete, because competition made him the prize."
+    },
+    {
+      "text": "Within a decade, Buganda's independence would be gone."
+    },
+    {
+      "text": "Swallowed by the scramble for Africa that Muteesa had sensed coming and tried to outrun."
+    },
+    {
+      "text": "He had invited the teachers to keep his kingdom strong."
+    },
+    {
+      "text": "He could not control what came with them."
+    },
+    {
+      "text": "One letter. One king. One request for teachers."
+    },
+    {
+      "text": "Kabaka Muteesa the First never committed to the new faith."
+    },
+    {
+      "text": "But he opened a door that no one in Buganda could close again."
+    },
+    {
+      "text": "And the question he was asking is still being asked today."
+    },
+    {
+      "text": "How do you keep your kingdom free in a world that is getting smaller?"
+    }
   ]
 }

@@ -127,6 +127,9 @@ else {
       if (!noAudio) ffArgs.push('-c:a', 'aac', '-b:a', '192k', '-shortest');
       ffArgs.push('-movflags', '+faststart', out);
       const ff = spawn('ffmpeg', ffArgs, { stdio: ['pipe', 'inherit', 'inherit'] });
+      let ffErr = '';
+      ff.on('error', (e) => { ffErr = String(e.message || e); });
+      ff.on('close', (code) => { if (code) console.error(`\nffmpeg exited ${code}${ffErr ? ': ' + ffErr : ''}`); });
       const t0 = Date.now();
       const long = flags.has('--long');
       let prevFp = null, lastBuf = null, held = 0, uniq = 0;
@@ -144,6 +147,7 @@ else {
         if (i % 150 === 0) process.stdout.write(`\r${i}/${n} frames`);
       }
       ff.stdin.end(); await new Promise((r) => ff.on('close', r));
+      if (ff.exitCode) process.exitCode = 1;
       const stat = long ? `, ${uniq} unique / ${held} held (${Math.round(100 * uniq / Math.max(1, n))}% captured)` : '';
       console.log(`\r${out} (${n} frames, ${noAudio ? 'VIDEO ONLY (--noaudio)' : hasMix ? 'with data/mix.wav' : 'SILENT: no data/mix.wav'}${stat}, ${((Date.now() - t0) / 1000).toFixed(0)} s)`);
     } else console.log('modes: check · cues · sheet · frames · video · preview');

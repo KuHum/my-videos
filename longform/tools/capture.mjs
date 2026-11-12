@@ -123,41 +123,39 @@ else {
       const segArg = args.find((a) => a.startsWith('--segment='));
       if (segArg) { const [k, m] = segArg.split('=')[1].split('/').map(Number); a0 = dur * k / m; a1 = dur * (k + 1) / m; }
       const n = Math.round((a1 - a0) * FPS), noAudio = flags.has('--noaudio');
-      const ffArgs = ['-v', 'error', '-y', '-f', 'image2pipe', '-framerate', String(FPS), '-i', '-'];
-      if (!noAudio) ffArgs.push(...(hasMix ? ['-ss', String(a0), '-t', String(a1 - a0), '-i', mix] : ['-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=stereo']), '-map', '0:v', '-map', '1:a');
-      ffArgs.push('-c:v', 'libx264', '-preset', flags.has('--draft') ? 'ultrafast' : 'veryfast', '-crf', flags.has('--draft') ? '28' : '18', '-pix_fmt', 'yuv420p');
-      if ((+(process.env.SCALE || 1)) < 1) ffArgs.push('-vf', 'scale=1920:1080:flags=lanczos');
-      if (!noAudio) ffArgs.push('-c:a', 'aac', '-b:a', '192k', '-shortest');
-      ffArgs.push('-movflags', '+faststart', out);
-      const ff = spawn('ffmpeg', ffArgs, { stdio: ['pipe', 'inherit', 'inherit'] });
-      let ffErr = '', ffDead = false;
-      ff.on('error', (e) => { ffErr = String(e.message || e); ffDead = true; });
-      ff.on('close', () => { ffDead = true; });
-      ff.on('close', (code) => { if (code) console.error(`\nffmpeg exited ${code}${ffErr ? ': ' + ffErr : ''}`); });
       const t0 = Date.now();
       const long = flags.has('--long');
+      // Decoupled capture: write frames to disk, then encode. No pipe, so no deadlock.
+      const frameDir = fs.mkdtempSync(path.join(os.tmpdir(), 'fs-frames-'));
       let lastBuf = null, held = 0, uniq = 0;
-      for (let i = 0; i < n; i++) {
-        const t = a0 + i / FPS;
-        let b;
-        if (long) {
-          const d = await P.ev(`OP.captureFrame(${t}, ${flags.has('--draft') ? 0.8 : 0.93})`);
-          if (d) { b = jpg(d); lastBuf = b; uniq++; }
-          else if (lastBuf) { b = lastBuf; held++; }
-          else { b = jpg(await P.ev(FRAME(t, 0.93))); lastBuf = b; uniq++; }
-        } else {
-          b = jpg(await P.ev(FRAME(t, flags.has('--draft') ? 0.8 : 0.93)));
+      try {
+        for (let i = 0; i < n; i++) {
+          const t = a0 + i / FPS;
+          let b;
+          if (long) {
+            const d = await P.ev(`OP.captureFrame(${t}, ${flags.has('--draft') ? 0.8 : 0.93})`);
+            if (d) { b = jpg(d); lastBuf = b; uniq++; }
+            else if (lastBuf) { b = lastBuf; held++; }
+            else { b = jpg(await P.ev(FRAME(t, 0.93))); lastBuf = b; uniq++; }
+          } else {
+            b = jpg(await P.ev(FRAME(t, flags.has('--draft') ? 0.8 : 0.93)));
+          }
+          fs.writeFileSync(path.join(frameDir, `f${String(i).padStart(6, '0')}.jpg`), b);
+          if (i % 100 === 0) console.log(`frame ${i}/${n} (${uniq} captured, ${held} held)`);
         }
-        try {
-          if (!ff.stdin.write(b)) await Promise.race([new Promise((r) => ff.stdin.once('drain', r)), new Promise((r) => ff.once('close', r))]);
-        } catch (e) { ffErr = String(e.message || e); ffDead = true; }
-        if (ffDead) { console.error(`\nffmpeg stopped at frame ${i}/${n}${ffErr ? ': ' + ffErr : ''}`); break; }
-        if (i % 25 === 0) console.log(`frame ${i}/${n} (${uniq} captured, ${held} held)`);
+        const ffArgs = ['-v', 'error', '-y', '-framerate', String(FPS), '-i', path.join(frameDir, 'f%06d.jpg')];
+        if (!noAudio) ffArgs.push(...(hasMix ? ['-ss', String(a0), '-t', String(a1 - a0), '-i', mix] : ['-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=stereo']), '-map', '0:v', '-map', '1:a');
+        ffArgs.push('-c:v', 'libx264', '-preset', flags.has('--draft') ? 'ultrafast' : 'veryfast', '-crf', flags.has('--draft') ? '28' : '18', '-pix_fmt', 'yuv420p');
+        if ((+(process.env.SCALE || 1)) < 1) ffArgs.push('-vf', 'scale=1920:1080:flags=lanczos');
+        if (!noAudio) ffArgs.push('-c:a', 'aac', '-b:a', '192k', '-shortest');
+        ffArgs.push('-movflags', '+faststart', out);
+        const r = spawnSync('ffmpeg', ffArgs, { stdio: ['ignore', 'inherit', 'inherit'] });
+        if (r.status) { console.error('ffmpeg failed: ' + (r.stderr || '')); process.exitCode = 1; }
+      } finally {
+        fs.rmSync(frameDir, { recursive: true, force: true });
       }
-      ff.stdin.end(); await new Promise((r) => ff.on('close', r));
-      if (ff.exitCode) process.exitCode = 1;
       const stat = long ? `, ${uniq} unique / ${held} held (${Math.round(100 * uniq / Math.max(1, n))}% captured)` : '';
-      console.log(`\r${out} (${n} frames, ${noAudio ? 'VIDEO ONLY (--noaudio)' : hasMix ? 'with data/mix.wav' : 'SILENT: no data/mix.wav'}${stat}, ${((Date.now() - t0) / 1000).toFixed(0)} s)`);
+      console.log(`\r${out} (${n} frames, ${noAudio ? 'VIDEO ONLY (--noaudio)' : hasMix ? 'with audio' : 'SILENT'}${stat}, ${((Date.now() - t0) / 1000).toFixed(0)} s)`);
     } else if (mode === 'bench') {
       const n = +(rest[0] || 20);
       const r = await P.ev(`(() => { const t0=performance.now(); for(let i=0;i<${n};i++) OP.draw(50+i*0.04); const t1=performance.now(); for(let i=0;i<${n};i++) OP.frame(50+i*0.04, 0.93); const t2=performance.now(); return { drawMs:+((t1-t0)/${n}).toFixed(1), frameMs:+((t2-t1)/${n}).toFixed(1) }; })()`);

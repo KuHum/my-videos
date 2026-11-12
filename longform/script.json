@@ -1,21 +1,48 @@
 {
-  "title": "Government Shutdown: Explained — opening chapter",
-  "voice": "en-US-ChristopherNeural",
+  "title": "The King Who Invited the Missionaries",
+  "voice": "en-GB-RyanNeural",
   "speed": 1.0,
-  "lead": 0.5,
-  "outro": 1.2,
-  "gap": 0.3,
+  "lead": 0.6,
+  "outro": 1.4,
+  "gap": 0.34,
   "music": "bed",
   "sources": [
-    "Congressional Research Service, 'Shutdown of the Federal Government: Causes, Processes, and Effects' (RL34680): appropriations lapse at the start of the fiscal year on October 1 without enacted funding",
-    "US Office of Personnel Management guidance on furloughs and excepted (essential) employees during a lapse in appropriations",
-    "AP and Reuters reporting on federal shutdowns: hundreds of thousands of employees furloughed, others required to work without pay until funding is restored"
+    "Dictionary of African Christian Biography, 'A History of Christianity in Uganda' — Stanley's 1875 visit; CMS party reaches Rubaga 30 June 1877; White Fathers 17 February 1879",
+    "Church of Uganda, 'About Us' — Stanley met Muteesa in April 1875; appeal published in the Daily Telegraph 15 November 1875",
+    "Tucker of Uganda (A. P. Shepherd, 1929) — eight missionaries sail 27 April 1876; Smith and Wilson reach Mengo 30 June 1877; Smith and O'Neill killed at Ukerewe",
+    "New Vision, 'Muteesa writes to the Queen' — published appeal text; £5,000 donations; CMS decision eight days later",
+    "Apolo Kaggwa, The Kings of Buganda — Muteesa I's reign, 1856–1884"
   ],
   "lines": [
-    { "text": "On October first, the government ran out of money.", "caps": "On *October first, | the government | ran out of *money." },
-    { "text": "Not all of it. Just the parts Congress hadn't funded.", "caps": "Not *all of it. | Just the parts | Congress *hadn't funded." },
-    { "text": "So hundreds of thousands of federal workers were sent home.", "caps": "*Hundreds of thousands | of federal workers | were sent *home." },
-    { "text": "Or told to keep working, for no pay.", "caps": "Or told to | keep *working, | for *no pay." },
-    { "text": "And every day it lasted, the bill grew.", "caps": "Every *day it lasted, | the bill *grew." }
+    { "text": "In 1875, a king in the heart of Africa decided to write to a queen he had never met.", "caps": "In *1875, | a king in the | heart of *Africa | decided to write | to a *queen | he had never *met." },
+    { "text": "He did not write it himself. A European explorer held the pen, but the words were his.", "caps": "He did not | write it *himself. | A European | explorer held | the *pen, | but the words | were *his." },
+    { "text": "He did not ask for soldiers, or money, or protection. He asked for teachers.", "caps": "He did not ask | for *soldiers, | or *money, | or *protection. | He asked for | *teachers." },
+    { "text": "That letter crossed the ocean, landed on the desk of a missionary society in London, and brought the first Christian missionaries to Uganda.", "caps": "That *letter | crossed the *ocean, | landed on the desk | of a *society | in London, | and brought | the first *missionaries | to *Uganda." },
+    { "text": "It is one of the most consequential letters ever written in this part of the world, and almost nobody remembers what it actually said.", "caps": "One of the most | *consequential | letters ever *written | in this part | of the *world, | and almost *nobody | remembers | what it *said." },
+    { "text": "This is the story of Kabaka Muteesa the First, and why he really sent for them.", "caps": "This is the story | of *Kabaka Muteesa | the *First, | and *why | he really | sent for *them." },
+
+    { "text": "Before the letter, there was Buganda.", "caps": "Before the *letter, | there was *Buganda." },
+    { "text": "A kingdom on the northern shore of a lake so vast that the first Europeans to see it thought they had found an inland sea.", "caps": "A *kingdom | on the northern *shore | of a lake so *vast | that the first | Europeans | thought they had found | an *inland sea." },
+    { "text": "The Baganda called it Nalubaale. We call it Lake Victoria.", "caps": "The Baganda | called it *Nalubaale. | We call it | *Lake Victoria." },
+    { "text": "At the head of the kingdom sat the kabaka. Not a chief, not a governor, but a king whose word could raise an army or end a life.", "caps": "At the head | of the *kingdom | sat the *kabaka. | Not a chief, | not a *governor, | but a *king | whose word could | raise an *army | or end a *life." },
+    { "text": "Beneath him were the chiefs, the court, the pages who served at the palace, and a capital that moved with the king.", "caps": "Beneath him | were the *chiefs, | the *court, | the pages who served | at the *palace, | and a capital | that *moved | with the king." },
+    { "text": "Muteesa the First had ruled since 1856.", "caps": "Muteesa the First | had ruled | since *1856." },
+    { "text": "By the 1870s, his authority reached from the lake shore out toward the edges of Bunyoro.", "caps": "By the *1870s, | his authority | reached from | the lake *shore | out toward the edges | of *Bunyoro." },
+    { "text": "Buganda was rich. Bananas, barkcloth, cattle, ivory.", "caps": "Buganda was *rich. | *Bananas, | *barkcloth, | *cattle, | *ivory." },
+    { "text": "It was also connected. Trade routes ran east to the Swahili coast, where the merchants of Zanzibar came looking for ivory and for slaves.", "caps": "It was also | *connected. | Trade routes | ran *east | to the Swahili *coast, | where the merchants | of *Zanzibar | came looking | for *ivory | and for *slaves." },
+    { "text": "And those traders brought more than goods. They brought a religion.", "caps": "And those traders | brought more | than *goods. | They brought | a *religion." },
+    { "text": "By the time Muteesa was king, Arab traders from the coast had been at his court for years.", "caps": "By the time | Muteesa was *king, | Arab *traders | from the coast | had been at his *court | for *years." },
+    { "text": "They prayed, they read the Quran, they wore long white robes, and Muteesa had learned to read Arabic.", "caps": "They *prayed, | they read | the *Quran, | they wore | long *white robes, | and Muteesa | had learned | to read *Arabic." },
+    { "text": "Islam was not a rumour in Buganda. It was already inside the palace.", "caps": "*Islam | was not a *rumour | in *Buganda. | It was already | inside the *palace." },
+
+    { "text": "But Muteesa was not only curious. He was afraid.", "caps": "But Muteesa | was not only *curious. | He was *afraid." },
+    { "text": "To the north, Egypt was pushing south up the Nile, reaching for the lakes and the kingdoms around them.", "caps": "To the *north, | *Egypt | was pushing | *south | up the *Nile, | reaching for the *lakes | and the kingdoms | around them." },
+    { "text": "To the west, Bunyoro, Buganda's old rival, was waiting for any sign of weakness.", "caps": "To the *west, | *Bunyoro, | Buganda's old *rival, | was waiting | for any sign | of *weakness." },
+    { "text": "And Muteesa had already met Europeans.", "caps": "And Muteesa | had already met | *Europeans." },
+    { "text": "In 1862, John Speke and James Grant had reached his court, searching for the source of the Nile.", "caps": "In *1862, | John *Speke | and James *Grant | had reached | his *court, | searching for | the source | of the *Nile." },
+    { "text": "He had seen what they carried. Guns, cloth, instruments, books.", "caps": "He had seen | what they *carried. | *Guns, | *cloth, | *instruments, | *books." },
+    { "text": "He understood something very clearly. The world was getting bigger, and kings who stayed small would be swallowed.", "caps": "He understood | something | very *clearly. | The world was | getting *bigger, | and kings | who stayed *small | would be *swallowed." },
+    { "text": "So he did what a smart king does. He looked for an ally who could bring him the things he lacked, without bringing an army that could take his throne.", "caps": "So he did | what a *smart king | does. | He looked | for an *ally | who could bring him | the things | he *lacked, | without bringing | an *army | that could take | his *throne." },
+    { "text": "Then, in April 1875, another European walked into his court.", "caps": "Then, | in April *1875, | another *European | walked into | his *court." }
   ]
 }

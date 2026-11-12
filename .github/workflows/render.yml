@@ -13,6 +13,10 @@ on:
         type: choice
         options: [final, draft]
         default: final
+  # push a tag like `render-ch1-3` to render without needing the API/UI
+  push:
+    tags:
+      - "render-*"
 
 permissions:
   contents: read

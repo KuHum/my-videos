@@ -139,6 +139,30 @@ export function timeline(years, x, y, w, p = 0, active = -1) {
 /** a pinned paper slip with a few words (for names, places, numbers) */
 export function slip(text, x, y, sc = 1, rot = -0.03, size = 54) { if (sc <= 0) return; ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(sc, sc); ctx.font = `700 ${size}px ${SERIF}`; const w = ctx.measureText(text).width + 70; cut(P_rr(-w / 2, -size * 0.8, w, size * 1.6, 4), P.edge); ctx.fillStyle = P.ink; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(text, 0, 4); circle(0, -size * 0.8 + 6, 10, P.crimson); ctx.restore(); }
 
+// ═════════════════════════ ARCHIVAL PHOTOS ═════════════════════════
+/**
+ * An archival photo mounted on a paper mat: warm sepia, soft paper shadow, slight tilt.
+ * o = { h, rot, sepia, mat, crop:{x,y,w,h} (0..1 of the source) }
+ * Returns the outer { w, h } so a shot can lay out around it.
+ */
+export function photoCard(img, x, y, w, o = {}) {
+  const rot = o.rot ?? -0.012, mat = o.mat ?? 24, sepia = o.sepia ?? 0.55;
+  const crop = o.crop || { x: 0, y: 0, w: 1, h: 1 };
+  const sw = img.width * crop.w, sh = img.height * crop.h;
+  const h = o.h ?? w * sh / sw;
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
+  cut(P_rr(-w / 2 - mat, -h / 2 - mat, w + mat * 2, h + mat * 2, 3), '#F1E7CF', { shadow: 1, edge: 0 });
+  ctx.save();
+  ctx.beginPath(); ctx.rect(-w / 2, -h / 2, w, h); ctx.clip();
+  ctx.filter = `sepia(${sepia}) contrast(1.06) brightness(0.97)`;
+  ctx.drawImage(img, img.width * crop.x, img.height * crop.y, sw, sh, -w / 2, -h / 2, w, h);
+  ctx.filter = 'none';
+  ctx.strokeStyle = 'rgba(62,44,30,0.32)'; ctx.lineWidth = 2; ctx.strokeRect(-w / 2, -h / 2, w, h);
+  ctx.restore();
+  ctx.restore();
+  return { w: w + mat * 2, h: h + mat * 2 };
+}
+
 // ═════════════════════════ CAPTION LOOK ═════════════════════════
 export const CAPLOOK = { font: `700 78px ${SERIF}`, y: 930, maxW: 1220, fg: P.ink, hi: P.crimson };
 /** caption on a torn paper strip */

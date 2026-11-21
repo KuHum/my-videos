@@ -1,0 +1,12 @@
+{
+  "name": "uganda-history",
+  "private": true,
+  "description": "Uganda: a history in six beats — 60s 3D film. Three.js and low-poly models load from the polyfork.dev CDN, rendered by HyperFrames in GitHub Actions.",
+  "scripts": {
+    "check": "hyperframes check",
+    "render": "hyperframes render . -o renders/uganda-history.mp4 --quality looks"
+  },
+  "dependencies": {
+    "hyperframes": "0.9.7"
+  }
+}

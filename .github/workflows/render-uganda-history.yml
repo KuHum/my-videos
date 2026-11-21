@@ -1,0 +1,126 @@
+name: Render Uganda history film
+
+# Renders uganda-history/ — a 60 s, 1920x1080, 30 fps 3D film — and publishes
+# the MP4 both as a workflow artifact and on the `final-video` branch, the same
+# place render.yml publishes the long-form film.
+#
+# The film's models come from the polyfork.dev CDN and three.js from unpkg, so
+# the runner needs network access during the render (GitHub-hosted runners have
+# it). Nothing 3D is vendored into this repo.
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "uganda-history/**"
+      - ".github/workflows/render-uganda-history.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - id: chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Ensure ffmpeg
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          ffmpeg -version | head -1
+
+      - name: Install HyperFrames
+        working-directory: uganda-history
+        run: |
+          npm install --no-audit --no-fund
+          npx hyperframes --version
+
+      - name: Lint composition
+        working-directory: uganda-history
+        run: |
+          set -o pipefail
+          # Warnings are fine; a structural error fails the job before we spend
+          # 90 minutes of render time on it.
+          mkdir -p renders
+          npx hyperframes lint --json > renders/lint.json || true
+          node -e '
+            const a = JSON.parse(require("fs").readFileSync("renders/lint.json", "utf8"));
+            const r = a.lint || a;
+            console.log(`lint: ${r.errorCount} errors, ${r.warningCount} warnings`);
+            for (const f of (r.findings || [])) console.log(`  ${f.severity} ${f.code} ${f.selector || ""}`);
+            if (r.errorCount > 0) process.exit(1);
+          '
+
+      - name: Build the score
+        working-directory: uganda-history
+        run: node tools/score.mjs assets/score.wav
+
+      - name: Render 60s film
+        working-directory: uganda-history
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          PUPPETEER_EXECUTABLE_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
+          set -euo pipefail
+          mkdir -p renders
+          start=$(date +%s)
+          npx hyperframes render . -o renders/uganda-history.mp4 --quality looks --workers 4
+          end=$(date +%s)
+          echo "render seconds: $((end - start))" | tee renders/render-time.txt
+
+      - name: Verify output
+        working-directory: uganda-history
+        run: |
+          set -euo pipefail
+          test -s renders/uganda-history.mp4
+          ffprobe -v error \
+            -show_entries format=duration,size,bit_rate \
+            -show_entries stream=codec_name,width,height,r_frame_rate,nb_frames \
+            -of default=nw=1 renders/uganda-history.mp4 | tee renders/probe.txt
+          dur=$(ffprobe -v error -show_entries format=duration -of csv=p=0 renders/uganda-history.mp4)
+          node -e "
+            const d = Number(process.argv[1]);
+            if (!(d > 58 && d < 62)) { console.error('bad duration', d); process.exit(1); }
+            console.log('duration ok:', d.toFixed(2) + 's');
+          " "$dur"
+          stat -c 'bytes: %s' renders/uganda-history.mp4
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: uganda-history-film
+          path: |
+            uganda-history/renders/uganda-history.mp4
+            uganda-history/renders/probe.txt
+            uganda-history/renders/render-time.txt
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Publish to the final-video branch
+        run: |
+          set -euo pipefail
+          SIZE=$(stat -c%s uganda-history/renders/uganda-history.mp4)
+          echo "size bytes: $SIZE"
+          if [ "$SIZE" -ge 95000000 ]; then
+            echo "too large for git; re-encoding smaller"
+            ffmpeg -v error -y -i uganda-history/renders/uganda-history.mp4 \
+              -c:v libx264 -preset veryfast -crf 27 -c:a aac -b:a 128k \
+              -movflags +faststart uganda-history/renders/small.mp4
+            mv uganda-history/renders/small.mp4 uganda-history/renders/uganda-history.mp4
+            SIZE=$(stat -c%s uganda-history/renders/uganda-history.mp4)
+          fi
+          git config user.name ci
+          git config user.email ci@local
+          git add -f uganda-history/renders/uganda-history.mp4
+          git commit -m "uganda-history final film ($SIZE bytes)" || true
+          git push -f origin HEAD:refs/heads/final-video

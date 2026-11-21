@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Uganda — A History in Six Beats</title>
+<!--
+  Uganda: a history in six beats — 60 s, 1920x1080, 30 fps.
+
+  Everything three-dimensional comes from https://polyfork.dev (free low-poly
+  models, loaded from their CDN as ES modules) and three.js r180 from unpkg.
+  No model files are copied into this repo: the CDN URLs are the source, which
+  is the licence-safe hotlink the library publishes for exactly this use.
+
+  Rendering is seek-based: every pixel is a function of timeline time, so the
+  film renders identically frame by frame in GitHub Actions.
+-->
+<script src="assets/gsap.min.js"></script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.180.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.180.0/examples/jsm/"
+  }
+}
+</script>
+<style>
+  html, body { margin: 0; padding: 0; background: #0d0a10; }
+  #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #0d0a10; }
+</style>
+</head>
+<body>
+<div id="root"
+     data-hf-id="hf-root"
+     data-composition-id="main"
+     data-start="0"
+     data-duration="60"
+     data-width="1920"
+     data-height="1080"
+     data-fps="30">
+
+  <div id="film"
+       data-hf-id="hf-film"
+       data-composition-id="film"
+       data-composition-src="compositions/film.html"
+       data-start="0"
+       data-duration="60"
+       data-track-index="1"
+       data-track-kind="graphics"
+       data-width="1920"
+       data-height="1080"></div>
+
+  <!-- The score: a 60 s pad built by tools/score.mjs, so the same bytes are
+       regenerated on every machine instead of being committed. -->
+  <audio id="film-score"
+         data-hf-id="hf-score"
+         src="assets/score.wav"
+         data-start="0"
+         data-duration="60"
+         data-volume="0.92"></audio>
+</div>
+<script>
+  window.__timelines["main"] = gsap.timeline({ paused: true });
+</script>
+</body>
+</html>

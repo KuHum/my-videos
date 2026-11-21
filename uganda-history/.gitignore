@@ -1,0 +1,9 @@
+node_modules/
+.npmcache/
+renders/
+.hyperframes/
+shots/
+*.log
+tools/*.log
+assets/score.wav
+shots*/

@@ -1,0 +1,1139 @@
+<template>
+<!-- ==========================================================================
+     Uganda — A History in Six Beats
+     One 60 s composition. The camera cuts between six dioramas that live on a
+     single timeline road, while three.js draws the frame from timeline time.
+     Every low-poly model is a polyfork.dev CDN module; three.js is from unpkg.
+     ========================================================================== -->
+<style>
+  #film {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: #140f14;
+    font-kerning: normal;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---- 3D stage ---------------------------------------------------------- */
+  #film-stage {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  #film-canvas {
+    position: absolute;
+    inset: 0;
+    width: 1920px;
+    height: 1080px;
+    display: block;
+  }
+
+  /* ---- grade: scrim, vignette -------------------------------------------- */
+  #film-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background:
+      linear-gradient(to top, rgba(14, 9, 12, 0.86) 0%, rgba(14, 9, 12, 0.55) 22%, rgba(14, 9, 12, 0) 52%),
+      linear-gradient(to right, rgba(14, 9, 12, 0.72) 0%, rgba(14, 9, 12, 0.20) 34%, rgba(14, 9, 12, 0) 58%);
+  }
+  #film-vignette {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 78% 68% at 50% 46%, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.52) 100%),
+      linear-gradient(to bottom, rgba(8, 6, 10, 0.42) 0%, rgba(8, 6, 10, 0) 26%);
+  }
+  #film-cut {
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    pointer-events: none;
+    background: #0a070c;
+    opacity: 1;
+  }
+
+  /* ---- beat typography --------------------------------------------------- */
+  .beat {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .beat-inner {
+    position: absolute;
+    left: 150px;
+    bottom: 168px;
+    width: 880px;
+  }
+  .beat-num {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 1;
+    letter-spacing: 0.44em;
+    color: #ffc383;
+    margin-bottom: 20px;
+    display: block;
+  }
+  .beat-title {
+    font-family: "Outfit", sans-serif;
+    font-weight: 800;
+    font-size: 92px;
+    line-height: 0.94;
+    letter-spacing: -0.005em;
+    text-transform: uppercase;
+    color: #fff7ec;
+    margin: 0;
+    display: block;
+  }
+  .beat-date {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 1;
+    letter-spacing: 0.24em;
+    color: #ffcb96;
+    margin-top: 24px;
+    display: block;
+  }
+  .beat-rule {
+    width: 132px;
+    height: 3px;
+    background: #ff9d4d;
+    margin: 22px 0 24px;
+    transform-origin: 0% 50%;
+    display: block;
+  }
+  .beat-line {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 1.42;
+    color: #f0e5d8;
+    max-width: 760px;
+    margin: 0;
+    display: block;
+  }
+
+  /* ---- era rail ---------------------------------------------------------- */
+  #film-hud {
+    position: absolute;
+    left: 150px;
+    right: 150px;
+    bottom: 70px;
+    height: 42px;
+    z-index: 11;
+    pointer-events: none;
+  }
+  #film-hud-rail {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 7px;
+    height: 1px;
+    background: rgba(255, 233, 208, 0.26);
+  }
+  #film-hud-fill {
+    position: absolute;
+    left: 0;
+    top: 7px;
+    height: 1px;
+    background: rgba(255, 168, 92, 0.85);
+    transform-origin: 0% 50%;
+    width: 100%;
+    transform: scaleX(0);
+  }
+  .hud-tick {
+    position: absolute;
+    top: 3px;
+    width: 1px;
+    height: 9px;
+    background: rgba(255, 233, 208, 0.4);
+  }
+  .hud-lab {
+    position: absolute;
+    top: 21px;
+    transform: translateX(-50%);
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.2em;
+    color: rgba(255, 238, 218, 0.42);
+    white-space: nowrap;
+  }
+  #film-hud-dot {
+    position: absolute;
+    top: 1px;
+    left: 0;
+    width: 13px;
+    height: 13px;
+    margin-left: -6.5px;
+    border-radius: 50%;
+    background: #ffa85c;
+    box-shadow: 0 0 0 5px rgba(255, 168, 92, 0.14);
+  }
+
+  /* ---- end card ---------------------------------------------------------- */
+  #film-end {
+    position: absolute;
+    inset: 0;
+    z-index: 12;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  #film-end-scrim {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 62% 52% at 50% 48%, rgba(9, 6, 10, 0.82) 0%, rgba(9, 6, 10, 0.55) 60%, rgba(9, 6, 10, 0) 100%);
+    opacity: 0;
+  }
+  #film-end-word {
+    position: relative;
+    font-family: "Outfit", sans-serif;
+    font-weight: 800;
+    font-size: 196px;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    padding-left: 0.14em;
+    color: #fff8ee;
+    margin: 0;
+    display: block;
+  }
+  #film-end-sub {
+    position: relative;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.42em;
+    color: #ffc383;
+    margin-top: 30px;
+    padding-left: 0.42em;
+    display: block;
+  }
+  #film-end-rule {
+    position: relative;
+    width: 210px;
+    height: 2px;
+    background: rgba(255, 172, 100, 0.9);
+    margin-top: 34px;
+    transform-origin: 50% 50%;
+    transform: scaleX(0);
+    display: block;
+  }
+</style>
+
+<div id="film"
+     data-composition-id="film"
+     data-width="1920"
+     data-height="1080"
+     data-composition-variables='[
+       {"id":"b1title","type":"string","label":"Beat 1 title","default":"The Land"},
+       {"id":"b1line","type":"string","label":"Beat 1 line","default":"Farming and iron reach the great lakes. Water, hills and papyrus — the ground under every story after this."},
+       {"id":"b2title","type":"string","label":"Beat 2 title","default":"Kingdoms"},
+       {"id":"b2line","type":"string","label":"Beat 2 line","default":"Bunyoro-Kitara, Buganda, Ankole, Toro. Power measured in cattle, banana groves and drums."},
+       {"id":"b3title","type":"string","label":"Beat 3 title","default":"The Outsiders"},
+       {"id":"b3line","type":"string","label":"Beat 3 line","default":"Zanzibar’s caravans arrive. Speke finds the Nile’s source. Missionaries follow the same road."},
+       {"id":"b4title","type":"string","label":"Beat 4 title","default":"The Protectorate"},
+       {"id":"b4line","type":"string","label":"Beat 4 line","default":"A British protectorate is declared. The railway reaches the lake. The map is drawn from outside."},
+       {"id":"b5title","type":"string","label":"Beat 5 title","default":"Independence"},
+       {"id":"b5line","type":"string","label":"Beat 5 line","default":"A flag at Kololo. Coups, war, a lost generation. A new government takes Kampala in 1986."},
+       {"id":"b6title","type":"string","label":"Beat 6 title","default":"Today"},
+       {"id":"b6line","type":"string","label":"Beat 6 line","default":"One of the youngest nations on earth, and its own story still being written."},
+       {"id":"endword","type":"string","label":"End card word","default":"Uganda"},
+       {"id":"endsub","type":"string","label":"End card line","default":"A history in six beats"}
+     ]'>
+
+  <div id="film-stage" data-hf-id="hf-stage">
+    <canvas id="film-canvas" data-hf-id="hf-canvas" width="1920" height="1080"></canvas>
+  </div>
+
+  <div id="film-scrim" data-hf-id="hf-scrim" data-layout-ignore></div>
+  <div id="film-vignette" data-hf-id="hf-vignette" data-layout-ignore></div>
+
+  <div id="film-b1" class="beat clip" data-hf-id="hf-b1" data-start="0" data-duration="9">
+    <div class="beat-inner">
+      <span id="film-b1-num" class="beat-num" data-hf-id="hf-b1-num">01 · First millennium CE</span>
+      <h1 id="film-b1-title" class="beat-title" data-hf-id="hf-b1-title" data-var-text="b1title">The Land</h1>
+      <span id="film-b1-date" class="beat-date" data-hf-id="hf-b1-date">FARMERS &amp; IRONWORKERS</span>
+      <span id="film-b1-rule" class="beat-rule" data-hf-id="hf-b1-rule"></span>
+      <p id="film-b1-line" class="beat-line" data-hf-id="hf-b1-line" data-var-text="b1line">Farming and iron reach the great lakes. Water, hills and papyrus — the ground under every story after this.</p>
+    </div>
+  </div>
+
+  <div id="film-b2" class="beat clip" data-hf-id="hf-b2" data-start="9" data-duration="10">
+    <div class="beat-inner">
+      <span id="film-b2-num" class="beat-num" data-hf-id="hf-b2-num">02 · By the 1300s</span>
+      <h1 id="film-b2-title" class="beat-title" data-hf-id="hf-b2-title" data-var-text="b2title">Kingdoms</h1>
+      <span id="film-b2-date" class="beat-date" data-hf-id="hf-b2-date">BUNYORO · BUGANDA · ANKOLE · TORO</span>
+      <span id="film-b2-rule" class="beat-rule" data-hf-id="hf-b2-rule"></span>
+      <p id="film-b2-line" class="beat-line" data-hf-id="hf-b2-line" data-var-text="b2line">Bunyoro-Kitara, Buganda, Ankole, Toro. Power measured in cattle, banana groves and drums.</p>
+    </div>
+  </div>
+
+  <div id="film-b3" class="beat clip" data-hf-id="hf-b3" data-start="19" data-duration="10">
+    <div class="beat-inner">
+      <span id="film-b3-num" class="beat-num" data-hf-id="hf-b3-num">03 · 1844 &nbsp;·&nbsp; 1862 &nbsp;·&nbsp; 1877</span>
+      <h1 id="film-b3-title" class="beat-title" data-hf-id="hf-b3-title" data-var-text="b3title">The Outsiders</h1>
+      <span id="film-b3-date" class="beat-date" data-hf-id="hf-b3-date">CARAVANS · EXPLORERS · MISSIONARIES</span>
+      <span id="film-b3-rule" class="beat-rule" data-hf-id="hf-b3-rule"></span>
+      <p id="film-b3-line" class="beat-line" data-hf-id="hf-b3-line" data-var-text="b3line">Zanzibar’s caravans arrive. Speke finds the Nile’s source. Missionaries follow the same road.</p>
+    </div>
+  </div>
+
+  <div id="film-b4" class="beat clip" data-hf-id="hf-b4" data-start="29" data-duration="10">
+    <div class="beat-inner">
+      <span id="film-b4-num" class="beat-num" data-hf-id="hf-b4-num">04 · 1894 &nbsp;·&nbsp; 1901</span>
+      <h1 id="film-b4-title" class="beat-title" data-hf-id="hf-b4-title" data-var-text="b4title">The Protectorate</h1>
+      <span id="film-b4-date" class="beat-date" data-hf-id="hf-b4-date">A BOUNDARY DRAWN ELSEWHERE</span>
+      <span id="film-b4-rule" class="beat-rule" data-hf-id="hf-b4-rule"></span>
+      <p id="film-b4-line" class="beat-line" data-hf-id="hf-b4-line" data-var-text="b4line">A British protectorate is declared. The railway reaches the lake. The map is drawn from outside.</p>
+    </div>
+  </div>
+
+  <div id="film-b5" class="beat clip" data-hf-id="hf-b5" data-start="39" data-duration="11">
+    <div class="beat-inner">
+      <span id="film-b5-num" class="beat-num" data-hf-id="hf-b5-num">05 · 9 October 1962 &nbsp;→&nbsp; 1986</span>
+      <h1 id="film-b5-title" class="beat-title" data-hf-id="hf-b5-title" data-var-text="b5title">Independence</h1>
+      <span id="film-b5-date" class="beat-date" data-hf-id="hf-b5-date">KOLOLO · COUPS · THE LONG ROAD BACK</span>
+      <span id="film-b5-rule" class="beat-rule" data-hf-id="hf-b5-rule"></span>
+      <p id="film-b5-line" class="beat-line" data-hf-id="hf-b5-line" data-var-text="b5line">A flag at Kololo. Coups, war, a lost generation. A new government takes Kampala in 1986.</p>
+    </div>
+  </div>
+
+  <div id="film-b6" class="beat clip" data-hf-id="hf-b6" data-start="50" data-duration="6.4">
+    <div class="beat-inner">
+      <span id="film-b6-num" class="beat-num" data-hf-id="hf-b6-num">06 · 1986 &nbsp;→&nbsp; now</span>
+      <h1 id="film-b6-title" class="beat-title" data-hf-id="hf-b6-title" data-var-text="b6title">Today</h1>
+      <span id="film-b6-date" class="beat-date" data-hf-id="hf-b6-date">A YOUNG NATION</span>
+      <span id="film-b6-rule" class="beat-rule" data-hf-id="hf-b6-rule"></span>
+      <p id="film-b6-line" class="beat-line" data-hf-id="hf-b6-line" data-var-text="b6line">One of the youngest nations on earth, and its own story still being written.</p>
+    </div>
+  </div>
+
+  <div id="film-hud" data-hf-id="hf-hud">
+    <span id="film-hud-rail" data-hf-id="hf-hud-rail"></span>
+    <span id="film-hud-fill" data-hf-id="hf-hud-fill"></span>
+    <span class="hud-tick" style="left: 0%"></span>
+    <span class="hud-tick" style="left: 22%"></span>
+    <span class="hud-tick" style="left: 44.5%"></span>
+    <span class="hud-tick" style="left: 66%"></span>
+    <span class="hud-tick" style="left: 86%"></span>
+    <span class="hud-tick" style="left: 100%"></span>
+    <span class="hud-lab" data-hf-id="hf-hud-l1" style="left: 0%">c. 1300</span>
+    <span class="hud-lab" data-hf-id="hf-hud-l2" style="left: 22%">1844</span>
+    <span class="hud-lab" data-hf-id="hf-hud-l3" style="left: 44.5%">1894</span>
+    <span class="hud-lab" data-hf-id="hf-hud-l4" style="left: 66%">1962</span>
+    <span class="hud-lab" data-hf-id="hf-hud-l5" style="left: 86%">1986</span>
+    <span class="hud-lab" data-hf-id="hf-hud-l6" style="left: 100%">NOW</span>
+    <span id="film-hud-dot" data-hf-id="hf-hud-dot"></span>
+  </div>
+
+  <div id="film-end" class="clip" data-hf-id="hf-end" data-start="56" data-duration="4">
+    <span id="film-end-scrim" data-hf-id="hf-end-scrim"></span>
+    <h2 id="film-end-word" data-hf-id="hf-end-word" data-var-text="endword">Uganda</h2>
+    <span id="film-end-rule" data-hf-id="hf-end-rule"></span>
+    <span id="film-end-sub" data-hf-id="hf-end-sub" data-var-text="endsub">A history in six beats</span>
+  </div>
+
+  <div id="film-cut" data-hf-id="hf-cut" data-layout-ignore></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // A scene can be mounted more than once by the Studio; build the 3D world once.
+  if (window.__ugandaFilmBooted) return;
+  window.__ugandaFilmBooted = true;
+
+  var DURATION = 60;
+
+  // ---------------------------------------------------------------------------
+  // Timing. One source of truth: the six beats, their length and where their
+  // diorama sits on the timeline road (metres along -Z).
+  // ---------------------------------------------------------------------------
+  var BEATS = [
+    { start: 0,  dur: 9,  z: 0    },
+    { start: 9,  dur: 10, z: -95  },
+    { start: 19, dur: 10, z: -190 },
+    { start: 29, dur: 10, z: -285 },
+    { start: 39, dur: 11, z: -380 },
+    { start: 50, dur: 10, z: -475 }
+  ];
+
+  // Per-beat camera: push-in from `from` to `to`, looking from `look` to `look2`.
+  // All coordinates are relative to the beat's diorama on the z axis.
+  var SHOTS = [
+    { from: [16, 7.6, 31],   to: [10.5, 4.4, 17],  look: [-1.5, 2.2, -4],  look2: [-3.5, 1.5, -9]  },
+    { from: [11, 4.6, 17],   to: [6.0, 3.3, 10],   look: [-1, 2.2, -3],    look2: [-0.5, 1.9, -7]  },
+    { from: [17, 6.0, 22],   to: [10, 4.2, 12],    look: [-1, 2.6, -7],    look2: [-0.5, 2.1, -13] },
+    { from: [18, 3.7, 11],   to: [11.5, 2.9, 3],   look: [-6, 1.9, -1],    look2: [-10, 1.7, -2]   },
+    { from: [8.5, 2.3, 15],  to: [4.5, 4.5, 10],   look: [0, 4.4, 0],      look2: [0, 5.0, 0]      },
+    { from: [46, 8.0, 58],   to: [30, 14.0, 40],   look: [0, 11, -12],     look2: [0, 14, -14]     }
+  ];
+
+  // ---------------------------------------------------------------------------
+  // Small deterministic helpers. Nothing in this film may read Math.random()
+  // or the wall clock: a frame at t must be the same every time it renders.
+  // ---------------------------------------------------------------------------
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
+  function lerp(a, b, p) { return a + (b - a) * p; }
+  function smoothstep(a, b, x) {
+    var t = clamp((x - a) / (b - a), 0, 1);
+    return t * t * (3 - 2 * t);
+  }
+  function easeOutQuad(p) { return 1 - (1 - p) * (1 - p); }
+
+  function beatAt(t) {
+    for (var i = BEATS.length - 1; i >= 0; i--) if (t >= BEATS[i].start) return i;
+    return 0;
+  }
+
+  // Black dip at every cut, and a short fade up from black at the head.
+  function cutOpacity(t) {
+    if (t < 0.36) return 1 - t / 0.36;
+    var b = beatAt(t);
+    var local = t - BEATS[b].start;
+    var dur = BEATS[b].dur;
+    var edge = 0.26;
+    var f = 0;
+    if (local < edge) f = Math.max(f, 1 - local / edge);
+    if (dur - local < edge) f = Math.max(f, 1 - (dur - local) / edge);
+    // And a fade to black over the closing end card.
+    if (t > 59.2) f = Math.max(f, (t - 59.2) / 0.8);
+    return clamp(f, 0, 1);
+  }
+
+  var el = {
+    canvas: document.getElementById("film-canvas"),
+    cut: document.getElementById("film-cut"),
+    hudFill: document.getElementById("film-hud-fill"),
+    hudDot: document.getElementById("film-hud-dot"),
+    hud: document.getElementById("film-hud"),
+  };
+  var hudLabels = Array.prototype.slice.call(document.querySelectorAll("#film-hud .hud-lab"));
+
+  // ---------------------------------------------------------------------------
+  // 3D world
+  // ---------------------------------------------------------------------------
+  var renderer = null, scene = null, camera = null, THREE = null;
+  var world = { stations: [], water: null, flag: null, birds: null, dust: null, sun: null };
+  var dustSeeds = null;
+
+  var MODELS = {
+    canoe:      "wooden-canoe-1d00c5",
+    reed:       "reed-bed-bbbefb",
+    cattail:    "cattail-reed-6abbb3",
+    acacia:     "espino-cd3edd",
+    olive:      "olive-tree-3cb4a4",
+    elephant:   "elephant-base",
+    giraffe:    "giraffe-base",
+    mound:      "termite-mound-9bc94b",
+    granary:    "stilted-granary-3e7d7d",
+    drum:       "war-drum-on-a-5fdf9d",
+    palisade:   "stake-palisade-run-548617",
+    cattle:     "cow-base",
+    jar:        "clay-wine-jar-8eea26",
+    drumtower:  "market-drum-tower-f133f3",
+    tent:       "commander-s-tent-c8b8b5",
+    oxcart:     "ox-cart-c12bca",
+    church:     "clapboard-church-03a6f5",
+    loco:       "tender-steam-locomotive-8e2a82",
+    telegrap:   "railway-telegraph-pole-run-bb9354",
+    hut:        "lineside-hut-2b43ff",
+    flagpole:   "flagpole-7b7806",
+    tower:      "office-tower-1538cc",
+    deco:       "art-deco-setback-tower-b3a788",
+    moto:       "touring-motorcycle-3b1ad3",
+    stall:      "market-stall-9d0b29",
+    bus:        "city-bus-49fd97"
+  };
+
+  function loadFactories() {
+    var keys = Object.keys(MODELS);
+    var out = {};
+    return Promise.all(keys.map(function (key) {
+      var url = "https://polyfork.dev/cdn/" + MODELS[key] + ".mjs";
+      return import(/* @vite-ignore */ url).then(function (mod) {
+        out[key] = mod.createAsset;
+      }).catch(function (err) {
+        console.warn("[polyfork] could not load " + key + " (" + MODELS[key] + "): " + err.message);
+      });
+    })).then(function () { return out; });
+  }
+
+  function makeGround(THREE) {
+    var geo = new THREE.PlaneGeometry(1100, 900, 150, 120);
+    geo.rotateX(-Math.PI / 2);
+
+    var pos = geo.attributes.position;
+    var colors = new Float32Array(pos.count * 3);
+    var cOlive = new THREE.Color("#5f6540");
+    var cEarth = new THREE.Color("#7d6040");
+    var cDry = new THREE.Color("#8d7947");
+    var tmp = new THREE.Color();
+
+    for (var i = 0; i < pos.count; i++) {
+      var x = pos.getX(i), z = pos.getZ(i);
+
+      // Rolling ground everywhere, flattened into a 20 m pad under each diorama
+      // so the models rest exactly on y = 0 with no sinking.
+      var hills =
+        Math.sin(x * 0.0128 + 1.7) * 2.4 +
+        Math.cos(z * 0.0107 - 0.4) * 2.0 +
+        Math.sin((x + z) * 0.0219) * 1.05 +
+        Math.sin((x - z) * 0.0405) * 0.45;
+
+      var nearest = Infinity;
+      for (var b = 0; b < BEATS.length; b++) {
+        var dz = z - BEATS[b].z;
+        nearest = Math.min(nearest, Math.sqrt(x * x + dz * dz));
+      }
+      var pad = smoothstep(19, 58, nearest);
+
+      // The lake: a basin cut into the ground beside the first diorama, so the
+      // water plane is bounded by a real bank instead of showing its own edge.
+      var lx = x / 46;
+      var lz = (z - 6) / 30;
+      var lr = Math.sqrt(lx * lx + lz * lz);
+      var basin = -3.1 * (1 - smoothstep(0.20, 0.84, lr)) + 1.05 * smoothstep(0.70, 1.0, lr);
+
+      var y = basin + hills * pad * smoothstep(0.9, 1.15, lr);
+
+      pos.setY(i, y);
+
+      var m = (Math.sin(x * 0.09) * Math.cos(z * 0.11) + 1) * 0.5;
+      tmp.copy(cOlive).lerp(cEarth, m * 0.75);
+      if (y > 1.4) tmp.lerp(cDry, smoothstep(1.4, 4.5, y) * 0.5);
+      colors[i * 3] = tmp.r; colors[i * 3 + 1] = tmp.g; colors[i * 3 + 2] = tmp.b;
+    }
+    geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+    geo.computeVertexNormals();
+
+    var mat = new THREE.MeshStandardMaterial({
+      vertexColors: true, flatShading: true, roughness: 0.98, metalness: 0.0
+    });
+    var mesh = new THREE.Mesh(geo, mat);
+    mesh.receiveShadow = true;
+    return mesh;
+  }
+
+  function buildWorld(THREE, factories) {
+    var rng = mulberry32(20260109);
+    var root = new THREE.Group();
+    scene.add(root);
+
+    // --- ground + water ------------------------------------------------------
+    root.add(makeGround(THREE));
+
+    var waterGeo = new THREE.PlaneGeometry(112, 82, 40, 30);
+    waterGeo.rotateX(-Math.PI / 2);
+    var waterMat = new THREE.MeshStandardMaterial({
+      color: "#395e69", roughness: 0.55, metalness: 0.0, flatShading: true
+    });
+    var water = new THREE.Mesh(waterGeo, waterMat);
+    water.position.set(0, 0.05, 6);
+    water.receiveShadow = false;
+    root.add(water);
+    world.water = water;
+
+    // --- placement helpers ---------------------------------------------------
+    function proto(key) {
+      if (!factories[key]) return null;
+      var g = factories[key]();
+      return g;
+    }
+    var cache = {};
+    function spawn(key, parent) {
+      if (!factories[key]) return null;
+      if (!cache[key]) cache[key] = factories[key]();
+      var g = cache[key].clone(true);
+      (parent || root).add(g);
+      return g;
+    }
+    function put(key, station, x, z, ry, opts) {
+      var g = spawn(key, station.group);
+      if (!g) return null;
+      g.position.set(x, (opts && opts.y) || 0, z);
+      g.rotation.y = ry || 0;
+      g.traverse(function (o) {
+        if (o.isMesh) {
+          o.castShadow = !!(opts && opts.shadow);
+          o.receiveShadow = false;
+          if (opts && opts.tint) {
+            o.material = o.material.clone();
+            o.material.color.multiply(new THREE.Color(opts.tint));
+          }
+        }
+      });
+      return g;
+    }
+    function spread(key, station, n, rMin, rMax, opts) {
+      var out = [];
+      for (var i = 0; i < n; i++) {
+        var a = rng() * Math.PI * 2;
+        var r = lerp(rMin, rMax, rng());
+        var g = put(key, station, Math.cos(a) * r, Math.sin(a) * r, rng() * Math.PI * 2, opts);
+        if (g) out.push(g);
+      }
+      return out;
+    }
+
+    // Round thatched huts, built here: a wattle drum under a conical thatch.
+    // Nothing in the catalogue is a Ugandan rural house, and a half-timbered
+    // European cottage would be the wrong country. All six beats share these.
+    var hutWallMat = new THREE.MeshStandardMaterial({ color: "#7a5c3e", roughness: 0.97, flatShading: true });
+    var hutRoofMat = new THREE.MeshStandardMaterial({ color: "#a28055", roughness: 0.95, flatShading: true });
+    var hutDoorMat = new THREE.MeshStandardMaterial({ color: "#3b2a1e", roughness: 0.92, flatShading: true });
+    function makeHut(scale) {
+      var g = new THREE.Group();
+      var rad = (1.7 + rng() * 0.6) * (scale || 1);
+      var wallH = (1.95 + rng() * 0.5) * (scale || 1);
+      var roofH = rad * 0.64;
+      var wall = new THREE.Mesh(new THREE.CylinderGeometry(rad, rad * 1.04, wallH, 12, 1), hutWallMat);
+      wall.position.y = wallH / 2;
+      var roof = new THREE.Mesh(new THREE.ConeGeometry(rad * 1.19, roofH, 12), hutRoofMat);
+      roof.position.y = wallH + roofH / 2 - 0.05;
+      var door = new THREE.Mesh(new THREE.BoxGeometry(0.85, 1.15, 0.14), hutDoorMat);
+      door.position.set(0, 0.58, rad * 1.0);
+      g.add(wall, roof, door);
+      g.traverse(function (o) { if (o.isMesh) { o.castShadow = true; o.receiveShadow = false; } });
+      return g;
+    }
+    function hut(station, x, z, ry, scale) {
+      var g = makeHut(scale);
+      g.position.set(x, 0, z);
+      g.rotation.y = ry || 0;
+      station.group.add(g);
+      return g;
+    }
+
+    // --- six dioramas --------------------------------------------------------
+    for (var b = 0; b < BEATS.length; b++) {
+      var group = new THREE.Group();
+      group.position.set(0, 0, BEATS[b].z);
+      root.add(group);
+      world.stations.push({ index: b, group: group, z: BEATS[b].z });
+    }
+    var S = world.stations;
+
+    // 01 — the land: lake, reeds, thorn trees, big animals, termite mounds.
+    // Papyrus standing in the shallows, all the way round the bank.
+    for (var ri = 0; ri < 24; ri++) {
+      var ra = (ri / 24) * Math.PI * 2 + 0.24;
+      var rr = 0.68 + rng() * 0.13;
+      put(ri % 3 === 0 ? "cattail" : "reed", S[0],
+        Math.cos(ra) * 46 * rr, 6 + Math.sin(ra) * 30 * rr, rng() * 6.28, { y: -0.12 });
+    }
+    var canoe = put("canoe", S[0], -8, 4, 0.62, { y: 0.22, shadow: true });
+    world.canoe = canoe;
+    put("acacia", S[0], 30, -27, 0.4, { shadow: true });
+    put("acacia", S[0], -36, -20, 1.9, { shadow: true });
+    put("acacia", S[0], 42, 12, 2.6, { shadow: true });
+    put("olive", S[0], -18, -36, 0.9);
+    put("olive", S[0], 16, -40, 2.2);
+    var elephant = put("elephant", S[0], -26, -31, 0.5, { shadow: true });
+    world.elephant = elephant;
+    put("giraffe", S[0], 40, -40, 2.4, { shadow: true });
+    put("giraffe", S[0], -44, -34, 0.9, { shadow: true });
+    put("mound", S[0], 44, -12, 0.3);
+    put("mound", S[0], -40, 6, 1.2);
+
+    // 02 — kingdoms: a royal enclosure of houses, a drum, cattle, a gate tower.
+    hut(S[1], -11, -11, 0.1);
+    hut(S[1], 9, -14, -0.5);
+    hut(S[1], -3, -23, 2.9, 1.15);
+    hut(S[1], 19, -20, 0.9, 0.92);
+    put("granary", S[1], 14, -4, 0.7, { shadow: true });
+    put("granary", S[1], -16, -4, 2.3, { shadow: true });
+    var drum = put("drum", S[1], 0.5, -4, 0.28, { shadow: true });
+    world.drum = drum;
+    hut(S[1], -19, -7, 1.6, 0.95);
+    put("granary", S[1], -20, -16, 1.1, { shadow: true });
+    put("palisade", S[1], -14, 3.0, 0.06);
+    put("palisade", S[1], -6, 3.8, 0.14);
+    put("palisade", S[1], 8, 3.4, -0.1);
+    put("acacia", S[1], -24, -20, 0.8);
+    put("acacia", S[1], 24, -24, 2.2);
+    spread("jar", S[1], 6, 3.2, 7.5, {});
+    put("cattle", S[1], -20, -6, 1.4);
+    put("cattle", S[1], -25, -11, 0.6);
+    put("cattle", S[1], -23, -3, 2.6);
+    put("cattle", S[1], 24, -6, 1.9);
+
+    // 03 — arrivals: a caravan tent, an ox cart, a beached canoe, a mission church.
+    put("tent", S[2], -17, -12, 0.18, { shadow: true });
+    put("oxcart", S[2], -3, 2, 1.15, { shadow: true });
+    put("canoe", S[2], 6, 8, 1.9, { y: 0.05 });
+    put("church", S[2], 9, -26, -0.22, { shadow: true });
+    hut(S[2], -12, -30, 0.4);
+    hut(S[2], -3, -34, 1.2, 0.9);
+    hut(S[2], 22, -32, 2.0, 1.05);
+    put("acacia", S[2], -22, -18, 1.1, { shadow: true });
+    put("acacia", S[2], 24, -12, 2.4);
+    put("jar", S[2], -7, 1.4, 0.4);
+    put("jar", S[2], -8.2, 2.2, 1.9);
+
+    // 04 — the protectorate: railway line, locomotive, telegraph, lineside hut.
+    // Two rails and 96 sleepers laid straight along x, drawn from code.
+    var railMat = new THREE.MeshStandardMaterial({ color: "#6a5a4c", roughness: 0.55, metalness: 0.35, flatShading: true });
+    var sleeperMat = new THREE.MeshStandardMaterial({ color: "#4a3a2c", roughness: 0.95, flatShading: true });
+    var railGeo = new THREE.BoxGeometry(120, 0.16, 0.13);
+    for (var r = 0; r < 2; r++) {
+      var rail = new THREE.Mesh(railGeo, railMat);
+      rail.position.set(0, 0.28, -1.35 + r * 2.7);
+      S[3].group.add(rail);
+    }
+    var sleeperGeo = new THREE.BoxGeometry(0.32, 0.16, 2.9);
+    var sleepers = new THREE.InstancedMesh(sleeperGeo, sleeperMat, 96);
+    var dummy = new THREE.Object3D();
+    for (var s = 0; s < 96; s++) {
+      dummy.position.set(-57 + s * 1.2, 0.2, 0);
+      dummy.updateMatrix();
+      sleepers.setMatrixAt(s, dummy.matrix);
+    }
+    sleepers.instanceMatrix.needsUpdate = true;
+    S[3].group.add(sleepers);
+
+    var loco = put("loco", S[3], 2, 0.06, 1.5708, { shadow: true });
+    world.loco = loco;
+    put("telegrap", S[3], -22, -9, 0);
+    put("telegrap", S[3], -6, -9, 0);
+    put("telegrap", S[3], 10, -9, 0);
+    put("telegrap", S[3], 26, -9, 0);
+    put("hut", S[3], 22, 9, 0.4, { shadow: true });
+    put("acacia", S[3], -30, 6, 2.1);
+
+    // 05 — independence: the flag over a stone plinth, the old village behind.
+    hut(S[4], -9, -11, 0.6);
+    hut(S[4], 11, -13, -0.8);
+    hut(S[4], 0, -22, 2.6, 1.15);
+    hut(S[4], -16, -18, 1.4, 0.95);
+    hut(S[4], 18, -24, 0.3, 1.0);
+    put("granary", S[4], 22, -6, 1.4);
+    put("palisade", S[4], -9, -6, 1.4);
+    put("acacia", S[4], -24, -22, 1.0);
+    put("acacia", S[4], 25, 4, 2.8);
+    spread("jar", S[4], 5, 4, 7.5, {});
+
+    var plinthMat = new THREE.MeshStandardMaterial({ color: "#8b8175", roughness: 0.92, flatShading: true });
+    var plinth = new THREE.Mesh(new THREE.CylinderGeometry(2.6, 3.0, 0.55, 12), plinthMat);
+    plinth.position.set(0, 0.275, 0);
+    plinth.castShadow = true; plinth.receiveShadow = true;
+    S[4].group.add(plinth);
+
+    var pole = put("flagpole", S[4], 0, 0, 0.0, { y: 0.55, shadow: true });
+    world.flagpole = pole;
+    // A Uganda flag drawn into a canvas: six bands, black-yellow-red, crane disc.
+    var flagTex = makeFlagTexture();
+    var flagGeo = new THREE.PlaneGeometry(3.5, 2.35, 22, 10);
+    var flagMat = new THREE.MeshStandardMaterial({
+      map: flagTex, side: THREE.DoubleSide, roughness: 0.85, flatShading: false
+    });
+    var flag = new THREE.Mesh(flagGeo, flagMat);
+    flag.position.set(1.78, 5.1, 0);
+    flag.castShadow = true;
+    S[4].group.add(flag);
+    world.flag = flag;
+
+    // 06 — today: towers, market, a boda boda, a bus.
+    put("tower", S[5], -15, -13, 0.4, { shadow: true });
+    put("deco", S[5], 8, -40, -0.25, { shadow: true });
+    put("tower", S[5], 24, -38, 0.9, { shadow: true });
+    put("tower", S[5], -32, -40, 1.7);
+    put("deco", S[5], 38, -14, 0.2);
+    put("stall", S[5], -5, 12, 0.1, { shadow: true });
+    put("stall", S[5], 3, 14, -0.3, { shadow: true });
+    put("stall", S[5], -13, 15, 0.5, { shadow: true });
+    put("moto", S[5], 9, 11, 1.2, { shadow: true });
+    put("bus", S[5], -18, 20, 0.35, { shadow: true });
+    put("acacia", S[5], 30, 6, 1.7);
+    spread("jar", S[5], 3, 6, 10, {});
+
+    // --- dust motes: one Points cloud that follows the camera ----------------
+    var dustCount = 520;
+    var dpos = new Float32Array(dustCount * 3);
+    dustSeeds = new Float32Array(dustCount * 3);
+    for (var d = 0; d < dustCount; d++) {
+      dustSeeds[d * 3] = (rng() - 0.5) * 90;
+      dustSeeds[d * 3 + 1] = rng() * 16 + 0.6;
+      dustSeeds[d * 3 + 2] = (rng() - 0.5) * 90;
+      dpos[d * 3] = dustSeeds[d * 3];
+      dpos[d * 3 + 1] = dustSeeds[d * 3 + 1];
+      dpos[d * 3 + 2] = dustSeeds[d * 3 + 2];
+    }
+    var dustGeo = new THREE.BufferGeometry();
+    dustGeo.setAttribute("position", new THREE.BufferAttribute(dpos, 3));
+    var dustMat = new THREE.PointsMaterial({
+      color: "#ffd7a0", size: 0.14, sizeAttenuation: true, transparent: true, opacity: 0.55, depthWrite: false
+    });
+    var dust = new THREE.Points(dustGeo, dustMat);
+    scene.add(dust);
+    world.dust = dust;
+
+    // --- a few birds, drawn from triangles ----------------------------------
+    var birdGeo = new THREE.BufferGeometry();
+    birdGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array([
+      0, 0, 0, 0.9, 0.05, -0.25, 0.35, 0, 0.55
+    ]), 3));
+    var birdMat = new THREE.MeshBasicMaterial({ color: "#2a2028", side: THREE.DoubleSide });
+    var birds = new THREE.Group();
+    for (var bi = 0; bi < 7; bi++) {
+      var bm = new THREE.Mesh(birdGeo, birdMat);
+      bm.userData.seed = bi * 1.37;
+      birds.add(bm);
+    }
+    scene.add(birds);
+    world.birds = birds;
+  }
+
+  function makeFlagTexture() {
+    var c = document.createElement("canvas");
+    c.width = 512; c.height = 344;
+    var g = c.getContext("2d");
+    var bands = ["#141414", "#f6d21f", "#d6231f", "#141414", "#f6d21f", "#d6231f"];
+    var bh = c.height / 6;
+    for (var i = 0; i < 6; i++) {
+      g.fillStyle = bands[i];
+      g.fillRect(0, i * bh, c.width, bh + 1);
+    }
+    // white disc
+    g.beginPath();
+    g.arc(c.width / 2, c.height / 2, 96, 0, Math.PI * 2);
+    g.fillStyle = "#f7f7f4";
+    g.fill();
+    // a grey crowned crane, reduced to its silhouette
+    g.save();
+    g.translate(c.width / 2, c.height / 2 + 6);
+    g.fillStyle = "#8b8b86";
+    g.beginPath();   // body
+    g.ellipse(6, 26, 46, 26, -0.18, 0, Math.PI * 2);
+    g.fill();
+    g.beginPath();   // neck + head
+    g.moveTo(-26, 12);
+    g.quadraticCurveTo(-44, -26, -30, -52);
+    g.quadraticCurveTo(-18, -62, -8, -50);
+    g.quadraticCurveTo(-22, -36, -10, 6);
+    g.closePath();
+    g.fill();
+    g.beginPath();   // crest
+    g.moveTo(-30, -56);
+    g.lineTo(-46, -74);
+    g.lineTo(-34, -58);
+    g.lineTo(-44, -60);
+    g.lineTo(-32, -50);
+    g.closePath();
+    g.fill();
+    g.beginPath();   // legs
+    g.moveTo(-2, 46); g.lineTo(-6, 78); g.lineTo(-1, 78); g.lineTo(3, 46); g.closePath(); g.fill();
+    g.beginPath();
+    g.moveTo(18, 46); g.lineTo(16, 78); g.lineTo(21, 78); g.lineTo(24, 46); g.closePath(); g.fill();
+    g.restore();
+    var tex = new THREE.CanvasTexture(c);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.anisotropy = 4;
+    return tex;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Render a frame for time t. Pure: reads t, writes pixels.
+  // ---------------------------------------------------------------------------
+  function renderAt(t) {
+    if (!renderer) return;
+
+    var b = beatAt(t);
+    var beat = BEATS[b];
+    var p = clamp((t - beat.start) / beat.dur, 0, 1);
+    var e = easeOutQuad(p);
+    var shot = SHOTS[b];
+
+    var cx = lerp(shot.from[0], shot.to[0], e) + Math.sin(t * 0.71) * 0.045;
+    var cy = lerp(shot.from[1], shot.to[1], e) + Math.sin(t * 0.53 + 1.7) * 0.035;
+    var cz = lerp(shot.from[2], shot.to[2], e) + beat.z;
+    camera.position.set(cx, cy, cz);
+
+    var lx = lerp(shot.look[0], shot.look2[0], e);
+    var ly = lerp(shot.look[1], shot.look2[1], e);
+    var lz = lerp(shot.look[2], shot.look2[2], e) + beat.z;
+    camera.lookAt(lx, ly, lz);
+
+    // Only the diorama being looked at is drawn (and its neighbours faintly
+    // through the haze). This is what keeps a software-GL render affordable.
+    for (var i = 0; i < world.stations.length; i++) {
+      var st = world.stations[i];
+      st.group.visible = Math.abs(st.z - cz) < 62;
+    }
+
+    // Water: a slow swell, flat-shaded.
+    if (world.water) {
+      var wp = world.water.geometry.attributes.position;
+      for (var v = 0; v < wp.count; v++) {
+        var wx = wp.getX(v), wz = wp.getZ(v);
+        wp.setY(v, Math.sin(wx * 0.26 + t * 0.7) * 0.085 + Math.sin(wz * 0.34 - t * 0.55) * 0.07);
+      }
+      wp.needsUpdate = true;
+    }
+
+    // The flag: a standing wave that travels out from the pole.
+    if (world.flag) {
+      var fp = world.flag.geometry.attributes.position;
+      for (var f = 0; f < fp.count; f++) {
+        var fx = fp.getX(f) + 1.75;      // 0 at the pole, 3.5 at the fly end
+        var k = clamp(fx / 3.5, 0, 1);
+        fp.setZ(f, Math.sin(fx * 1.9 - t * 3.1) * 0.16 * k + Math.sin(fx * 3.6 - t * 4.4) * 0.05 * k);
+      }
+      fp.needsUpdate = true;
+      world.flag.geometry.computeVertexNormals();
+    }
+
+    // A canoe that rides the swell.
+    if (world.canoe) {
+      world.canoe.position.y = 0.2 + Math.sin(t * 0.9) * 0.045;
+      world.canoe.rotation.z = Math.sin(t * 0.75 + 0.6) * 0.018;
+      world.canoe.rotation.x = Math.cos(t * 0.61) * 0.012;
+    }
+
+    // Dust drifts; the cloud rides with the camera so it always reads.
+    if (world.dust) {
+      var dp = world.dust.geometry.attributes.position;
+      for (var d = 0; d < dp.count; d++) {
+        var sx = dustSeeds[d * 3], sy = dustSeeds[d * 3 + 1], sz = dustSeeds[d * 3 + 2];
+        dp.setX(d, sx + Math.sin(t * 0.22 + sy * 0.7) * 2.4 + cx * 0.0);
+        dp.setY(d, sy + Math.sin(t * 0.35 + sx * 0.3) * 0.5);
+        dp.setZ(d, sz + Math.cos(t * 0.19 + sx * 0.2) * 2.4);
+      }
+      dp.needsUpdate = true;
+      world.dust.position.set(cx, 0, cz);
+    }
+
+    // Birds: a loose line crossing the top of the frame.
+    if (world.birds) {
+      world.birds.position.set(cx, 0, cz);
+      for (var n = 0; n < world.birds.children.length; n++) {
+        var bird = world.birds.children[n];
+        var sd = bird.userData.seed;
+        var ph = t * 0.16 + sd;
+        bird.position.set(
+          Math.sin(ph) * 34 - 6,
+          19 + Math.sin(ph * 1.7 + sd) * 1.8,
+          -26 + Math.cos(ph) * 20 - n * 1.6
+        );
+        bird.rotation.y = -ph + Math.PI / 2;
+        bird.rotation.z = Math.sin(t * 3.1 + sd) * 0.35;
+        bird.scale.setScalar(0.9 + (n % 3) * 0.18);
+      }
+    }
+
+    // Key light travels with the camera so the shadows stay in frame.
+    if (world.sun) {
+      world.sun.position.set(cx - 26, 34, cz + 22);
+      world.sun.target.position.set(lx, 0, lz);
+      world.sun.target.updateMatrixWorld();
+    }
+
+    // The DOM layers that belong to the 3D: black dips and the era rail.
+    if (el.cut) el.cut.style.opacity = String(cutOpacity(t));
+
+    var progress = clamp(t / DURATION, 0, 1);
+    if (el.hudFill) el.hudFill.style.transform = "scaleX(" + progress + ")";
+    if (el.hudDot) el.hudDot.style.left = (progress * 100) + "%";
+    if (el.hud) {
+      var hudFade = t > 55.2 ? clamp(1 - (t - 55.2) / 0.8, 0, 1) : 1;
+      el.hud.style.opacity = String(hudFade);
+    }
+    for (var hi = 0; hi < hudLabels.length; hi++) {
+      var on = hi === Math.min(hudLabels.length - 1, Math.floor(progress * hudLabels.length + 0.15));
+      hudLabels[hi].style.color = on ? "rgba(255,238,218,0.95)" : "rgba(255,238,218,0.42)";
+    }
+
+    renderer.render(scene, camera);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Boot: three.js + models, then the world, then the text timeline.
+  // The runtime waits for window.__hf.buildReady promises before it captures.
+  // ---------------------------------------------------------------------------
+  window.__hf = window.__hf || {};
+  window.__hf.buildReady = window.__hf.buildReady || {};
+  window.__hfTimelinesBuilding = true;
+
+  var boot = (async function () {
+    try {
+      THREE = await import("three");
+    } catch (err) {
+      console.error("[film] three.js failed to load; text only", err);
+      buildTextTimeline();
+      markTimelinesBuilt();
+      return;
+    }
+
+    renderer = new THREE.WebGLRenderer({
+      canvas: el.canvas,
+      antialias: false,
+      alpha: false,
+      preserveDrawingBuffer: true,
+      powerPreference: "high-performance"
+    });
+    renderer.setPixelRatio(1);
+    renderer.setSize(1920, 1080, false);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.NoToneMapping;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    scene = new THREE.Scene();
+    scene.fog = new THREE.Fog("#ce9469", 42, 158);
+    scene.background = makeSkyTexture();
+
+    camera = new THREE.PerspectiveCamera(38, 1920 / 1080, 0.4, 900);
+
+    scene.add(new THREE.HemisphereLight("#ffd9ae", "#3a2b22", 0.85));
+    var sun = new THREE.DirectionalLight("#ffd2a0", 2.5);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(1024, 1024);
+    sun.shadow.camera.near = 1;
+    sun.shadow.camera.far = 120;
+    sun.shadow.camera.left = -42;
+    sun.shadow.camera.right = 42;
+    sun.shadow.camera.top = 42;
+    sun.shadow.camera.bottom = -42;
+    sun.shadow.bias = -0.0008;
+    scene.add(sun);
+    scene.add(sun.target);
+    world.sun = sun;
+
+    var rim = new THREE.DirectionalLight("#7a8fd6", 1.15);
+    rim.position.set(30, 18, -40);
+    scene.add(rim);
+
+    var factories = await loadFactories();
+    var loaded = Object.keys(factories).length;
+    console.log("[film] polyfork models loaded: " + loaded + "/" + Object.keys(MODELS).length);
+    buildWorld(THREE, factories);
+
+    if (document.fonts && document.fonts.ready) {
+      try { await document.fonts.ready; } catch (e) { /* fonts are optional */ }
+    }
+
+    renderAt(0);
+    buildTextTimeline();
+    markTimelinesBuilt();
+  })();
+
+  // The runtime keeps the page un-ready while this flag is up, and it waits for
+  // this event before it checks again. Both are the documented handshake for a
+  // timeline built inside an async callback.
+  function markTimelinesBuilt() {
+    window.__hfTimelinesBuilding = false;
+    window.dispatchEvent(new Event("hf-timelines-built"));
+  }
+
+  function makeSkyTexture() {
+    var c = document.createElement("canvas");
+    c.width = 8; c.height = 256;
+    var g = c.getContext("2d");
+    var grad = g.createLinearGradient(0, 0, 0, 256);
+    grad.addColorStop(0.0, "#1b1730");
+    grad.addColorStop(0.30, "#3b2742");
+    grad.addColorStop(0.46, "#6d3f52");
+    grad.addColorStop(0.56, "#a35f53");
+    grad.addColorStop(0.63, "#c47d5e");
+    grad.addColorStop(0.70, "#d9936a");
+    grad.addColorStop(0.80, "#dd9a70");
+    grad.addColorStop(1.0, "#ce9469");
+    g.fillStyle = grad;
+    g.fillRect(0, 0, 8, 256);
+    var tex = new THREE.CanvasTexture(c);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    return tex;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Text: one paused timeline, absolute times, all from the BEATS table.
+  // ---------------------------------------------------------------------------
+  function buildTextTimeline() {
+    var tl = gsap.timeline({ paused: true });
+
+    for (var i = 0; i < BEATS.length; i++) {
+      var n = i + 1;
+      var t0 = BEATS[i].start + 0.34;
+      var num = document.getElementById("film-b" + n + "-num");
+      var title = document.getElementById("film-b" + n + "-title");
+      var date = document.getElementById("film-b" + n + "-date");
+      var rule = document.getElementById("film-b" + n + "-rule");
+      var line = document.getElementById("film-b" + n + "-line");
+      if (!title) continue;
+
+      tl.fromTo(num,
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, t0);
+
+      tl.fromTo(title,
+        { clipPath: "inset(0% 0% 108% 0%)", y: 26, opacity: 0 },
+        { clipPath: "inset(0% 0% -8% 0%)", y: 0, opacity: 1, duration: 1.05, ease: "power4.out" }, t0 + 0.08);
+
+      tl.fromTo(date,
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, duration: 0.75, ease: "power2.out" }, t0 + 0.34);
+
+      tl.fromTo(rule,
+        { scaleX: 0, opacity: 0.2 },
+        { scaleX: 1, opacity: 1, duration: 0.85, ease: "power3.out" }, t0 + 0.42);
+
+      tl.fromTo(line,
+        { opacity: 0, y: 18, filter: "blur(6px)" },
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.95, ease: "power2.out" }, t0 + 0.5);
+    }
+
+    // Era rail: the fill draws across the whole film, the dot rides with it.
+    tl.fromTo("#film-hud",
+      { opacity: 0, y: 14 },
+      { opacity: 1, y: 0, duration: 1.1, ease: "power2.out" }, 0.5);
+
+    // End card.
+    tl.fromTo("#film-end-scrim",
+      { opacity: 0 },
+      { opacity: 1, duration: 1.4, ease: "sine.out" }, 55.9);
+    tl.fromTo("#film-end-word",
+      { opacity: 0, scale: 0.94 },
+      { opacity: 1, scale: 1, duration: 1.5, ease: "power4.out" }, 56.25);
+    tl.fromTo("#film-end-rule",
+      { scaleX: 0, opacity: 0 },
+      { scaleX: 1, opacity: 1, duration: 0.9, ease: "power3.out" }, 56.75);
+    tl.fromTo("#film-end-sub",
+      { opacity: 0, y: 14 },
+      { opacity: 1, y: 0, duration: 0.9, ease: "power2.out" }, 56.95);
+
+    window.__timelines["film"] = tl;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Seek protocol
+  // ---------------------------------------------------------------------------
+  window.addEventListener("hf-seek", function (e) {
+    var t = e.detail && typeof e.detail.time === "number" ? e.detail.time : 0;
+    renderAt(clamp(t, 0, DURATION));
+  });
+
+  window.__hf.buildReady.film = boot.then(function () {
+    renderAt(0);
+  });
+})();
+</script>
+</template>

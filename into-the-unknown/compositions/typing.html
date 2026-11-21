@@ -1,0 +1,142 @@
+<template>
+<!-- ==========================================================================
+     typing.html — 18.200-20.115 s (host-local clock)
+     The quiet passage. From 18.32 s a blue block cursor types
+     "Unravel the mystery of AGI with curiosity." at 33 characters per
+     second. At 19.72 s the line contracts horizontally to a light-blue dot;
+     a cool white flash lands on the downbeat at 20.115 s as the next
+     scene expands the circular window from that dot.
+     ========================================================================== -->
+<style>
+  #root {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: #03060d;
+    -webkit-font-smoothing: antialiased;
+  }
+  @font-face {
+    font-family: "DM Mono";
+    src: url("assets/fonts/DMMono-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  #t-line {
+    position: absolute;
+    left: 0;
+    top: 478px;
+    line-height: 44px;
+    white-space: nowrap;
+    font-family: "DM Mono", monospace;
+    font-weight: 400;
+    font-size: 40px;
+    color: #edf2fb;
+    transform-origin: 50% 50%;
+  }
+  #t-line .ch {
+    display: inline-block;
+    opacity: 0;
+  }
+  #t-line .ch-sp {
+    display: inline-block;
+    opacity: 0;
+  }
+
+  #t-cursor {
+    position: absolute;
+    left: 0;
+    top: 476px;
+    width: 23px;
+    height: 48px;
+    background: #4176e6;
+    transform-origin: 50% 50%;
+    opacity: 0;
+  }
+
+  #t-dot {
+    position: absolute;
+    left: 953px;
+    top: 493px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #7fa4ff;
+    box-shadow: 0 0 18px rgba(127, 164, 255, 0.9);
+    opacity: 0;
+  }
+
+  #t-flash {
+    position: absolute;
+    inset: 0;
+    z-index: 60;
+    background: #f2f6ff;
+    opacity: 0;
+  }
+</style>
+
+<div id="root" data-composition-id="typing" data-width="1920" data-height="1080">
+  <div id="t-line" data-var-text="typed1">Unravel the mystery of AGI with curiosity.</div>
+  <div id="t-cursor" data-layout-ignore="true"></div>
+  <div id="t-dot" data-layout-ignore="true"></div>
+  <div id="t-flash" data-layout-ignore="true"></div>
+</div>
+
+<script>
+  {
+    const START = 0.12; // 18.32 s on the film clock
+    const CPS = 33;
+
+    const measureCtx = document.createElement("canvas").getContext("2d");
+    measureCtx.font = '400 40px "DM Mono"';
+
+    function build() {
+      const line = document.getElementById("t-line");
+      const text = line.textContent;
+      const advance = measureCtx.measureText("M").width;
+      const width = measureCtx.measureText(text).width;
+      const lineLeft = 960 - width / 2;
+
+      // split into per-character spans (monospace: every glyph one cell)
+      const spans = [];
+      for (const ch of text) {
+        const span = document.createElement("span");
+        span.className = ch === " " ? "ch-sp" : "ch";
+        if (ch !== " ") span.textContent = ch;
+        line.appendChild(span);
+        spans.push(span);
+      }
+
+      const tl = gsap.timeline({ paused: true });
+      gsap.set(line, { x: lineLeft });
+
+      // the blue block cursor types at 33 characters per second
+      tl.set("#t-cursor", { opacity: 1, x: lineLeft }, START);
+      spans.forEach((span, i) => {
+        const at = START + i / CPS;
+        tl.set(span, { opacity: 1 }, at);
+        tl.set("#t-cursor", { x: lineLeft + (i + 1) * advance }, at);
+      });
+
+      // at 19.72 s the line contracts horizontally to a point of light
+      tl.to(line, { scaleX: 0.02, opacity: 0, duration: 0.2, ease: "power3.in" }, 1.52);
+      tl.to("#t-cursor", { opacity: 0, duration: 0.12, ease: "power1.in" }, 1.52);
+      tl.fromTo(
+        "#t-dot",
+        { scale: 0.4, opacity: 0 },
+        { scale: 1.35, opacity: 1, duration: 0.14, ease: "power2.out" },
+        1.66,
+      );
+      tl.to("#t-dot", { scale: 1.1, duration: 0.14, ease: "power2.out" }, 1.8);
+
+      // a cool white flash lands on the downbeat at 20.115 s
+      tl.to("#t-flash", { opacity: 1, duration: 0.16, ease: "power2.in" }, 1.755);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["typing"] = tl;
+    }
+
+    document.fonts.load('400 40px "DM Mono"').then(build);
+  }
+</script>
+</template>

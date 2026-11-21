@@ -1,0 +1,168 @@
+<template>
+<!-- ==========================================================================
+     endcard.html — 46.479-52.000 s (host-local clock)
+     The blue whale mark pops onto a pale blue gradient (#9EBBEA through
+     #D6E2F6 to #F9F8F8). At 47.57 s it slides left as the wordmark wipes
+     on to the right. "Into the Unknown." appears from 48.05 s, the fine
+     print from 48.70 s — including the unofficial concept-film credit.
+     The music is already fading (baked into the score); the picture fades
+     to black from 51.25 s, fully black at 51.95 s.
+     ========================================================================== -->
+<style>
+  #root {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  @font-face {
+    font-family: "DM Sans";
+    src: url("assets/fonts/DMSans.ttf") format("truetype-variations");
+    font-weight: 100 1000;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "DM Mono";
+    src: url("assets/fonts/DMMono-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  #e-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, #9ebbea 0%, #d6e2f6 50%, #f9f8f8 100%);
+  }
+
+  #e-flash {
+    position: absolute;
+    inset: 0;
+    z-index: 60;
+    background: #f2f6ff;
+  }
+
+  #e-whale {
+    position: absolute;
+    left: 865px;
+    top: 360px;
+    width: 190px;
+    height: 140px;
+    z-index: 20;
+    opacity: 0;
+  }
+  #e-wordmark {
+    position: absolute;
+    left: 903px;
+    top: 395px;
+    width: 330px;
+    height: 69px;
+    z-index: 20;
+    clip-path: inset(0 100% 0 0);
+  }
+
+  #e-title {
+    position: absolute;
+    left: 0;
+    top: 528px;
+    width: 1920px;
+    text-align: center;
+    z-index: 20;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 600;
+    font-size: 64px;
+    color: #17263f;
+    opacity: 0;
+  }
+
+  #e-fine1,
+  #e-fine2 {
+    position: absolute;
+    left: 0;
+    width: 1920px;
+    text-align: center;
+    z-index: 20;
+    font-family: "DM Mono", monospace;
+    font-weight: 400;
+    font-size: 21px;
+    letter-spacing: 0.14em;
+    color: #40536e;
+    opacity: 0;
+  }
+  #e-fine1 { top: 648px; }
+  #e-fine2 { top: 686px; }
+
+  #e-black {
+    position: absolute;
+    inset: 0;
+    z-index: 80;
+    background: #03060d;
+    opacity: 0;
+  }
+</style>
+
+<div id="root" data-composition-id="endcard" data-width="1920" data-height="1080">
+  <div id="e-bg"></div>
+
+  <img id="e-whale" class="clip" data-start="0.08" data-duration="5.441" data-track-index="1" src="assets/brand/deepseek-whale-blue.svg" alt="DeepSeek whale mark" />
+  <img id="e-wordmark" class="clip" data-start="1.091" data-duration="4.43" data-track-index="2" src="assets/brand/deepseek-wordmark-blue.svg" alt="DeepSeek" />
+
+  <div id="e-title" data-var-text="endTitle">Into the Unknown.</div>
+  <div id="e-fine1" data-var-text="credit">IPO · A CONCEPT FILM · NOT AFFILIATED WITH DEEPSEEK</div>
+  <div id="e-fine2" data-var-text="musicCredit">Music by Kulakovka from Pixabay.</div>
+
+  <div id="e-flash" data-layout-ignore="true"></div>
+  <div id="e-black" data-layout-ignore="true"></div>
+</div>
+
+<script>
+  {
+    const tl = gsap.timeline({ paused: true });
+
+    // the cool white flash from the IPO beat decays onto the card
+    tl.fromTo("#e-flash", { opacity: 1 }, { opacity: 0, duration: 0.2, ease: "power2.out" }, 0);
+
+    // the blue whale mark pops on, centered on its own
+    tl.fromTo(
+      "#e-whale",
+      { scale: 0.55, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.4)", transformOrigin: "50% 50%" },
+      0.08,
+    );
+
+    // at 47.57 s it slides left as the wordmark wipes on to the right
+    tl.to("#e-whale", { x: -178, duration: 0.55, ease: "power3.inOut" }, 1.091);
+    tl.fromTo(
+      "#e-wordmark",
+      { clipPath: "inset(0 100% 0 0)" },
+      { clipPath: "inset(0 0% 0 0)", duration: 0.6, ease: "power2.inOut" },
+      1.161,
+    );
+
+    // the title, then the fine print
+    tl.fromTo(
+      "#e-title",
+      { opacity: 0, y: 18, filter: "blur(6px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.45, ease: "power3.out" },
+      1.571,
+    );
+    tl.fromTo(
+      "#e-fine1",
+      { opacity: 0, y: 10 },
+      { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
+      2.221,
+    );
+    tl.fromTo(
+      "#e-fine2",
+      { opacity: 0, y: 10 },
+      { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
+      2.571,
+    );
+
+    // the picture fades to black from 51.25 s, full black at 51.95 s
+    tl.to("#e-black", { opacity: 1, duration: 0.7, ease: "power1.inOut" }, 4.771);
+
+    window.__timelines = window.__timelines || {};
+    window.__timelines["endcard"] = tl;
+  }
+</script>
+</template>

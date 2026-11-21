@@ -1,0 +1,308 @@
+<template>
+<!-- ==========================================================================
+     ipo.html — 41.933-46.479 s (host-local clock)
+     The Shanghai skyline (p129, source trim restarted) darkens; the white
+     DeepSeek wordmark wipes on above and a line traces upward to the
+     right through 41 points. I, P and O rise at 43.05 / 43.47 / 43.90 s,
+     each filled with a second city-light shot (p131) behind a 2 px white
+     outline. At 44.75 s the second typed line begins; in the final 0.55 s
+     the letters enlarge toward the camera and a cool white flash takes
+     the image into the end card.
+     ========================================================================== -->
+<style>
+  #root {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: #03060d;
+    -webkit-font-smoothing: antialiased;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/Montserrat.ttf") format("truetype-variations");
+    font-weight: 100 900;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "DM Mono";
+    src: url("assets/fonts/DMMono-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  #i-bg {
+    position: absolute;
+    inset: 0;
+    width: 1920px;
+    height: 1080px;
+    object-fit: cover;
+  }
+  #i-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background:
+      linear-gradient(0deg, rgba(3, 6, 13, 0.82) 0%, rgba(3, 6, 13, 0.25) 45%, rgba(3, 6, 13, 0.3) 100%);
+  }
+
+  #i-mark {
+    position: absolute;
+    left: 715px;
+    top: 132px;
+    width: 490px;
+    height: 102px;
+    z-index: 20;
+    clip-path: inset(0 100% 0 0);
+  }
+
+  #i-chart {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    opacity: 0;
+  }
+
+  #i-block {
+    position: absolute;
+    inset: 0;
+    z-index: 15;
+  }
+  .i-letter {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+  }
+  .i-letter video {
+    position: absolute;
+    inset: 0;
+    width: 1920px;
+    height: 1080px;
+    object-fit: cover;
+  }
+  .i-glyph {
+    position: absolute;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 900;
+    font-size: 440px;
+    line-height: 440px;
+    white-space: nowrap;
+    color: transparent;
+    -webkit-text-stroke: 2px #ffffff;
+    text-shadow: 0 6px 40px rgba(3, 6, 13, 0.5);
+  }
+
+  #i-typeline {
+    position: absolute;
+    left: 0;
+    top: 880px;
+    line-height: 44px;
+    white-space: nowrap;
+    z-index: 20;
+    font-family: "DM Mono", monospace;
+    font-weight: 400;
+    font-size: 40px;
+    color: #edf2fb;
+    text-shadow: 0 2px 24px rgba(3, 6, 13, 0.9);
+  }
+  #i-typeline .ch {
+    display: inline-block;
+    opacity: 0;
+  }
+  #i-typeline .ch-sp {
+    display: inline-block;
+    opacity: 0;
+  }
+  #i-dot {
+    position: absolute;
+    left: 0;
+    top: 895px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #7fa4ff;
+    box-shadow: 0 0 14px rgba(127, 164, 255, 0.9);
+    z-index: 20;
+    opacity: 0;
+  }
+
+  #i-flash {
+    position: absolute;
+    inset: 0;
+    z-index: 60;
+    background: #f2f6ff;
+    opacity: 0;
+  }
+</style>
+
+<div id="root" data-composition-id="ipo" data-width="1920" data-height="1080">
+  <!-- letter clip shapes: must live inside #root so they mount with the scene -->
+  <svg width="0" height="0" style="position: absolute">
+    <defs>
+      <clipPath id="iClip1" clipPathUnits="userSpaceOnUse"><text id="iClipT1" x="0" y="700" text-anchor="middle" font-family="Montserrat" font-weight="900" font-size="440px">I</text></clipPath>
+      <clipPath id="iClip2" clipPathUnits="userSpaceOnUse"><text id="iClipT2" x="0" y="700" text-anchor="middle" font-family="Montserrat" font-weight="900" font-size="440px">P</text></clipPath>
+      <clipPath id="iClip3" clipPathUnits="userSpaceOnUse"><text id="iClipT3" x="0" y="700" text-anchor="middle" font-family="Montserrat" font-weight="900" font-size="440px">O</text></clipPath>
+    </defs>
+  </svg>
+
+  <video id="i-bg" class="clip" data-start="0" data-duration="4.546" data-track-index="1" muted playsinline src="assets/media/p129.mp4" style="z-index: 1"></video>
+  <div id="i-scrim" data-layout-ignore="true"></div>
+
+  <!-- the white DeepSeek wordmark wipes on above the skyline -->
+  <img id="i-mark" class="clip" data-start="0.07" data-duration="4.476" data-track-index="2" src="assets/brand/deepseek-wordmark-white.svg" alt="DeepSeek" />
+
+  <!-- a line traces upward to the right through 41 points -->
+  <svg id="i-chart" class="clip" data-start="0.47" data-duration="4.076" data-track-index="3" width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" data-layout-ignore="true">
+    <polyline id="i-line" stroke="#7fa4ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+
+  <!-- I P O: each letter a window onto a second city-light shot -->
+  <div id="i-block">
+    <div class="i-letter" id="i-lw1">
+      <video id="i-fill-i" class="clip" data-start="1.117" data-duration="3.427" data-track-index="4" muted playsinline src="assets/media/p131.mp4"></video>
+      <div class="i-glyph" id="i-g1">I</div>
+    </div>
+    <div class="i-letter" id="i-lw2">
+      <video id="i-fill-p" class="clip" data-start="1.117" data-duration="3.428" data-track-index="4" muted playsinline src="assets/media/p131.mp4"></video>
+      <div class="i-glyph" id="i-g2">P</div>
+    </div>
+    <div class="i-letter" id="i-lw3">
+      <video id="i-fill-o" class="clip" data-start="1.117" data-duration="3.429" data-track-index="4" muted playsinline src="assets/media/p131.mp4"></video>
+      <div class="i-glyph" id="i-g3">O</div>
+    </div>
+  </div>
+
+  <div id="i-typeline" data-var-text="typed2">Answer the essential question with long-termism.</div>
+  <div id="i-dot" data-layout-ignore="true"></div>
+
+  <div id="i-flash" data-layout-ignore="true"></div>
+</div>
+
+<script>
+  {
+    const BASELINE = 700;
+    const LETTER_GAP = 64;
+    const TYPE_START = 2.817; // 44.75 s on the film clock
+    const CPS = 33;
+
+    const measureCtx = document.createElement("canvas").getContext("2d");
+
+    // seeded PRNG for the chart wobble (no Math.random)
+    function mulberry32(seed) {
+      return function () {
+        seed |= 0;
+        seed = (seed + 0x6d2b79f5) | 0;
+        let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    function build() {
+      // ---- letter positions: I, P, O centered on the frame ----------
+      measureCtx.font = '900 440px "Montserrat"';
+      const glyphs = ["I", "P", "O"];
+      const widths = glyphs.map((g) => measureCtx.measureText(g).width);
+      const metrics = measureCtx.measureText("IPO");
+      const ascent = metrics.fontBoundingBoxAscent;
+      const descent = metrics.fontBoundingBoxDescent;
+      const total = widths.reduce((a, b) => a + b, 0) + 2 * LETTER_GAP;
+      let cursor = 960 - total / 2;
+      const boxes = glyphs.map((g, i) => {
+        const left = cursor;
+        cursor += widths[i] + (i < 2 ? LETTER_GAP : 0);
+        return { glyph: g, left, width: widths[i], center: left + widths[i] / 2 };
+      });
+
+      // DOM glyph tops: land the baseline of each 440 px line at BASELINE
+      const lineHeight = 440;
+      const baselineTop = (lineHeight - (ascent + descent)) / 2 + ascent;
+      boxes.forEach((b, i) => {
+        const glyphEl = document.getElementById("i-g" + (i + 1));
+        glyphEl.style.left = b.left + "px";
+        glyphEl.style.top = BASELINE - baselineTop + "px";
+        document.getElementById("iClipT" + (i + 1)).setAttribute("x", b.center);
+      });
+      document.querySelectorAll(".i-letter").forEach((el, i) => {
+        el.style.clipPath = "url(#iClip" + (i + 1) + ")";
+      });
+
+      const tl = gsap.timeline({ paused: true });
+
+      // the white wordmark wipes on
+      tl.fromTo(
+        "#i-mark",
+        { clipPath: "inset(0 100% 0 0)" },
+        { clipPath: "inset(0 0% 0 0)", duration: 0.7, ease: "power2.inOut" },
+        0.07,
+      );
+
+      // the rising line through 41 points, drawn behind the letters
+      const rand = mulberry32(7);
+      const points = [];
+      for (let i = 0; i < 41; i++) {
+        const x = 240 + i * 36;
+        const y = 880 - i * 10.5 + (rand() - 0.5) * 26;
+        points.push(x + "," + y);
+      }
+      const line = document.getElementById("i-line");
+      line.setAttribute("points", points.join(" "));
+      const lineLength = line.getTotalLength();
+      line.style.strokeDasharray = lineLength;
+      line.style.strokeDashoffset = lineLength;
+      tl.fromTo("#i-chart", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "none" }, 0.47);
+      tl.to(line, { strokeDashoffset: 0, duration: 2.1, ease: "power1.inOut" }, 0.47);
+
+      // the three letters rise at 43.05 / 43.47 / 43.90 s
+      [0, 1, 2].forEach((i) => {
+        tl.fromTo(
+          "#i-lw" + (i + 1),
+          { y: 150, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" },
+          1.117 + i * 0.42,
+        );
+      });
+
+      // the second typed line, 33 characters per second
+      const typeLine = document.getElementById("i-typeline");
+      const text = typeLine.textContent;
+      const advance = (measureCtx.font = '400 40px "DM Mono"', measureCtx.measureText("M").width);
+      const typeWidth = measureCtx.measureText(text).width;
+      const typeLeft = 960 - typeWidth / 2;
+      const spans = [];
+      for (const ch of text) {
+        const span = document.createElement("span");
+        span.className = ch === " " ? "ch-sp" : "ch";
+        if (ch !== " ") span.textContent = ch;
+        typeLine.appendChild(span);
+        spans.push(span);
+      }
+      gsap.set(typeLine, { x: typeLeft });
+      spans.forEach((span, i) => {
+        const at = TYPE_START + i / CPS;
+        tl.set(span, { opacity: 1 }, at);
+        tl.set("#i-dot", { opacity: 1, x: typeLeft + (i + 1) * advance + 14 }, at);
+      });
+      tl.to("#i-dot", { opacity: 0, duration: 0.2, ease: "power1.in" }, 4.2);
+
+      // in the final 0.55 s the letters enlarge toward the camera
+      tl.fromTo(
+        "#i-block",
+        { scale: 1 },
+        { scale: 1.32, duration: 0.55, ease: "power2.in", transformOrigin: "50% 46%" },
+        3.996,
+      );
+
+      // a cool white flash takes the image into the end card
+      tl.to("#i-flash", { opacity: 1, duration: 0.15, ease: "power2.in" }, 4.396);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["ipo"] = tl;
+    }
+
+    Promise.all([
+      document.fonts.load('900 440px "Montserrat"'),
+      document.fonts.load('400 40px "DM Mono"'),
+    ]).then(build);
+  }
+</script>
+</template>

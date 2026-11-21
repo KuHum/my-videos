@@ -1,0 +1,84 @@
+name: Render Into the Unknown film
+
+# Renders into-the-unknown/ (HyperFrames, 52 s, 1920x1080 @ 60 fps, stereo
+# AAC) and uploads the MP4. Sources are committed: Pexels footage trims,
+# the 32 wall stills, the four Google Fonts TTFs, the DeepSeek logo SVGs
+# and the mastered score (Epic Hybrid by Kulakovka, Pixabay).
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "into-the-unknown/**"
+      - ".github/workflows/render-into-the-unknown.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - id: chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Ensure ffmpeg
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          ffmpeg -version | head -1
+
+      - name: Install HyperFrames
+        working-directory: into-the-unknown
+        run: |
+          npm install --no-audit --no-fund
+          npx hyperframes --version
+
+      - name: Lint composition
+        working-directory: into-the-unknown
+        run: npx hyperframes lint --json
+
+      - name: Render 52s film at 60 fps
+        working-directory: into-the-unknown
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          PUPPETEER_EXECUTABLE_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
+          mkdir -p renders
+          npx hyperframes render . -o renders/into-the-unknown-raw.mp4 \
+            --fps 60 --quality looks --workers 4
+
+      - name: Master audio to stereo AAC 48 kHz 256 kb/s
+        working-directory: into-the-unknown
+        run: |
+          ffmpeg -y -i renders/into-the-unknown-raw.mp4 \
+            -c:v copy -c:a aac -b:a 256k -ar 48000 -ac 2 \
+            -movflags +faststart renders/into-the-unknown.mp4
+          rm -f renders/into-the-unknown-raw.mp4
+
+      - name: Verify output
+        working-directory: into-the-unknown
+        run: |
+          set -euo pipefail
+          test -s renders/into-the-unknown.mp4
+          ffprobe -v error \
+            -show_entries format=duration,size \
+            -show_entries stream=codec_name,width,height,r_frame_rate,channels,sample_rate,bit_rate \
+            -of default=nw=1 renders/into-the-unknown.mp4
+          stat -c 'bytes: %s' renders/into-the-unknown.mp4
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: into-the-unknown-film
+          path: into-the-unknown/renders/into-the-unknown.mp4
+          retention-days: 30
+          if-no-files-found: error

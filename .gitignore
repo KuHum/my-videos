@@ -6,3 +6,6 @@ longform/review/*
 longform/data/mix.wav
 agency-inspiration/
 longform/data/voice-cache/
+
+.ghcache/
+ci-out/

@@ -1,0 +1,263 @@
+<template>
+<!-- ==========================================================================
+     pills.html — 28.297-37.388 s (host-local clock)
+     The sonar circle holds its size and position as the iris cuts to the
+     microscope, then in 0.5 s moves beside "Open to" and reshapes into a
+     300x124 px pill. Four five-beat bars follow; each starts with three
+     beats of footage, then the audience name appears letter by letter while
+     the window takes up the word's measured width and the line stays
+     centered. At 36.438 s the final Hangzhou shot expands to fill the
+     frame behind the text, becoming the wall's center tile.
+     ========================================================================== -->
+<style>
+  #root {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: #03060d;
+    -webkit-font-smoothing: antialiased;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/Montserrat.ttf") format("truetype-variations");
+    font-weight: 100 900;
+    font-style: normal;
+  }
+
+  #p-window {
+    position: absolute;
+    left: 660px;
+    top: 200px;
+    width: 600px;
+    height: 600px;
+    border-radius: 300px;
+    overflow: hidden;
+    z-index: 10;
+    background: #03060d;
+  }
+  #p-window video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  #p-open {
+    position: absolute;
+    left: 0;
+    top: 445px;
+    line-height: 110px;
+    white-space: nowrap;
+    z-index: 20;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 110px;
+    color: #f4f7fd;
+    text-shadow: 0 2px 30px rgba(3, 6, 13, 0.65);
+    opacity: 0;
+  }
+
+  .p-word {
+    position: absolute;
+    left: 0;
+    top: 468px;
+    line-height: 64px;
+    white-space: nowrap;
+    z-index: 20;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 64px;
+    color: #ffffff;
+    text-shadow: 0 2px 26px rgba(3, 6, 13, 0.75);
+  }
+  .p-word .ch {
+    display: inline-block;
+    opacity: 0;
+  }
+  .p-word .ch-sp {
+    display: inline-block;
+    opacity: 0;
+    width: 0.28em;
+  }
+</style>
+
+<div id="root" data-composition-id="pills" data-width="1920" data-height="1080">
+  <div id="p-window" data-layout-ignore="true">
+    <video id="p-v1" class="clip" data-start="0" data-duration="2.2727" data-track-index="1" muted playsinline src="assets/media/p038.mp4"></video>
+    <video id="p-v2" class="clip" data-start="2.2727" data-duration="2.2728" data-track-index="2" muted playsinline src="assets/media/p059.mp4"></video>
+    <video id="p-v3" class="clip" data-start="4.5455" data-duration="2.2727" data-track-index="3" muted playsinline src="assets/media/p098.mp4"></video>
+    <video id="p-v4" class="clip" data-start="6.8182" data-duration="2.2728" data-track-index="4" muted playsinline src="assets/media/p176.mp4"></video>
+  </div>
+
+  <div id="p-open" data-var-text="openTo">Open to</div>
+
+  <div id="p-word1" class="p-word clip" data-start="1.3636" data-duration="0.9091"><span data-var-text="aud1">researchers.</span></div>
+  <div id="p-word2" class="p-word clip" data-start="3.6364" data-duration="0.9091"><span data-var-text="aud2">builders.</span></div>
+  <div id="p-word3" class="p-word clip" data-start="5.9091" data-duration="0.9091"><span data-var-text="aud3">students.</span></div>
+  <div id="p-word4" class="p-word clip" data-start="8.1818" data-duration="0.9092"><span data-var-text="aud4">everyone.</span></div>
+</div>
+
+<script>
+  {
+    const SEG = 2.272727; // five beats at 132 BPM
+    const CUES = [1.363636, 3.636364, 5.909091, 8.181818]; // word cues
+    const EXPAND_START = 8.141; // 36.438 s on the film clock
+    const SCENE_END = 9.0909;
+    const GAP = 32;
+    const WORD_PAD = 48;
+
+    const measureCtx = document.createElement("canvas").getContext("2d");
+    function textWidth(text, weight, size) {
+      measureCtx.font = weight + " " + size + 'px "Montserrat"';
+      return measureCtx.measureText(text).width;
+    }
+
+    const clamp01 = (v) => Math.max(0, Math.min(1, v));
+    const easeInOut = (p) => (p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);
+    const easeOut = (p) => 1 - Math.pow(1 - p, 3);
+
+    function splitLetters(el) {
+      const holder = el.firstElementChild || el;
+      const text = holder.textContent;
+      while (holder.firstChild) holder.removeChild(holder.firstChild);
+      const spans = [];
+      for (const ch of text) {
+        const span = document.createElement("span");
+        if (ch === " ") {
+          span.className = "ch-sp";
+        } else {
+          span.className = "ch";
+          span.textContent = ch;
+        }
+        holder.appendChild(span);
+        spans.push(span);
+      }
+      return spans;
+    }
+
+    function build() {
+      const openEl = document.getElementById("p-open");
+      const words = [1, 2, 3, 4].map((i) => document.getElementById("p-word" + i));
+      const letterSets = words.map((w) => splitLetters(w));
+
+      const wOpen = textWidth(openEl.textContent, "600", 110);
+      const wWord = words.map((w) => textWidth(w.textContent, "600", 64));
+
+      // pill width over time: 300 -> each word's measured width + padding
+      const P0 = 300;
+      const pillWidth = (t) => {
+        let p = P0;
+        for (let i = 0; i < 4; i++) {
+          const target = wWord[i] + WORD_PAD;
+          const k = clamp01((t - CUES[i]) / 0.5);
+          if (k > 0) p = P0 + (target - P0) * easeOut(k);
+          if (t > CUES[i] + 0.5) p = target;
+        }
+        return p;
+      };
+
+      const openX = (p) => 960 - (wOpen + GAP + p) / 2;
+      const pillLeft = (p) => openX(p) + wOpen + GAP;
+
+      // final line layout with the last word ("Open to everyone.")
+      const lineOpenX = 960 - (wOpen + GAP + wWord[3]) / 2;
+      const lineWordX = lineOpenX + wOpen + GAP;
+
+      const win = document.getElementById("p-window");
+      const render = (t) => {
+        const p = pillWidth(t);
+        let cx = pillLeft(p) + p / 2;
+        let cy = 500;
+        let w = p;
+        let h = 124;
+        let r = 62;
+
+        // circle -> pill morph over the first 0.5 s
+        const mk = easeInOut(clamp01(t / 0.5));
+        if (mk < 1) {
+          cx = 960 + (cx - 960) * mk;
+          w = 600 + (p - 600) * mk;
+          h = 600 + (124 - 600) * mk;
+          r = 300 + (62 - 300) * mk;
+        }
+
+        // the final Hangzhou shot expands to fill the frame behind the text
+        const ek = easeInOut(clamp01((t - EXPAND_START) / (SCENE_END - EXPAND_START)));
+        let oX = openX(p);
+        let wordX = cx - wWord[3] / 2;
+        if (ek > 0) {
+          const fsx = 960;
+          const fsy = 540;
+          cx = cx + (fsx - cx) * ek;
+          cy = cy + (fsy - cy) * ek;
+          w = w + (1920 - w) * ek;
+          h = h + (1080 - h) * ek;
+          r = r * (1 - ek);
+          oX = oX + (lineOpenX - oX) * ek;
+          wordX = wordX + (lineWordX - wordX) * ek;
+        }
+
+        win.style.left = cx - w / 2 + "px";
+        win.style.top = cy - h / 2 + "px";
+        win.style.width = w + "px";
+        win.style.height = h + "px";
+        win.style.borderRadius = r + "px";
+
+        gsap.set(openEl, { x: oX });
+        // each word rides its pill (the clips gate their visibility);
+        // the last word blends into the centered line as it expands
+        words.forEach((wordEl, i) => {
+          if (i === 3) {
+            gsap.set(wordEl, { x: wordX });
+          } else {
+            gsap.set(wordEl, { x: pillLeft(p) + p / 2 - wWord[i] / 2 });
+          }
+        });
+      };
+      render(0);
+
+      const tl = gsap.timeline({ paused: true });
+
+      // "Open to" animates in once, while the circle arrives beside it
+      tl.fromTo(
+        openEl,
+        { opacity: 0, y: 16, filter: "blur(10px)" },
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.45, ease: "power3.out" },
+        0.1,
+      );
+
+      // audience names appear letter by letter on their cues
+      letterSets.forEach((letters, i) => {
+        letters.forEach((span, j) => {
+          tl.fromTo(
+            span,
+            { y: 18, opacity: 0, filter: "blur(6px)" },
+            { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.35, ease: "power3.out" },
+            CUES[i] + j * 0.04,
+          );
+        });
+      });
+
+      // one proxy tween drives the whole window/line layout, a pure
+      // function of scene time, so every frame is seek-order safe
+      const driver = { p: 0 };
+      tl.to(
+        driver,
+        {
+          p: 1,
+          duration: SCENE_END,
+          ease: "none",
+          onUpdate: () => render(driver.p * SCENE_END),
+        },
+        0,
+      );
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["pills"] = tl;
+    }
+
+    document.fonts.load('600 110px "Montserrat"').then(build);
+  }
+</script>
+</template>

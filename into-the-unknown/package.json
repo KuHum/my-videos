@@ -1,0 +1,13 @@
+{
+  "name": "into-the-unknown",
+  "private": true,
+  "description": "Into the Unknown. — a 52 s DeepSeek concept film (1920x1080, 60 fps) built as a HyperFrames composition and rendered by GitHub Actions. Footage: Pexels. Music: Epic Hybrid by Kulakovka (Pixabay). Not affiliated with DeepSeek.",
+  "scripts": {
+    "prepare": "python3 tools/prepare.py",
+    "check": "hyperframes check",
+    "render": "hyperframes render . -o renders/into-the-unknown.mp4 --fps 60 --quality looks"
+  },
+  "dependencies": {
+    "hyperframes": "0.9.7"
+  }
+}

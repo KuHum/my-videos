@@ -1,0 +1,307 @@
+<template>
+<!-- ==========================================================================
+     sonar.html — 20.115-28.297 s (host-local clock), 132 BPM in 5/4
+     Nine shots cut every two beats (0.909091 s) inside a 600 px circular
+     window at (960, 500). Behind it: a blurred copy of the same frame and
+     the outlined words INTO THE UNKNOWN. The dashed ring turns clockwise,
+     the 72 tick marks counterclockwise, and a blue progress ring completes
+     one revolution across all nine shots. Each shot starts at 1.07x its
+     listed zoom and eases back over the shot, aimed at its focal point.
+     The circle pops slightly larger and settles on each cut.
+     ========================================================================== -->
+<style>
+  #root {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: #03060d;
+    -webkit-font-smoothing: antialiased;
+  }
+  @font-face {
+    font-family: "DM Sans";
+    src: url("assets/fonts/DMSans.ttf") format("truetype-variations");
+    font-weight: 100 1000;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "DM Mono";
+    src: url("assets/fonts/DMMono-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  .s-plate {
+    position: absolute;
+    inset: 0;
+    width: 1920px;
+    height: 1080px;
+    object-fit: cover;
+  }
+  #s-platescrim {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    background: linear-gradient(180deg, rgba(3, 6, 13, 0.5) 0%, rgba(3, 6, 13, 0.32) 100%);
+  }
+
+  #s-words {
+    position: absolute;
+    left: 0;
+    top: 424px;
+    width: 1920px;
+    text-align: center;
+    z-index: 4;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 700;
+    font-size: 155px;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    color: transparent;
+    -webkit-text-stroke: 2px rgba(127, 164, 255, 0.72);
+    opacity: 0;
+  }
+
+  #s-circle {
+    position: absolute;
+    left: 660px;
+    top: 200px;
+    width: 600px;
+    height: 600px;
+    z-index: 10;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #03060d;
+  }
+  #s-pop {
+    position: absolute;
+    inset: 0;
+  }
+  .s-shot {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1080px;
+    height: 1080px;
+  }
+  .s-shot video {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1080px;
+    height: 1080px;
+  }
+
+  #s-rings {
+    position: absolute;
+    left: 580px;
+    top: 120px;
+    z-index: 20;
+    opacity: 0;
+  }
+
+  .s-label {
+    position: absolute;
+    left: 0;
+    top: 856px;
+    width: 1920px;
+    text-align: center;
+    z-index: 30;
+    font-family: "DM Mono", monospace;
+    font-weight: 500;
+    font-size: 30px;
+    white-space: nowrap;
+  }
+  .s-label .sl {
+    color: #edf2fb;
+    opacity: 0;
+  }
+  .s-label .ss {
+    color: #5a6e96;
+    opacity: 0;
+  }
+  .s-label .sr {
+    color: #7fa4ff;
+    opacity: 0;
+  }
+
+  #s-flash {
+    position: absolute;
+    inset: 0;
+    z-index: 60;
+    background: #f2f6ff;
+  }
+</style>
+
+<div id="root" data-composition-id="sonar" data-width="1920" data-height="1080">
+  <!-- blurred copies of each frame, full-screen behind the window -->
+  <video id="s-b0" class="clip s-plate" data-start="0" data-duration="0.909091" data-track-index="1" muted playsinline src="assets/media/sonar-blur/p097.mp4" style="z-index: 1"></video>
+  <video id="s-b1" class="clip s-plate" data-start="0.909091" data-duration="0.909091" data-track-index="1" muted playsinline src="assets/media/sonar-blur/p223.mp4" style="z-index: 1"></video>
+  <video id="s-b2" class="clip s-plate" data-start="1.818182" data-duration="0.909091" data-track-index="1" muted playsinline src="assets/media/sonar-blur/p019.mp4" style="z-index: 1"></video>
+  <video id="s-b3" class="clip s-plate" data-start="2.727273" data-duration="0.909091" data-track-index="1" muted playsinline src="assets/media/sonar-blur/p169.mp4" style="z-index: 1"></video>
+  <video id="s-b4" class="clip s-plate" data-start="3.636364" data-duration="0.909091" data-track-index="1" muted playsinline src="assets/media/sonar-blur/p121.mp4" style="z-index: 1"></video>
+  <video id="s-b5" class="clip s-plate" data-start="4.545455" data-duration="0.909091" data-track-index="1" muted playsinline src="assets/media/sonar-blur/p025.mp4" style="z-index: 1"></video>
+  <video id="s-b6" class="clip s-plate" data-start="5.454545" data-duration="0.909091" data-track-index="1" muted playsinline src="assets/media/sonar-blur/p194.mp4" style="z-index: 1"></video>
+  <video id="s-b7" class="clip s-plate" data-start="6.363636" data-duration="0.909091" data-track-index="1" muted playsinline src="assets/media/sonar-blur/p083.mp4" style="z-index: 1"></video>
+  <video id="s-b8" class="clip s-plate" data-start="7.272727" data-duration="0.909091" data-track-index="1" muted playsinline src="assets/media/sonar-blur/p089.mp4" style="z-index: 1"></video>
+  <div id="s-platescrim" data-layout-ignore="true"></div>
+
+  <div id="s-words">INTO THE UNKNOWN</div>
+
+  <!-- the 600 px circular window at (960, 500) -->
+  <div id="s-circle" data-layout-ignore="true">
+    <div id="s-pop">
+      <div class="s-shot" id="s-w0"><video id="s-v0" class="clip" data-start="0" data-duration="0.909091" data-track-index="2" muted playsinline src="assets/media/sonar/p097.mp4"></video></div>
+      <div class="s-shot" id="s-w1"><video id="s-v1" class="clip" data-start="0.909091" data-duration="0.909091" data-track-index="2" muted playsinline src="assets/media/sonar/p223.mp4"></video></div>
+      <div class="s-shot" id="s-w2"><video id="s-v2" class="clip" data-start="1.818182" data-duration="0.909091" data-track-index="2" muted playsinline src="assets/media/sonar/p019.mp4"></video></div>
+      <div class="s-shot" id="s-w3"><video id="s-v3" class="clip" data-start="2.727273" data-duration="0.909091" data-track-index="2" muted playsinline src="assets/media/sonar/p169.mp4"></video></div>
+      <div class="s-shot" id="s-w4"><video id="s-v4" class="clip" data-start="3.636364" data-duration="0.909091" data-track-index="2" muted playsinline src="assets/media/sonar/p121.mp4"></video></div>
+      <div class="s-shot" id="s-w5"><video id="s-v5" class="clip" data-start="4.545455" data-duration="0.909091" data-track-index="2" muted playsinline src="assets/media/sonar/p025.mp4"></video></div>
+      <div class="s-shot" id="s-w6"><video id="s-v6" class="clip" data-start="5.454545" data-duration="0.909091" data-track-index="2" muted playsinline src="assets/media/sonar/p194.mp4"></video></div>
+      <div class="s-shot" id="s-w7"><video id="s-v7" class="clip" data-start="6.363636" data-duration="0.909091" data-track-index="2" muted playsinline src="assets/media/sonar/p083.mp4"></video></div>
+      <div class="s-shot" id="s-w8"><video id="s-v8" class="clip" data-start="7.272727" data-duration="0.909091" data-track-index="2" muted playsinline src="assets/media/sonar/p089.mp4"></video></div>
+    </div>
+  </div>
+
+  <!-- dashed ring, 72 ticks, progress ring -->
+  <svg id="s-rings" width="760" height="760" viewBox="0 0 760 760" fill="none" data-layout-ignore="true">
+    <circle id="s-track" cx="380" cy="380" r="340" stroke="rgba(255,255,255,0.10)" stroke-width="5" />
+    <circle id="s-progress" cx="380" cy="380" r="340" stroke="#7fa4ff" stroke-width="5"
+      stroke-linecap="round" stroke-dasharray="2136.28" stroke-dashoffset="2136.28"
+      transform="rotate(-90 380 380)" />
+    <circle id="s-dashring" cx="380" cy="380" r="316" stroke="rgba(127,164,255,0.8)" stroke-width="2"
+      stroke-dasharray="6 12" />
+    <g id="s-ticks"></g>
+    <circle cx="380" cy="380" r="300" stroke="rgba(127,164,255,0.45)" stroke-width="1.5" />
+  </svg>
+
+  <!-- one label per shot; the left of the slash resolves first -->
+  <div id="s-l0" class="s-label clip" data-start="0" data-duration="0.909091"><span class="sl">DeepSeek-V3</span><span class="ss"> / </span><span class="sr">open weights</span></div>
+  <div id="s-l1" class="s-label clip" data-start="0.909091" data-duration="0.909091"><span class="sl">DeepSeek-R1</span><span class="ss"> / </span><span class="sr">reasoning</span></div>
+  <div id="s-l2" class="s-label clip" data-start="1.818182" data-duration="0.909091"><span class="sl">DeepSeek-V3.1</span><span class="ss"> / </span><span class="sr">hybrid thinking</span></div>
+  <div id="s-l3" class="s-label clip" data-start="2.727273" data-duration="0.909091"><span class="sl">DeepSeek-V3.2</span><span class="ss"> / </span><span class="sr">open source</span></div>
+  <div id="s-l4" class="s-label clip" data-start="3.636364" data-duration="0.909091"><span class="sl">DeepSeek-V4</span><span class="ss"> / </span><span class="sr">open source</span></div>
+  <div id="s-l5" class="s-label clip" data-start="4.545455" data-duration="0.909091"><span class="sl">DeepSeek-V4.1</span><span class="ss"> / </span><span class="sr">Flash</span></div>
+  <div id="s-l6" class="s-label clip" data-start="5.454545" data-duration="0.909091"><span class="sl">DeepSeek</span><span class="ss"> / </span><span class="sr">Harness</span></div>
+  <div id="s-l7" class="s-label clip" data-start="6.363636" data-duration="0.909091"><span class="sl">API</span><span class="ss"> / </span><span class="sr">web search + fetch</span></div>
+  <div id="s-l8" class="s-label clip" data-start="7.272727" data-duration="0.909091"><span class="sl">github.com</span><span class="ss"> / </span><span class="sr">deepseek-ai</span></div>
+
+  <div id="s-flash" data-layout-ignore="true"></div>
+</div>
+
+<script>
+  {
+    // per-shot focal point (fractions of the square) and base zoom
+    const SHOTS = [
+      { fx: 0.7, fy: 0.52, z: 1.55 },
+      { fx: 0.44, fy: 0.45, z: 1.15 },
+      { fx: 0.3, fy: 0.66, z: 1.35 },
+      { fx: 0.66, fy: 0.4, z: 1.35 },
+      { fx: 0.5, fy: 0.52, z: 1.15 },
+      { fx: 0.58, fy: 0.62, z: 1.25 },
+      { fx: 0.5, fy: 0.5, z: 1.1 },
+      { fx: 0.5, fy: 0.58, z: 1.2 },
+      { fx: 0.38, fy: 0.42, z: 1.55 },
+    ];
+    const CUT = 0.909091; // two beats at 132 BPM
+
+    function build() {
+      const tl = gsap.timeline({ paused: true });
+
+      // 72 tick marks
+      const ticks = document.getElementById("s-ticks");
+      for (let i = 0; i < 72; i++) {
+        const angle = (i / 72) * Math.PI * 2;
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        const r0 = 324;
+        const r1 = 336;
+        line.setAttribute("x1", 380 + r0 * Math.cos(angle));
+        line.setAttribute("y1", 380 + r0 * Math.sin(angle));
+        line.setAttribute("x2", 380 + r1 * Math.cos(angle));
+        line.setAttribute("y2", 380 + r1 * Math.sin(angle));
+        line.setAttribute("stroke", "rgba(232,238,249,0.8)");
+        line.setAttribute("stroke-width", "2");
+        ticks.appendChild(line);
+      }
+
+      // the window expands from the dot on the downbeat
+      gsap.set("#s-pop", { scale: 1 });
+      tl.fromTo("#s-circle", { scale: 0.035 }, { scale: 1, duration: 0.35, ease: "power3.out" }, 0);
+      // the cool white flash decays
+      tl.fromTo("#s-flash", { opacity: 1 }, { opacity: 0, duration: 0.18, ease: "power2.out" }, 0);
+      // rings and outlined words arrive with the window
+      tl.fromTo("#s-rings", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0.08);
+      tl.fromTo(
+        "#s-words",
+        { opacity: 0, filter: "blur(10px)" },
+        { opacity: 1, filter: "blur(0px)", duration: 0.4, ease: "power2.out" },
+        0.25,
+      );
+
+      // dashed ring clockwise, tick marks counterclockwise, progress one turn
+      tl.to("#s-dashring", { rotation: 360, svgOrigin: "380 380", duration: 8.182, ease: "none" }, 0);
+      tl.to("#s-ticks", { rotation: -180, svgOrigin: "380 380", duration: 8.182, ease: "none" }, 0);
+      tl.to("#s-progress", { strokeDashoffset: 0, duration: 8.182, ease: "none" }, 0);
+
+      // the circle pops slightly larger and settles on each cut: a pure
+      // function of scene time, driven through one proxy tween so every
+      // frame is identical no matter the seek order
+      const popProxy = { p: 0 };
+      const popScale = (t) => {
+        for (let i = 1; i < 9; i++) {
+          const dt = t - i * CUT;
+          if (dt >= 0 && dt < 0.16) {
+            const k = 1 - dt / 0.16;
+            return 1 + 0.045 * k * k;
+          }
+        }
+        return 1;
+      };
+      tl.to(
+        popProxy,
+        {
+          p: 1,
+          duration: 8.182,
+          ease: "none",
+          onUpdate: () => {
+            gsap.set("#s-pop", { scale: popScale(popProxy.p * 8.182) });
+          },
+        },
+        0,
+      );
+
+      SHOTS.forEach((shot, i) => {
+        const at = i * CUT;
+        const wrap = "#s-w" + i;
+        // 1.07x the listed zoom, easing back to it over the shot, focal
+        // point held at the window center
+        const fromS = shot.z * 1.07;
+        tl.fromTo(
+          wrap,
+          {
+            scale: fromS,
+            x: 300 - shot.fx * 1080 * fromS,
+            y: 300 - shot.fy * 1080 * fromS,
+          },
+          {
+            scale: shot.z,
+            x: 300 - shot.fx * 1080 * shot.z,
+            y: 300 - shot.fy * 1080 * shot.z,
+            duration: CUT,
+            ease: "power1.out",
+          },
+          at,
+        );
+        // label: left of the slash first, then the right
+        tl.fromTo("#s-l" + i + " .sl", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.22, ease: "power2.out" }, at + 0.03);
+        tl.fromTo("#s-l" + i + " .ss", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, at + 0.2);
+        tl.fromTo("#s-l" + i + " .sr", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.22, ease: "power2.out" }, at + 0.28);
+      });
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["sonar"] = tl;
+    }
+
+    build();
+  }
+</script>
+</template>

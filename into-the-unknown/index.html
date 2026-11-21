@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en" data-composition-variables='[
+  {"id": "brandBlue", "type": "color", "label": "Brand blue (whale, cursor)", "default": "#4176E6"},
+  {"id": "brandLight", "type": "color", "label": "Brand light blue (ring, dot)", "default": "#7FA4FF"},
+  {"id": "q1a", "type": "string", "label": "Question 1, first phrase", "default": "How deep"},
+  {"id": "q1b", "type": "string", "label": "Question 1, second phrase", "default": "can curiosity go?"},
+  {"id": "q2a", "type": "string", "label": "Question 2, first phrase", "default": "What haven\u2019t"},
+  {"id": "q2b", "type": "string", "label": "Question 2, second phrase", "default": "we solved yet?"},
+  {"id": "q3a", "type": "string", "label": "Question 3, first phrase", "default": "Can a machine"},
+  {"id": "q3b", "type": "string", "label": "Question 3, second phrase", "default": "learn to reason?"},
+  {"id": "typed1", "type": "string", "label": "Typed line 1", "default": "Unravel the mystery of AGI with curiosity."},
+  {"id": "typed2", "type": "string", "label": "Typed line 2", "default": "Answer the essential question with long-termism."},
+  {"id": "openTo", "type": "string", "label": "Audience lead-in", "default": "Open to"},
+  {"id": "aud1", "type": "string", "label": "Audience 1", "default": "researchers."},
+  {"id": "aud2", "type": "string", "label": "Audience 2", "default": "builders."},
+  {"id": "aud3", "type": "string", "label": "Audience 3", "default": "students."},
+  {"id": "aud4", "type": "string", "label": "Audience 4", "default": "everyone."},
+  {"id": "cityLabel", "type": "string", "label": "Hangzhou tile label", "default": "HANGZHOU \u00b7 EST. 2023"},
+  {"id": "endTitle", "type": "string", "label": "End title", "default": "Into the Unknown."},
+  {"id": "credit", "type": "string", "label": "End credit", "default": "IPO \u00b7 A CONCEPT FILM \u00b7 NOT AFFILIATED WITH DEEPSEEK"},
+  {"id": "musicCredit", "type": "string", "label": "Music credit", "default": "Music by Kulakovka from Pixabay."}
+]'>
+<head>
+  <meta charset="utf-8" />
+  <title>Into the Unknown.</title>
+</head>
+<body>
+  <script src="assets/gsap.min.js"></script>
+  <div
+    id="root"
+    data-composition-id="main"
+    data-start="0"
+    data-duration="52"
+    data-width="1920"
+    data-height="1080"
+    data-fps="60"
+    style="background: #03060d"
+  >
+    <!-- ===== 0.000-4.400  whale mark draws itself; calf footage inside ===== -->
+    <div
+      id="open"
+      data-composition-id="open"
+      data-composition-src="compositions/open.html"
+      data-start="0"
+      data-duration="4.4"
+      data-track-index="1"
+      data-track-kind="graphics"
+      style="z-index: 10"
+    ></div>
+
+    <!-- ===== 4.400-18.200  the three questions over footage ================ -->
+    <div
+      id="questions"
+      data-composition-id="questions"
+      data-composition-src="compositions/questions.html"
+      data-start="4.4"
+      data-duration="13.8"
+      data-track-index="2"
+      data-track-kind="graphics"
+      style="z-index: 10"
+    ></div>
+
+    <!-- ===== 18.200-20.115  quiet passage: the typed line ================ -->
+    <div
+      id="typing"
+      data-composition-id="typing"
+      data-composition-src="compositions/typing.html"
+      data-start="18.2"
+      data-duration="1.915"
+      data-track-index="3"
+      data-track-kind="graphics"
+      style="z-index: 10"
+    ></div>
+
+    <!-- ===== 20.115-28.297  sonar montage, nine shots in the window ====== -->
+    <div
+      id="sonar"
+      data-composition-id="sonar"
+      data-composition-src="compositions/sonar.html"
+      data-start="20.115"
+      data-duration="8.182"
+      data-track-index="4"
+      data-track-kind="graphics"
+      style="z-index: 10"
+    ></div>
+
+    <!-- ===== 28.297-37.388  circle becomes the "Open to" pill =========== -->
+    <div
+      id="pills"
+      data-composition-id="pills"
+      data-composition-src="compositions/pills.html"
+      data-start="28.297"
+      data-duration="9.091"
+      data-track-index="5"
+      data-track-kind="graphics"
+      style="z-index: 10"
+    ></div>
+
+    <!-- ===== 37.388-41.933  pull back: the footage wall, dive to ======= -->
+    <div
+      id="wall"
+      data-composition-id="wall"
+      data-composition-src="compositions/wall.html"
+      data-start="37.388"
+      data-duration="4.545"
+      data-track-index="6"
+      data-track-kind="graphics"
+      style="z-index: 10"
+    ></div>
+
+    <!-- ===== 41.933-46.479  Shanghai, IPO letters fill with city ======= -->
+    <div
+      id="ipo"
+      data-composition-id="ipo"
+      data-composition-src="compositions/ipo.html"
+      data-start="41.933"
+      data-duration="4.546"
+      data-track-index="7"
+      data-track-kind="graphics"
+      style="z-index: 10"
+    ></div>
+
+    <!-- ===== 46.479-52.000  end card ===================================== -->
+    <div
+      id="endcard"
+      data-composition-id="endcard"
+      data-composition-src="compositions/endcard.html"
+      data-start="46.479"
+      data-duration="5.521"
+      data-track-index="8"
+      data-track-kind="graphics"
+      style="z-index: 50"
+    ></div>
+
+    <!-- ===== depth ruler + DEPTH readout, 4.400-28.297 overlay ========= -->
+    <div
+      id="depth"
+      data-composition-id="depth"
+      data-composition-src="compositions/depth.html"
+      data-start="4.4"
+      data-duration="23.897"
+      data-track-index="9"
+      data-track-kind="graphics"
+      style="z-index: 40"
+    ></div>
+
+    <!-- ===== the whole score: Epic Hybrid by Kulakovka, 52 s ========== -->
+    <audio
+      id="score"
+      class="clip"
+      data-start="0"
+      data-duration="52"
+      data-volume="1"
+      data-track-index="10"
+      src="assets/audio/score.flac"
+    ></audio>
+  </div>
+  <script>
+    window.__timelines = window.__timelines || {};
+    window.__timelines["main"] = gsap.timeline({ paused: true });
+  </script>
+</body>
+</html>

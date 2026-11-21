@@ -1,0 +1,188 @@
+<template>
+<!-- ==========================================================================
+     open.html — 0.000-4.400 s (host-local clock)
+     A pale blue line draws the whale mark against near-black while humpback
+     footage (p002, source 10.00-14.80) plays inside the silhouette. Three
+     sonar rings expand; at 3.15 s we accelerate into the whale and at 3.95 s
+     the same footage, at the same source time, goes full-screen behind it.
+     ========================================================================== -->
+<style>
+  #root {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: #03060d;
+    font-kerning: normal;
+    -webkit-font-smoothing: antialiased;
+  }
+  @font-face {
+    font-family: "DM Mono";
+    src: url("assets/fonts/DMMono-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  #o-full {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 1920px;
+    height: 1080px;
+    object-fit: cover;
+  }
+
+  #o-stage {
+    position: absolute;
+    left: 700px;
+    top: 289px;
+    width: 520px;
+    height: 382px;
+    z-index: 10;
+    transform-origin: 55% 42%;
+  }
+  #o-maskwrap {
+    position: absolute;
+    inset: 0;
+    clip-path: url(#oWhaleClip);
+  }
+  #o-masked {
+    position: absolute;
+    inset: 0;
+    width: 520px;
+    height: 382px;
+    object-fit: cover;
+    opacity: 0;
+  }
+  #o-outline {
+    position: absolute;
+    inset: 0;
+    overflow: visible;
+  }
+  #o-outline path {
+    fill: transparent;
+    stroke: #7fa4ff;
+    stroke-width: 2.5;
+    vector-effect: non-scaling-stroke;
+    filter: drop-shadow(0 0 6px rgba(127, 164, 255, 0.45));
+  }
+
+  .o-ring {
+    position: absolute;
+    left: 680px;
+    top: 200px;
+    width: 560px;
+    height: 560px;
+    border: 2px solid rgba(127, 164, 255, 0.55);
+    border-radius: 50%;
+    z-index: 6;
+    opacity: 0;
+  }
+
+  #o-label {
+    position: absolute;
+    left: 0;
+    top: 726px;
+    width: 1920px;
+    text-align: center;
+    z-index: 12;
+    font-family: "DM Mono", monospace;
+    font-weight: 400;
+    font-size: 26px;
+    letter-spacing: 0.42em;
+    text-indent: 0.42em;
+    color: #c9d9f6;
+    opacity: 0;
+  }
+</style>
+
+<div id="root" data-composition-id="open" data-width="1920" data-height="1080">
+  <!-- the whale clip shape: must live inside #root so it mounts with the scene -->
+  <svg width="0" height="0" style="position: absolute">
+    <defs>
+      <clipPath id="oWhaleClip" clipPathUnits="userSpaceOnUse">
+        <path
+          transform="translate(-3.1840,-34.16) scale(19.52)"
+          d="M26.5174 3.39471C26.235 3.2567 26.1137 3.52006 25.9487 3.65346C25.8923 3.69659 25.8446 3.75294 25.7969 3.80469C25.3846 4.24516 24.9027 4.53439 24.2737 4.49989C23.3536 4.44814 22.5682 4.73737 21.8735 5.44119C21.7258 4.57349 21.2353 4.0554 20.4889 3.72304C20.0985 3.55054 19.7034 3.37746 19.4297 3.00197C19.2388 2.73459 19.1865 2.43673 19.091 2.14289C19.0301 1.96579 18.9697 1.78466 18.7656 1.75418C18.5442 1.71968 18.4574 1.90541 18.3705 2.06067C18.0232 2.69549 17.8887 3.39471 17.9019 4.10313C17.9324 5.6965 18.6051 6.96556 19.9421 7.86834C20.0939 7.97184 20.133 8.07535 20.0852 8.22658C19.9938 8.53766 19.8857 8.83955 19.7903 9.15063C19.7293 9.34901 19.6384 9.39271 19.4257 9.30588C18.692 8.9994 18.0583 8.54571 17.4982 7.99772C16.5477 7.07827 15.6881 6.06336 14.6162 5.26869C14.3644 5.08296 14.1125 4.91045 13.8521 4.746C12.7584 3.68394 13.9952 2.81164 14.2816 2.70814C14.5812 2.60003 14.3857 2.22857 13.4179 2.23317C12.4502 2.2372 11.5646 2.56151 10.4359 2.99335C10.2708 3.05832 10.0972 3.10547 9.91951 3.14457C8.8954 2.95022 7.83162 2.90709 6.72069 3.03245C4.62877 3.26533 2.95777 4.25436 1.72954 5.94261C0.254043 7.97184 -0.0932678 10.2777 0.33167 12.6824C0.778458 15.2171 2.07225 17.3153 4.06008 18.9558C6.12152 20.6567 8.49577 21.4905 11.2047 21.3306C12.8498 21.2358 14.6812 21.0155 16.7473 19.2669C17.2682 19.5262 17.8151 19.6297 18.7219 19.7074C19.4205 19.7723 20.0933 19.6729 20.6143 19.5648C21.4302 19.3923 21.3739 18.6367 21.0789 18.4981C18.6874 17.3843 19.2124 17.8374 18.7351 17.4706C19.9501 16.033 21.8063 13.4776 22.379 9.99821C22.4353 9.61409 22.5072 9.073 22.4986 8.76192C22.494 8.57216 22.5377 8.49856 22.7545 8.47671C23.3536 8.40771 23.9352 8.24383 24.4692 7.94999C26.0188 7.10357 26.6439 5.71318 26.7911 4.04678C26.8129 3.79204 26.7865 3.52869 26.5174 3.39471Z"
+        />
+      </clipPath>
+    </defs>
+  </svg>
+
+  <video
+    id="o-full"
+    class="clip"
+    data-start="3.95"
+    data-duration="0.45"
+    data-media-start="3.95"
+    data-track-index="1"
+    muted
+    playsinline
+    src="assets/media/p002.mp4"
+  ></video>
+
+  <div id="o-stage">
+    <div id="o-maskwrap">
+      <video
+        id="o-masked"
+        class="clip"
+        data-start="0"
+        data-duration="4.4"
+        data-track-index="2"
+        muted
+        playsinline
+        src="assets/media/p002.mp4"
+      ></video>
+    </div>
+    <svg id="o-outline" width="520" height="382" viewBox="0.163086 1.75 26.634 19.6" fill="none">
+      <path
+        id="o-outline-path"
+        d="M26.5174 3.39471C26.235 3.2567 26.1137 3.52006 25.9487 3.65346C25.8923 3.69659 25.8446 3.75294 25.7969 3.80469C25.3846 4.24516 24.9027 4.53439 24.2737 4.49989C23.3536 4.44814 22.5682 4.73737 21.8735 5.44119C21.7258 4.57349 21.2353 4.0554 20.4889 3.72304C20.0985 3.55054 19.7034 3.37746 19.4297 3.00197C19.2388 2.73459 19.1865 2.43673 19.091 2.14289C19.0301 1.96579 18.9697 1.78466 18.7656 1.75418C18.5442 1.71968 18.4574 1.90541 18.3705 2.06067C18.0232 2.69549 17.8887 3.39471 17.9019 4.10313C17.9324 5.6965 18.6051 6.96556 19.9421 7.86834C20.0939 7.97184 20.133 8.07535 20.0852 8.22658C19.9938 8.53766 19.8857 8.83955 19.7903 9.15063C19.7293 9.34901 19.6384 9.39271 19.4257 9.30588C18.692 8.9994 18.0583 8.54571 17.4982 7.99772C16.5477 7.07827 15.6881 6.06336 14.6162 5.26869C14.3644 5.08296 14.1125 4.91045 13.8521 4.746C12.7584 3.68394 13.9952 2.81164 14.2816 2.70814C14.5812 2.60003 14.3857 2.22857 13.4179 2.23317C12.4502 2.2372 11.5646 2.56151 10.4359 2.99335C10.2708 3.05832 10.0972 3.10547 9.91951 3.14457C8.8954 2.95022 7.83162 2.90709 6.72069 3.03245C4.62877 3.26533 2.95777 4.25436 1.72954 5.94261C0.254043 7.97184 -0.0932678 10.2777 0.33167 12.6824C0.778458 15.2171 2.07225 17.3153 4.06008 18.9558C6.12152 20.6567 8.49577 21.4905 11.2047 21.3306C12.8498 21.2358 14.6812 21.0155 16.7473 19.2669C17.2682 19.5262 17.8151 19.6297 18.7219 19.7074C19.4205 19.7723 20.0933 19.6729 20.6143 19.5648C21.4302 19.3923 21.3739 18.6367 21.0789 18.4981C18.6874 17.3843 19.2124 17.8374 18.7351 17.4706C19.9501 16.033 21.8063 13.4776 22.379 9.99821C22.4353 9.61409 22.5072 9.073 22.4986 8.76192C22.494 8.57216 22.5377 8.49856 22.7545 8.47671C23.3536 8.40771 23.9352 8.24383 24.4692 7.94999C26.0188 7.10357 26.6439 5.71318 26.7911 4.04678C26.8129 3.79204 26.7865 3.52869 26.5174 3.39471Z"
+      />
+    </svg>
+  </div>
+
+  
+
+  <div class="o-ring" id="o-ring1" data-layout-ignore="true"></div>
+  <div class="o-ring" id="o-ring2" data-layout-ignore="true"></div>
+  <div class="o-ring" id="o-ring3" data-layout-ignore="true"></div>
+
+  <div id="o-label">DEEPSEEK</div>
+</div>
+
+<script>
+  {
+    const tl = gsap.timeline({ paused: true });
+
+    // the pale blue line draws the whale mark
+    const outlinePath = document.getElementById("o-outline-path");
+    const lineLength = outlinePath.getTotalLength();
+    gsap.set(outlinePath, { strokeDasharray: lineLength, strokeDashoffset: lineLength });
+    tl.to(outlinePath, { strokeDashoffset: 0, duration: 3.15, ease: "power1.inOut" }, 0);
+
+    // footage fades in inside the silhouette while the line draws
+    tl.fromTo("#o-masked", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.out" }, 0.3);
+
+    // three sonar rings expand in succession
+    tl.fromTo(
+      "#o-ring1", { scale: 0.12, opacity: 0.75 }, { scale: 1, opacity: 0, duration: 1.3, ease: "power2.out" }, 0.7,
+    );
+    tl.fromTo(
+      "#o-ring2", { scale: 0.12, opacity: 0.75 }, { scale: 1, opacity: 0, duration: 1.3, ease: "power2.out" }, 1.35,
+    );
+    tl.fromTo(
+      "#o-ring3", { scale: 0.12, opacity: 0.75 }, { scale: 1, opacity: 0, duration: 1.3, ease: "power2.out" }, 2.0,
+    );
+
+    // the small label beneath the mark
+    tl.fromTo("#o-label", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 0.9);
+
+    // at 3.15 s accelerate into the whale shape; the same footage goes
+    // full-screen behind the mask at 3.95 s (see #o-full in the markup)
+    tl.fromTo("#o-stage", { scale: 1 }, { scale: 1.52, duration: 1.25, ease: "power2.in" }, 3.15);
+
+    window.__timelines = window.__timelines || {};
+    window.__timelines["open"] = tl;
+  }
+</script>
+</template>

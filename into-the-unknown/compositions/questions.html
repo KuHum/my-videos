@@ -1,0 +1,208 @@
+<template>
+<!-- ==========================================================================
+     questions.html — 4.400-18.200 s (host-local clock)
+     Three questions over full-screen footage, each split at its shot change:
+       4.40  How deep            over the diving whale (p000)
+       6.85  can curiosity go?   over underwater light shafts (p029)
+       9.29  What haven't        over the researcher (p042)
+       11.62 we solved yet?      over the chalkboard (p055)
+       13.95 Can a machine       over the chess robot (p114)
+       16.30 learn to reason?    over typing hands (p208), then code (p064)
+     The first phrase centers on its own; when the second arrives it shifts
+     left to half opacity and the second phrase's letters rise into focus
+     28 ms apart. A diagonal band of light sweeps as question two enters.
+     Widths come from canvas text metrics (timed clips may be hidden).
+     ========================================================================== -->
+<style>
+  #root {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: #03060d;
+    -webkit-font-smoothing: antialiased;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/Montserrat.ttf") format("truetype-variations");
+    font-weight: 100 900;
+    font-style: normal;
+  }
+
+  .q-footage {
+    position: absolute;
+    inset: 0;
+    width: 1920px;
+    height: 1080px;
+    object-fit: cover;
+  }
+
+  .q-group {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    pointer-events: none;
+  }
+  .q-phrase {
+    position: absolute;
+    left: 0;
+    top: 454px;
+    line-height: 92px;
+    white-space: nowrap;
+    font-family: "Montserrat", sans-serif;
+    font-size: 92px;
+    text-shadow: 0 2px 26px rgba(3, 6, 13, 0.55);
+  }
+  .q-first {
+    font-weight: 300;
+    color: #edf2fb;
+    opacity: 0;
+  }
+  .q-second {
+    font-weight: 600;
+    color: #ffffff;
+  }
+  .q-second .ch {
+    display: inline-block;
+    opacity: 0;
+  }
+  .q-second .ch-sp {
+    display: inline-block;
+    opacity: 0;
+    width: 0.32em;
+  }
+
+  #q-band {
+    position: absolute;
+    left: -340px;
+    top: 430px;
+    width: 2600px;
+    height: 220px;
+    z-index: 15;
+    transform: rotate(-18deg);
+    background: linear-gradient(
+      90deg,
+      rgba(190, 215, 255, 0) 0%,
+      rgba(190, 215, 255, 0.38) 45%,
+      rgba(190, 215, 255, 0) 100%
+    );
+    opacity: 0;
+  }
+</style>
+
+<div id="root" data-composition-id="questions" data-width="1920" data-height="1080">
+  <video id="q-v1" class="clip q-footage" data-start="0" data-duration="2.45" data-track-index="1" muted playsinline src="assets/media/p000.mp4" style="z-index: 1"></video>
+  <video id="q-v2" class="clip q-footage" data-start="2.45" data-duration="2.44" data-track-index="2" muted playsinline src="assets/media/p029.mp4" style="z-index: 2"></video>
+  <video id="q-v3" class="clip q-footage" data-start="4.89" data-duration="2.33" data-track-index="3" muted playsinline src="assets/media/p042.mp4" style="z-index: 3"></video>
+  <video id="q-v4" class="clip q-footage" data-start="7.22" data-duration="2.33" data-track-index="4" muted playsinline src="assets/media/p055.mp4" style="z-index: 4"></video>
+  <video id="q-v5" class="clip q-footage" data-start="9.55" data-duration="2.35" data-track-index="5" muted playsinline src="assets/media/p114.mp4" style="z-index: 5"></video>
+  <video id="q-v6" class="clip q-footage" data-start="11.9" data-duration="0.42" data-track-index="6" muted playsinline src="assets/media/p208.mp4" style="z-index: 6"></video>
+  <video id="q-v7" class="clip q-footage" data-start="12.32" data-duration="1.48" data-track-index="7" muted playsinline src="assets/media/p064.mp4" style="z-index: 7"></video>
+
+  <div id="q-band" data-layout-ignore="true"></div>
+
+  <div id="q-g1" class="q-group clip" data-start="0.2" data-duration="4.69">
+    <span id="q-1a" class="q-phrase q-first" data-var-text="q1a">How deep</span>
+    <span id="q-1b" class="q-phrase q-second" data-var-text="q1b">can curiosity go?</span>
+  </div>
+
+  <div id="q-g2" class="q-group clip" data-start="4.89" data-duration="4.66">
+    <span id="q-2a" class="q-phrase q-first" data-var-text="q2a">What haven’t</span>
+    <span id="q-2b" class="q-phrase q-second" data-var-text="q2b">we solved yet?</span>
+  </div>
+
+  <div id="q-g3" class="q-group clip" data-start="9.55" data-duration="4.25">
+    <span id="q-3a" class="q-phrase q-first" data-var-text="q3a">Can a machine</span>
+    <span id="q-3b" class="q-phrase q-second" data-var-text="q3b">learn to reason?</span>
+  </div>
+</div>
+
+<script>
+  {
+    // Canvas text metrics: timed clips may not be laid out at build time.
+    const measureCtx = document.createElement("canvas").getContext("2d");
+    function textWidth(text, weight) {
+      measureCtx.font = weight + ' 92px "Montserrat"';
+      return measureCtx.measureText(text).width;
+    }
+
+    // Split a phrase element into per-character spans (spaces keep their
+    // own spacer span) and return the letter spans.
+    function splitLetters(el) {
+      const text = el.textContent;
+      while (el.firstChild) el.removeChild(el.firstChild);
+      const spans = [];
+      for (const ch of text) {
+        const span = document.createElement("span");
+        if (ch === " ") {
+          span.className = "ch-sp";
+        } else {
+          span.className = "ch";
+          span.textContent = ch;
+        }
+        el.appendChild(span);
+        spans.push(span);
+      }
+      return spans;
+    }
+
+    const GAP = 36;
+
+    // One question: the first phrase enters alone, then shifts left to
+    // half opacity while the second phrase's letters rise 28 ms apart.
+    function buildQuestion(tl, firstSel, secondSel, tIn, tSecond, tGroupFade) {
+      const first = document.querySelector(firstSel);
+      const second = document.querySelector(secondSel);
+      const letters = splitLetters(second);
+      const w1 = textWidth(first.textContent, "300");
+      const w2 = textWidth(second.textContent, "600");
+      const total = w1 + GAP + w2;
+
+      gsap.set(first, { x: 960 - w1 / 2 });
+      gsap.set(second, { x: 960 - total / 2 + w1 + GAP });
+
+      tl.fromTo(
+        first,
+        { y: 26, opacity: 0, filter: "blur(8px)" },
+        { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.4, ease: "power3.out" },
+        tIn,
+      );
+
+      // the whole question recenters on the second phrase's arrival
+      tl.to(first, { x: 960 - total / 2, opacity: 0.5, duration: 0.45, ease: "power3.out" }, tSecond);
+      letters.forEach((span, i) => {
+        tl.fromTo(
+          span,
+          { y: 22, opacity: 0, filter: "blur(6px)" },
+          { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.45, ease: "power3.out" },
+          tSecond + i * 0.028,
+        );
+      });
+
+      const group = first.closest(".q-group");
+      tl.to(group, { opacity: 0, duration: 0.3, ease: "power1.in" }, tGroupFade);
+    }
+
+    function build() {
+      const tl = gsap.timeline({ paused: true });
+
+      buildQuestion(tl, "#q-1a", "#q-1b", 0.2, 2.45, 4.59);
+      buildQuestion(tl, "#q-2a", "#q-2b", 4.92, 7.22, 9.25);
+      buildQuestion(tl, "#q-3a", "#q-3b", 9.6, 11.9, 13.35);
+
+      // diagonal band of light sweeps as the second question enters
+      tl.fromTo(
+        "#q-band",
+        { x: -1300, opacity: 1 },
+        { x: 1300, opacity: 0, duration: 0.55, ease: "power2.out" },
+        4.94,
+      );
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["questions"] = tl;
+    }
+
+    // build only once the display font is really loaded
+    document.fonts.load('600 92px "Montserrat"').then(build);
+  }
+</script>
+</template>

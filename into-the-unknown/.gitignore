@@ -1,0 +1,11 @@
+# original downloads are re-fetchable with fetch-assets.py (from motion.md)
+deepseek-assets/
+asset-urls.tsv
+
+# renders and QA frames are build output
+renders/
+review/
+.hf/
+.hyperframes/
+node_modules/
+.npmcache/

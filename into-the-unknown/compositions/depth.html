@@ -1,0 +1,210 @@
+<template>
+<!-- ==========================================================================
+     depth.html — 4.400-28.297 s overlay (host-local clock)
+     The 720 px depth ruler scrolls on the left from about 5 s; the DEPTH
+     readout sits 72 px from the left and 58 px from the bottom, counts to
+     10935 m and stops at 18.20 s. It holds through the typing passage, then
+     resolves to UNKNOWN during the sonar montage and fades out as the
+     circle becomes the pill.
+     ========================================================================== -->
+<style>
+  #root {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    -webkit-font-smoothing: antialiased;
+  }
+  @font-face {
+    font-family: "DM Mono";
+    src: url("assets/fonts/DMMono-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "DM Mono";
+    src: url("assets/fonts/DMMono-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  #d-wrap {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* ---- the 720 px ruler at x=40, y=180 --------------------------------- */
+  #d-ruler {
+    position: absolute;
+    left: 40px;
+    top: 180px;
+    width: 130px;
+    height: 720px;
+    overflow: hidden;
+    opacity: 0;
+    border-left: 2px solid rgba(127, 164, 255, 0.35);
+  }
+  #d-strip {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 130px;
+  }
+  .d-tick {
+    position: absolute;
+    left: 0;
+    width: 22px;
+    height: 1px;
+    background: rgba(143, 168, 216, 0.55);
+  }
+  .d-tick-major {
+    width: 40px;
+    height: 2px;
+    background: rgba(143, 168, 216, 0.9);
+  }
+  .d-label {
+    position: absolute;
+    left: 48px;
+    transform: translateY(-50%);
+    font-family: "DM Mono", monospace;
+    font-weight: 400;
+    font-size: 18px;
+    color: #8fa8d8;
+    white-space: nowrap;
+  }
+
+  /* ---- DEPTH readout, 72 px from the left, 58 px from the bottom ------- */
+  #d-readout {
+    position: absolute;
+    left: 72px;
+    bottom: 58px;
+    font-family: "DM Mono", monospace;
+    font-weight: 500;
+    color: #e8eef9;
+  }
+  #d-label {
+    font-size: 20px;
+    letter-spacing: 0.34em;
+    color: #7fa4ff;
+    margin-bottom: 10px;
+  }
+  #d-value,
+  #d-unknown {
+    font-size: 34px;
+    line-height: 40px;
+    white-space: nowrap;
+  }
+  #d-unknown {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+  #d-unknown .uch {
+    display: inline-block;
+    opacity: 0;
+  }
+</style>
+
+<div id="root" data-composition-id="depth" data-width="1920" data-height="1080">
+  <div id="d-wrap">
+    <div id="d-ruler" data-layout-ignore="true">
+      <div id="d-strip"></div>
+    </div>
+    <div id="d-readout" data-layout-ignore="true">
+      <div id="d-label">DEPTH</div>
+      <div id="d-value">0 m</div>
+      <div id="d-unknown">UNKNOWN</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  {
+    const MAX_DEPTH = 10935;
+    const PX_PER_M = 0.6; // 100 m every 60 px
+    const COUNT_START = 0.6; // about 5.0 s on the film clock
+    const COUNT_END = 13.8; // 18.20 s: the counter stops
+    const RULER_WINDOW = 720;
+
+    function build() {
+      // ruler ticks: minor every 100 m, major with label every 500 m
+      const strip = document.getElementById("d-strip");
+      const stripHeight = MAX_DEPTH * PX_PER_M + RULER_WINDOW;
+      strip.style.height = stripHeight + "px";
+      for (let m = 0; m <= MAX_DEPTH; m += 100) {
+        const y = m * PX_PER_M;
+        const tick = document.createElement("div");
+        tick.className = m % 500 === 0 ? "d-tick d-tick-major" : "d-tick";
+        tick.style.top = y + "px";
+        strip.appendChild(tick);
+        if (m % 500 === 0) {
+          const label = document.createElement("div");
+          label.className = "d-label";
+          label.style.top = y + "px";
+          label.textContent = m;
+          strip.appendChild(label);
+        }
+      }
+
+      // UNKNOWN letters
+      const unknown = document.getElementById("d-unknown");
+      const uText = unknown.textContent;
+      while (unknown.firstChild) unknown.removeChild(unknown.firstChild);
+      const uSpans = [];
+      for (const ch of uText) {
+        const span = document.createElement("span");
+        span.className = "uch";
+        span.textContent = ch;
+        unknown.appendChild(span);
+        uSpans.push(span);
+      }
+
+      const tl = gsap.timeline({ paused: true });
+      const depth = { d: 0 };
+      const value = document.getElementById("d-value");
+      const stripEl = strip;
+      const renderDepth = () => {
+        const d = Math.round(depth.d);
+        value.textContent = d + " m";
+        stripEl.style.transform = "translateY(" + (-(d * PX_PER_M - RULER_WINDOW / 2)) + "px)";
+      };
+      renderDepth();
+
+      // the ruler fades in and the counter starts scrolling
+      tl.fromTo("#d-ruler", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out" }, 0.5);
+      tl.to(
+        depth,
+        {
+          d: MAX_DEPTH,
+          duration: COUNT_END - COUNT_START,
+          ease: "none",
+          onUpdate: renderDepth,
+        },
+        COUNT_START,
+      );
+
+      // at 18.20 s the footage drops away: the ruler leaves, the value holds
+      tl.to("#d-ruler", { opacity: 0, duration: 0.3, ease: "power1.in" }, 13.55);
+
+      // during the sonar montage the readout resolves to UNKNOWN
+      tl.to("#d-value", { opacity: 0, filter: "blur(4px)", duration: 0.18, ease: "power1.in" }, 16.5);
+      uSpans.forEach((span, i) => {
+        tl.fromTo(
+          span,
+          { opacity: 0, y: 8, filter: "blur(4px)" },
+          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.3, ease: "power2.out" },
+          16.55 + i * 0.03,
+        );
+      });
+
+      // out with the circle, as it becomes the pill
+      tl.to("#d-wrap", { opacity: 0, duration: 0.45, ease: "power1.inOut" }, 23.4);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["depth"] = tl;
+    }
+
+    document.fonts.load('500 34px "DM Mono"').then(build);
+  }
+</script>
+</template>

@@ -92,10 +92,10 @@
 
   <div id="p-open" data-var-text="openTo">Open to</div>
 
-  <div id="p-word1" class="p-word clip" data-start="1.3636" data-duration="0.9091"><span data-var-text="aud1">researchers.</span></div>
-  <div id="p-word2" class="p-word clip" data-start="3.6364" data-duration="0.9091"><span data-var-text="aud2">builders.</span></div>
-  <div id="p-word3" class="p-word clip" data-start="5.9091" data-duration="0.9091"><span data-var-text="aud3">students.</span></div>
-  <div id="p-word4" class="p-word clip" data-start="8.1818" data-duration="0.9092"><span data-var-text="aud4">everyone.</span></div>
+  <div id="p-word1" class="p-word clip" data-start="1.3636" data-duration="0.9091">researchers.</div>
+  <div id="p-word2" class="p-word clip" data-start="3.6364" data-duration="0.9091">builders.</div>
+  <div id="p-word3" class="p-word clip" data-start="5.9091" data-duration="0.9091">students.</div>
+  <div id="p-word4" class="p-word clip" data-start="8.1818" data-duration="0.9092">everyone.</div>
 </div>
 
 <script>
@@ -118,7 +118,7 @@
     const easeOut = (p) => 1 - Math.pow(1 - p, 3);
 
     function splitLetters(el) {
-      const holder = el.firstElementChild || el;
+      const holder = el;
       const text = holder.textContent;
       while (holder.firstChild) holder.removeChild(holder.firstChild);
       const spans = [];

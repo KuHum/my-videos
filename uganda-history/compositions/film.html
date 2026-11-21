@@ -511,10 +511,17 @@
       // water plane is bounded by a real bank instead of showing its own edge.
       var lx = x / 46;
       var lz = (z - 6) / 30;
-      var lr = Math.sqrt(lx * lx + lz * lz);
+      var la = Math.atan2(lz, lx);
+      // a wobbly bank, so the water never ends on a drawn ellipse
+      var wob = 1 + Math.sin(la * 5 + 0.7) * 0.055 + Math.sin(la * 11 - 1.1) * 0.032;
+      var lr = Math.sqrt(lx * lx + lz * lz) / wob;
       var basin = -3.1 * (1 - smoothstep(0.20, 0.84, lr)) + 1.05 * smoothstep(0.70, 1.0, lr);
 
-      var y = basin + hills * pad * smoothstep(0.9, 1.15, lr);
+      // Far ground lifts into a hazy ridge: every beat gets a horizon with a
+      // profile instead of a straight line.
+      var ridge = 1 + smoothstep(58, 150, nearest) * 2.4;
+
+      var y = basin + hills * pad * ridge * smoothstep(0.9, 1.15, lr);
 
       pos.setY(i, y);
 
@@ -637,9 +644,10 @@
     // Papyrus standing in the shallows, all the way round the bank.
     for (var ri = 0; ri < 24; ri++) {
       var ra = (ri / 24) * Math.PI * 2 + 0.24;
-      var rr = 0.68 + rng() * 0.13;
-      put(ri % 3 === 0 ? "cattail" : "reed", S[0],
-        Math.cos(ra) * 46 * rr, 6 + Math.sin(ra) * 30 * rr, rng() * 6.28, { y: -0.12 });
+      var rr = 0.70 + rng() * 0.10;
+      var stand = put(ri % 3 === 0 ? "cattail" : "reed", S[0],
+        Math.cos(ra) * 46 * rr, 6 + Math.sin(ra) * 30 * rr, rng() * 6.28, { y: -0.05 });
+      if (stand) stand.scale.setScalar(1.55 + rng() * 0.5);
     }
     var canoe = put("canoe", S[0], -8, 4, 0.62, { y: 0.22, shadow: true });
     world.canoe = canoe;
@@ -666,9 +674,8 @@
     world.drum = drum;
     hut(S[1], -19, -7, 1.6, 0.95);
     put("granary", S[1], -20, -16, 1.1, { shadow: true });
-    put("palisade", S[1], -14, 3.0, 0.06);
-    put("palisade", S[1], -6, 3.8, 0.14);
-    put("palisade", S[1], 8, 3.4, -0.1);
+    put("palisade", S[1], -21, 2.2, 0.06);
+    put("palisade", S[1], -13, 2.8, 0.14);
     put("acacia", S[1], -24, -20, 0.8);
     put("acacia", S[1], 24, -24, 2.2);
     spread("jar", S[1], 6, 3.2, 7.5, {});
@@ -678,13 +685,14 @@
     put("cattle", S[1], 24, -6, 1.9);
 
     // 03 — arrivals: a caravan tent, an ox cart, a beached canoe, a mission church.
-    put("tent", S[2], -17, -12, 0.18, { shadow: true });
-    put("oxcart", S[2], -3, 2, 1.15, { shadow: true });
-    put("canoe", S[2], 6, 8, 1.9, { y: 0.05 });
-    put("church", S[2], 9, -26, -0.22, { shadow: true });
-    hut(S[2], -12, -30, 0.4);
-    hut(S[2], -3, -34, 1.2, 0.9);
-    hut(S[2], 22, -32, 2.0, 1.05);
+    put("tent", S[2], -16, -7, 0.18, { shadow: true });
+    put("oxcart", S[2], -4, 1, 1.15, { shadow: true });
+    put("canoe", S[2], 7, 11, 1.75, { y: 0.05 });
+    put("church", S[2], 5, -21, -0.16, { shadow: true });
+    hut(S[2], -11, -27, 0.4);
+    hut(S[2], 13, -31, 1.2, 0.9);
+    hut(S[2], 22, -24, 2.0, 1.05);
+    hut(S[2], -22, -22, 1.8, 0.95);
     put("acacia", S[2], -22, -18, 1.1, { shadow: true });
     put("acacia", S[2], 24, -12, 2.4);
     put("jar", S[2], -7, 1.4, 0.4);

@@ -111,11 +111,26 @@
       gsap.set(line, { x: lineLeft });
 
       // the blue block cursor types at 33 characters per second
-      tl.set("#t-cursor", { opacity: 1, x: lineLeft }, START);
+      tl.fromTo(
+        "#t-cursor",
+        { opacity: 0, x: lineLeft },
+        { opacity: 1, x: lineLeft, duration: 0.01, immediateRender: false },
+        START,
+      );
       spans.forEach((span, i) => {
         const at = START + i / CPS;
-        tl.set(span, { opacity: 1 }, at);
-        tl.set("#t-cursor", { x: lineLeft + (i + 1) * advance }, at);
+        tl.fromTo(
+          span,
+          { opacity: 0 },
+          { opacity: 1, duration: 0.01, immediateRender: false },
+          at,
+        );
+        tl.fromTo(
+          "#t-cursor",
+          { x: lineLeft + i * advance },
+          { x: lineLeft + (i + 1) * advance, duration: 0.01, immediateRender: false },
+          at,
+        );
       });
 
       // at 19.72 s the line contracts horizontally to a point of light

@@ -279,8 +279,18 @@
       gsap.set(typeLine, { x: typeLeft });
       spans.forEach((span, i) => {
         const at = TYPE_START + i / CPS;
-        tl.set(span, { opacity: 1 }, at);
-        tl.set("#i-dot", { opacity: 1, x: typeLeft + (i + 1) * advance + 14 }, at);
+        tl.fromTo(
+          span,
+          { opacity: 0 },
+          { opacity: 1, duration: 0.01, immediateRender: false },
+          at,
+        );
+        tl.fromTo(
+          "#i-dot",
+          { opacity: 0, x: typeLeft + (i + 1) * advance + 14 },
+          { opacity: 1, x: typeLeft + (i + 1) * advance + 14, duration: 0.01, immediateRender: false },
+          at,
+        );
       });
       tl.to("#i-dot", { opacity: 0, duration: 0.2, ease: "power1.in" }, 4.2);
 

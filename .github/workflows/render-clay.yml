@@ -1,0 +1,72 @@
+name: Render clay futures film
+
+# Renders clay-futures/ (OpenMotion/HyperFrames, 60 s, 1280x720) and uploads the MP4.
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "clay-futures/**"
+      - ".github/workflows/render-clay.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - id: chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Ensure ffmpeg
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          ffmpeg -version | head -1
+
+      - name: Install HyperFrames
+        working-directory: clay-futures
+        run: |
+          npm install --no-audit --no-fund
+          npx hyperframes --version
+
+      - name: Lint composition
+        working-directory: clay-futures
+        run: npx hyperframes lint --json
+
+      - name: Render 60s film
+        working-directory: clay-futures
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          PUPPETEER_EXECUTABLE_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
+          mkdir -p renders
+          npx hyperframes render . -o renders/clay-futures.mp4 --quality looks --workers 4
+
+      - name: Verify output
+        working-directory: clay-futures
+        run: |
+          set -euo pipefail
+          test -s renders/clay-futures.mp4
+          ffprobe -v error \
+            -show_entries format=duration,size \
+            -show_entries stream=codec_name,width,height,r_frame_rate \
+            -of default=nw=1 renders/clay-futures.mp4
+          stat -c 'bytes: %s' renders/clay-futures.mp4
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: clay-futures-film
+          path: clay-futures/renders/clay-futures.mp4
+          retention-days: 14
+          if-no-files-found: error

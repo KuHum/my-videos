@@ -1,0 +1,105 @@
+<template>
+<style>
+#root{position:absolute;inset:0;overflow:hidden;background:#dcbb9f;font-family:Inter,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;}
+  .grain{position:absolute;inset:0;background-image:url(assets/grain.png);background-size:180px 180px;mix-blend-mode:overlay;pointer-events:none;z-index:60;}
+  .stage{position:absolute;inset:0;width:1280px;height:720px;}
+  .fig,.spark,.po1,.po2,.po3{transform-box:fill-box;transform-origin:50% 50%;}
+.cam{position:absolute;inset:0;transform-origin:58% 80%;}
+  .copy{position:absolute;left:70px;top:118px;width:392px;z-index:30;color:#46281f;}
+  .copy div{font-family:"EB Garamond",Georgia,serif;font-size:35px;line-height:1.24;text-shadow:0 0 26px rgba(255,240,218,.9),0 1px 1px rgba(80,44,34,.12);}
+  .copy .l2{margin-top:9px;font-style:italic;color:#5c3a30;opacity:.95;}
+</style>
+<div id="root" data-composition-id="beat2" data-width="1280" data-height="720">
+
+  <svg class="stage" viewBox="0 0 1280 720" data-layout-ignore>
+    <defs>
+      <linearGradient id="bg2" x1=".2" y1="0" x2=".85" y2="1"><stop offset="0" stop-color="#f6e2cc"/><stop offset=".5" stop-color="#e6c6a9"/><stop offset="1" stop-color="#cfa488"/></linearGradient>
+      <radialGradient id="pool2" cx=".5" cy=".42" r=".55"><stop offset="0" stop-color="#fff6e8" stop-opacity=".98"/><stop offset="1" stop-color="#fff6e8" stop-opacity="0"/></radialGradient>
+      <linearGradient id="deskTop" x1="0" y1="0" x2=".35" y2="1"><stop offset="0" stop-color="#f1d9c1"/><stop offset=".5" stop-color="#e0bfa4"/><stop offset="1" stop-color="#c9a086"/></linearGradient>
+      <linearGradient id="deskFace" x1="0" y1="0" x2="1" y2=".4"><stop offset="0" stop-color="#c09879"/><stop offset=".6" stop-color="#b98e72"/><stop offset="1" stop-color="#a87f68"/></linearGradient>
+      <linearGradient id="paperG" x1="0" y1="0" x2=".7" y2="1"><stop offset="0" stop-color="#fffaf1"/><stop offset="1" stop-color="#f2e3d2"/></linearGradient>
+      <linearGradient id="sleeve" x1="0" y1="0" x2="1" y2=".3"><stop offset="0" stop-color="#9dc0e4"/><stop offset=".6" stop-color="#7fa8d8"/><stop offset="1" stop-color="#5d80ae"/></linearGradient>
+      <linearGradient id="sleeveHi" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      <radialGradient id="handG" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#f6cfae"/><stop offset=".55" stop-color="#e6b48f"/><stop offset="1" stop-color="#c98d6d"/></radialGradient>
+      <linearGradient id="penG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff5e2"/><stop offset=".5" stop-color="#eedcc4"/><stop offset="1" stop-color="#c9b295"/></linearGradient>
+      <filter id="glow2" x="-160%" y="-160%" width="420%" height="420%"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <filter id="softArm" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="18"/></filter>
+      
+    </defs>
+    <rect width="1280" height="720" fill="url(#bg2)"/>
+    <ellipse cx="700" cy="300" rx="520" ry="330" fill="url(#pool2)" data-layout-ignore/>
+    <defs><linearGradient id="f0pa" x1=".12" y1="0" x2=".86" y2="1"><stop offset="0" stop-color="#9386a7"/><stop offset=".42" stop-color="#5b4a80"/><stop offset="1" stop-color="#4c3c64"/></linearGradient><linearGradient id="f0to" x1=".12" y1="0" x2=".86" y2="1"><stop offset="0" stop-color="#b8cde4"/><stop offset=".42" stop-color="#93b6dd"/><stop offset="1" stop-color="#7488a5"/></linearGradient><linearGradient id="f0sk" x1=".12" y1="0" x2=".86" y2="1"><stop offset="0" stop-color="#efccb1"/><stop offset=".42" stop-color="#e6b48f"/><stop offset="1" stop-color="#ae866e"/></linearGradient><linearGradient id="f0ha" x1=".12" y1="0" x2=".86" y2="1"><stop offset="0" stop-color="#80736a"/><stop offset=".42" stop-color="#3f2d24"/><stop offset="1" stop-color="#392823"/></linearGradient><radialGradient id="f0sh" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#3b2a26" stop-opacity=".4"/><stop offset=".6" stop-color="#3b2a26" stop-opacity=".15"/><stop offset="1" stop-color="#3b2a26" stop-opacity="0"/></radialGradient></defs><g class="figpos" transform="translate(132,690) rotate(-4) scale(1.9)"><g class="fig"><ellipse cx="11" cy="3" rx="31" ry="8" fill="url(#f0sh)" transform="rotate(-12)"/><rect x="-13" y="-52" width="11.4" height="52" rx="5.6" fill="url(#f0pa)" transform="rotate(0 -7 -52)"/><rect x="2" y="-52" width="11.4" height="52" rx="5.6" fill="url(#f0pa)" transform="rotate(0 7.5 -52)"/><g transform="rotate(4, 0, -50)"><rect x="-24" y="-76" width="9.2" height="34" rx="4.6" fill="url(#f0to)" transform="rotate(-6 -19.5 -74)"/><rect x="14.8" y="-76" width="9.2" height="34" rx="4.6" fill="url(#f0to)" transform="rotate(6 19.5 -74)"/><path d="M-17,-78 C-19,-70 -18,-57 -14,-49 L14,-49 C18,-57 19,-70 17,-78 Q0,-84 -17,-78 Z" fill="url(#f0to)"/><path d="M-13,-76 Q0,-79.5 13,-76" stroke="rgba(90,60,52,.16)" stroke-width="1.6" fill="none"/><path d="M-15,-51 Q0,-48 15,-51" stroke="rgba(60,34,30,.2)" stroke-width="2.2" fill="none"/><ellipse cx="-7" cy="-68" rx="6" ry="10" fill="rgba(255,255,255,.22)" transform="rotate(-20 -7 -68)"/><rect x="-3.8" y="-82" width="7.6" height="8" rx="3.4" fill="#bd9377"/><path d="M-11.2,-88.5 A11.2,11.2 0 0 1 11.2,-88.5 L12.4,-64 Q0,-58 -12.4,-64 Z" fill="url(#f0ha)"/><path d="M-10.6,-94 A11,11 0 0 1 3.8,-98" stroke="rgba(255,255,255,.42)" stroke-width="1.4" fill="none" stroke-linecap="round"/><ellipse cx="7" cy="-87" rx="3.2" ry="4.6" fill="url(#f0sk)"/></g></g></g>
+    <g class="desk">
+      <path d="M-40,566 C300,530 1000,530 1320,566 L1320,780 L-40,780 Z" fill="url(#deskFace)"/>
+      <path d="M-40,566 C300,530 1000,530 1320,566 L1320,610 C1000,574 300,574 -40,610 Z" fill="url(#deskTop)"/>
+      <path d="M-40,566 C300,530 1000,530 1320,566" fill="none" stroke="rgba(255,246,232,.55)" stroke-width="3"/>
+    </g>
+    <g class="paperG">
+      <path d="M520,508 L980,490 L1052,606 L486,630 Z" fill="url(#paperG)"/>
+      <path d="M520,508 L980,490 L1052,606 L486,630 Z" fill="none" stroke="rgba(178,140,110,.6)" stroke-width="2.5"/>
+      <path d="M508,522 L1004,504" stroke="rgba(255,255,255,.75)" stroke-width="2"/>
+    </g>
+    <g class="rules" opacity=".6">
+      <path d="M552,548 L1008,530" stroke="rgba(182,142,112,.5)" stroke-width="1.6"/>
+      <path d="M544,572 L1016,554" stroke="rgba(182,142,112,.45)" stroke-width="1.6"/>
+      <path d="M536,596 L1024,578" stroke="rgba(182,142,112,.4)" stroke-width="1.6"/>
+    </g>
+    <g class="ink" filter="url(#glow2)">
+      <path id="stroke1" d="M844,558 C800,566 764,548 714,556 C668,564 628,548 590,554" fill="none" stroke="#ffcf8f" stroke-width="4.5" stroke-linecap="round"/>
+      <path id="bloom" d="M590,554 C598,534 588,518 602,510 C616,502 624,518 612,530 C624,520 640,526 640,540 C640,554 622,558 610,550 C618,562 610,576 598,572 C586,568 586,556 590,554 Z" fill="none" stroke="#ffd9a0" stroke-width="3.2" stroke-linecap="round"/>
+    </g>
+    <circle class="spark" cx="606" cy="540" r="6" fill="#fff4d8" filter="url(#glow2)"/>
+    <g class="armShadow"><ellipse cx="1082" cy="600" rx="250" ry="46" fill="rgba(120,70,50,.16)" filter="url(#softArm)" transform="rotate(-16 1082 600)"/></g>
+    <g class="hand">
+      <g transform="translate(986,442) rotate(38)">
+        <path d="M-50,4 L-64,-250 Q-66,-430 -56,-480 L56,-480 Q66,-430 64,-250 L50,4 Z" fill="url(#sleeve)"/>
+        <path d="M-50,4 L-58,-160 L-26,-160 L-22,4 Z" fill="url(#sleeveHi)" opacity=".55"/>
+        <rect x="-53" y="-14" width="106" height="26" rx="13" fill="#6d92c4"/>
+        <rect x="-53" y="-14" width="106" height="9" rx="4.5" fill="rgba(255,255,255,.32)"/>
+      </g>
+      <g transform="translate(956,462) rotate(20)">
+        <path d="M-58,-2 Q-50,-48 -2,-50 L44,-45 Q82,-40 80,-4 Q78,32 38,36 L-24,36 Q-56,33 -58,-2 Z" fill="url(#handG)"/>
+        <path d="M-58,-2 Q-50,-48 -2,-50 L20,-48 L18,-14 L-30,-12 Q-52,-10 -58,-2 Z" fill="rgba(255,255,255,.13)"/>
+        <rect x="8" y="-44" width="88" height="23" rx="11.5" fill="url(#handG)" transform="rotate(7 8 -44)"/>
+        <rect x="6" y="-19" width="84" height="22" rx="11" fill="url(#handG)" transform="rotate(3 6 -19)"/>
+        <rect x="0" y="6" width="70" height="21" rx="10.5" fill="url(#handG)"/>
+        <rect x="-50" y="6" width="34" height="24" rx="12" fill="url(#handG)" transform="rotate(-14 -50 6)"/>
+        <path d="M8,-44 L96,-49" stroke="rgba(150,96,72,.28)" stroke-width="3" fill="none"/>
+        <path d="M6,-19 L90,-24" stroke="rgba(150,96,72,.24)" stroke-width="3" fill="none"/>
+        <path d="M0,6 L70,4" stroke="rgba(150,96,72,.2)" stroke-width="2.6" fill="none"/>
+      </g>
+      <g class="pen" transform="translate(848,556) rotate(38)">
+        <rect x="-11" y="-166" width="22" height="150" rx="11" fill="url(#penG)"/>
+        <rect x="-11" y="-166" width="8" height="150" rx="4" fill="rgba(255,255,255,.45)"/>
+        <rect x="-12" y="-30" width="24" height="22" rx="6" fill="#dfc7ab"/>
+        <path d="M-11,-16 L0,6 L11,-16 Z" fill="#f8ead2"/>
+        <path d="M-11,-16 L0,6 L11,-16 Z" fill="none" stroke="rgba(160,120,90,.35)" stroke-width="1.4"/>
+        <circle cx="0" cy="8" r="7" fill="#ffe1a8" filter="url(#glow2)"/>
+      </g>
+    </g>
+  </svg>
+  <div class="copy serif"><div class="l1">One hand began to write.</div><div class="l2">The line would not stay still.</div></div>
+  <div class="grain" style="opacity:0.075"></div>
+</div>
+<script>
+
+  const tl = gsap.timeline({ paused: true });
+  const p1 = document.querySelector('#root #stroke1'), p2 = document.querySelector('#root #bloom');
+  const l1 = p1.getTotalLength(), l2 = p2.getTotalLength();
+  gsap.set(p1, { strokeDasharray: l1, strokeDashoffset: l1 });
+  gsap.set(p2, { strokeDasharray: l2, strokeDashoffset: l2 });
+  tl.fromTo('#root .stage', { scale: 1, y: 0 }, { scale: 1.17, y: 26, duration: 9, ease: 'sine.inOut', transformOrigin: '58% 80%' }, 0);
+  tl.fromTo('#root .desk', { y: 40, opacity: .5 }, { y: 0, opacity: 1, duration: 1.5, ease: 'power2.out' }, 0);
+  tl.fromTo('#root .paperG', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 1.7, ease: 'power2.out' }, 0.25);
+  tl.fromTo('#root .copy .l1', { opacity: 0, y: 18, filter: 'blur(6px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.2, ease: 'power2.out' }, 0.5);
+  tl.fromTo('#root .hand', { opacity: 0, x: 70, y: -40 }, { opacity: 1, x: 0, y: 0, duration: 1.7, ease: 'power3.out' }, 0.9);
+  tl.fromTo('#root .armShadow', { opacity: 0 }, { opacity: 1, duration: 1.7, ease: 'power2.out' }, 1);
+  tl.fromTo('#root #stroke1', { strokeDashoffset: l1 }, { strokeDashoffset: 0, duration: 2.6, ease: 'power1.inOut' }, 2.2);
+  tl.fromTo('#root #bloom', { strokeDashoffset: l2, opacity: .15 }, { strokeDashoffset: 0, opacity: 1, duration: 2.2, ease: 'power1.inOut' }, 4.3);
+  tl.fromTo('#root .spark', { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: .7, ease: 'back.out(2)' }, 6.1);
+  tl.to('#root .spark', { scale: 2.6, opacity: .9, duration: 2, ease: 'power1.out' }, 6.8);
+  tl.fromTo('#root .copy .l2', { opacity: 0, y: 16, filter: 'blur(6px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.2, ease: 'power2.out' }, 4.6);
+  tl.to('#root .copy', { opacity: 0, duration: .8, ease: 'power1.in' }, 7.8);
+  window.__timelines["beat2"] = tl;
+</script>
+</template>

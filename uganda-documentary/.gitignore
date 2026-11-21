@@ -1,0 +1,12 @@
+node_modules/
+renders/
+shots*/
+.hyperframes/
+*.log
+_probe.html
+src/_extract.js
+assets/score.wav
+data/raw/
+data/narration.wav
+assets/flag3.png
+assets/flag-im.png

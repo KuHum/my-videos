@@ -1,0 +1,109 @@
+name: Render Uganda documentary
+
+# Renders uganda-documentary/ — a 2-minute narrated 3D film — and uploads the MP4.
+#
+# The voice is committed (data/narration.m4a, made once with edge-tts), so CI
+# needs no TTS account. Models load from the polyfork.dev CDN and three.js from
+# unpkg at render time, which the runner has network for.
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "uganda-documentary/**"
+      - ".github/workflows/render-uganda-documentary.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - id: chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Ensure ffmpeg
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          ffmpeg -version | head -1
+
+      - name: Install HyperFrames
+        working-directory: uganda-documentary
+        run: |
+          npm install --no-audit --no-fund
+          npx hyperframes --version
+
+      - name: Build score and compositions
+        working-directory: uganda-documentary
+        run: |
+          set -euo pipefail
+          node tools/score.mjs assets/score.wav
+          node tools/build.mjs
+          test -s data/narration.m4a
+          test -s assets/score.wav
+
+      - name: Lint
+        working-directory: uganda-documentary
+        run: |
+          set -euo pipefail
+          mkdir -p renders
+          npx hyperframes lint --json > renders/lint.json || true
+          node -e '
+            const a = JSON.parse(require("fs").readFileSync("renders/lint.json", "utf8"));
+            const r = a.lint || a;
+            console.log(`lint: ${r.errorCount} errors, ${r.warningCount} warnings`);
+            for (const f of (r.findings || [])) console.log(`  ${f.severity} ${f.code} ${f.selector || ""}`);
+            if (r.errorCount > 0) process.exit(1);
+          '
+
+      - name: Render 2-minute film
+        working-directory: uganda-documentary
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          PUPPETEER_EXECUTABLE_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
+          set -euo pipefail
+          start=$(date +%s)
+          npx hyperframes render . -o renders/uganda-documentary.mp4 --quality looks --workers 4
+          echo "render seconds: $(( $(date +%s) - start ))" | tee renders/render-time.txt
+
+      - name: Verify output
+        working-directory: uganda-documentary
+        run: |
+          set -euo pipefail
+          test -s renders/uganda-documentary.mp4
+          ffprobe -v error \
+            -show_entries format=duration,size,bit_rate \
+            -show_entries stream=index,codec_name,width,height,r_frame_rate,channels \
+            -of default=nw=1 renders/uganda-documentary.mp4 | tee renders/probe.txt
+          dur=$(ffprobe -v error -show_entries format=duration -of csv=p=0 renders/uganda-documentary.mp4)
+          aud=$(ffprobe -v error -select_streams a -show_entries stream=index -of csv=p=0 renders/uganda-documentary.mp4 | wc -l)
+          node -e "
+            const d = Number(process.argv[1]);
+            if (!(d > 116 && d < 124)) { console.error('bad duration', d); process.exit(1); }
+            console.log('duration ok:', d.toFixed(2) + 's');
+          " "$dur"
+          test "$aud" -ge 1 || { echo "no audio stream"; exit 1; }
+          echo "audio streams: $aud"
+          stat -c 'bytes: %s' renders/uganda-documentary.mp4
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: uganda-documentary-film
+          path: |
+            uganda-documentary/renders/uganda-documentary.mp4
+            uganda-documentary/renders/probe.txt
+            uganda-documentary/renders/render-time.txt
+          retention-days: 30
+          if-no-files-found: error

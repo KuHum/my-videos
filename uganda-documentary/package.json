@@ -1,0 +1,14 @@
+{
+  "name": "uganda-documentary",
+  "private": true,
+  "description": "Uganda: a history in six beats — a 2-minute narrated 3D documentary. three.js and polyfork models from CDN, Kenyan English narration from edge-tts, rendered by HyperFrames in GitHub Actions.",
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "score": "node tools/score.mjs assets/score.wav",
+    "check": "hyperframes check",
+    "render": "hyperframes render . -o renders/uganda-documentary.mp4 --quality looks"
+  },
+  "dependencies": {
+    "hyperframes": "0.9.7"
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "voice": "en-KE-ChilembaNeural",
+  "rate": 1.04,
+  "lead": 3.2,
+  "gap": 0.34,
+  "chapterGap": 1.4,
+  "chapters": [
+    {
+      "id": "land",
+      "num": "01",
+      "title": "The Land",
+      "date": "THE GROUND ITSELF",
+      "key": "Water, altitude, rain",
+      "lines": [
+        "Uganda is a country shaped by water.",
+        "More of Lake Victoria lies inside it than in any other nation.",
+        "At Jinja, the Nile leaves the lake and runs north to Egypt.",
+        "West of the lake, the Rift Valley drops into salt plains.",
+        "And on the Congo border, the Ruwenzori carry snow on the equator."
+      ]
+    },
+    {
+      "id": "kingdoms",
+      "num": "02",
+      "title": "Kingdoms",
+      "date": "BY THE 1400s",
+      "key": "Salt, iron, cattle, bananas",
+      "lines": [
+        "By the fourteen hundreds, kingdoms ran this land.",
+        "Kitara first, then Bunyoro, Buganda, Ankole and Toro.",
+        "Their kings were called Omukama, or Kabaka.",
+        "Wealth was salt, iron, cattle and banana groves.",
+        "Power was measured in the people who owed you allegiance.",
+        "The Kabaka's court was a bureaucracy, with chiefs, pages and tax."
+      ]
+    },
+    {
+      "id": "outsiders",
+      "num": "03",
+      "title": "The Outsiders",
+      "date": "1844 &nbsp;·&nbsp; 1862 &nbsp;·&nbsp; 1877",
+      "key": "Ivory, guns, and a river",
+      "lines": [
+        "In eighteen forty-four, a trader from Zanzibar reached the Kabaka.",
+        "He wanted ivory. He paid in cloth, beads and guns.",
+        "Guns changed who could rule.",
+        "In eighteen sixty-two, Speke stood at the Nile's source near Jinja.",
+        "And in eighteen seventy-seven, the missionaries arrived."
+      ]
+    },
+    {
+      "id": "protectorate",
+      "num": "04",
+      "title": "The Protectorate",
+      "date": "1894 &nbsp;·&nbsp; 1901",
+      "key": "Announced, not negotiated",
+      "lines": [
+        "In eighteen ninety-four, Britain declared a protectorate.",
+        "It was announced, not negotiated.",
+        "Bunyoro fought for years. Its king, Kabalega, was exiled.",
+        "In nineteen oh one, the railway reached the lake.",
+        "Cotton followed, and a new economy of cash crops.",
+        "The lake was suddenly a day away from the coast."
+      ]
+    },
+    {
+      "id": "independence",
+      "num": "05",
+      "title": "Independence",
+      "date": "9 OCTOBER 1962 &nbsp;→&nbsp; 1986",
+      "key": "A flag, then a long night",
+      "lines": [
+        "On the ninth of October, nineteen sixty-two, Uganda became independent.",
+        "Nine years later, the army took power.",
+        "Under Amin, hundreds of thousands died, and sixty thousand Asians were expelled.",
+        "War followed war, until nineteen eighty-six, when the rebels took Kampala.",
+        "In nineteen sixty-six, the army attacked the Kabaka's palace."
+      ]
+    },
+    {
+      "id": "today",
+      "num": "06",
+      "title": "Today",
+      "date": "1986 &nbsp;→&nbsp; NOW",
+      "key": "Forty years of work",
+      "lines": [
+        "What came next was not a miracle. It was forty years of work.",
+        "AIDS prevalence fell by two thirds. Primary school became free.",
+        "Oil came out of the ground near Lake Albert.",
+        "More than forty-five million people live here now.",
+        "The median age is about sixteen.",
+        "Kampala is still growing, and so is the country."
+      ]
+    }
+  ]
+}

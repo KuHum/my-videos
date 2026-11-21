@@ -1,0 +1,62 @@
+[
+ {
+  "id": "land",
+  "num": "01",
+  "title": "The Land",
+  "date": "THE GROUND ITSELF",
+  "key": "Water, altitude, rain",
+  "start": 2.55,
+  "voiceEnd": 19.968,
+  "duration": 16.768
+ },
+ {
+  "id": "kingdoms",
+  "num": "02",
+  "title": "Kingdoms",
+  "date": "BY THE 1400s",
+  "key": "Salt, iron, cattle, bananas",
+  "start": 19.318,
+  "voiceEnd": 40.01,
+  "duration": 20.042
+ },
+ {
+  "id": "outsiders",
+  "num": "03",
+  "title": "The Outsiders",
+  "date": "1844 &nbsp;\u00b7&nbsp; 1862 &nbsp;\u00b7&nbsp; 1877",
+  "key": "Ivory, guns, and a river",
+  "start": 39.36,
+  "voiceEnd": 57.211,
+  "duration": 17.201
+ },
+ {
+  "id": "protectorate",
+  "num": "04",
+  "title": "The Protectorate",
+  "date": "1894 &nbsp;\u00b7&nbsp; 1901",
+  "key": "Announced, not negotiated",
+  "start": 56.561,
+  "voiceEnd": 76.52,
+  "duration": 19.309
+ },
+ {
+  "id": "independence",
+  "num": "05",
+  "title": "Independence",
+  "date": "9 OCTOBER 1962 &nbsp;\u2192&nbsp; 1986",
+  "key": "A flag, then a long night",
+  "start": 75.87,
+  "voiceEnd": 96.379,
+  "duration": 19.859
+ },
+ {
+  "id": "today",
+  "num": "06",
+  "title": "Today",
+  "date": "1986 &nbsp;\u2192&nbsp; NOW",
+  "key": "Forty years of work",
+  "start": 95.729,
+  "voiceEnd": 115.501,
+  "duration": 19.772
+ }
+]

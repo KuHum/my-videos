@@ -1,0 +1,12 @@
+[
+  { "line": 0, "file": "wind.mp3", "volume": 0.34, "dur": 7.0, "offset": -1.0, "fadeOut": 2.4 },
+  { "chapter": 1, "file": "clock-gong.mp3", "volume": 0.30, "dur": 2.8, "offset": -0.6, "fadeOut": 1.6 },
+  { "text": "He wanted ivory", "file": "typewriter.mp3", "volume": 0.26, "dur": 1.8, "offset": -0.1 },
+  { "text": "In eighteen sixty-two", "file": "whoosh-short.mp3", "volume": 0.38, "dur": 1.3, "offset": -0.15 },
+  { "text": "In nineteen oh one", "file": "train.mp3", "volume": 0.42, "dur": 4.4, "offset": -0.25, "fadeOut": 1.4 },
+  { "text": "On the ninth of October", "file": "crowd.mp3", "volume": 0.40, "dur": 5.5, "offset": -0.35, "fadeOut": 2.0 },
+  { "text": "Nine years later", "file": "impact-suspense.mp3", "volume": 0.34, "dur": 3.2, "offset": -0.3 },
+  { "text": "Under Amin", "file": "thunder.mp3", "volume": 0.36, "dur": 4.6, "offset": -0.5, "fadeOut": 1.8 },
+  { "text": "War followed war", "file": "rain.mp3", "volume": 0.20, "dur": 7.0, "offset": 0.0, "fadeOut": 2.5 },
+  { "chapter": 5, "file": "footsteps-street.mp3", "volume": 0.28, "dur": 5.0, "offset": -0.25, "fadeOut": 1.8 }
+]

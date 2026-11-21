@@ -8,7 +8,7 @@
   .tile{aspect-ratio:1/1;border-radius:14px;background:rgba(247,241,230,.06);
     border:1px solid rgba(247,241,230,.13);display:flex;align-items:center;justify-content:center;}
   .tile i{display:block;width:16px;height:16px;border-radius:50%;}
-  .b6-copy{position:absolute;left:0;right:0;bottom:42px;text-align:center;}
+  .b6-copy{position:absolute;left:0;right:0;bottom:44px;text-align:center;}
   .b6-copy .head + .head{margin-top:6px;}
 </style>
 <div id="root" data-composition-id="beat6" data-width="1280" data-height="720">
@@ -41,11 +41,11 @@
 <script>
   const tl6 = gsap.timeline({ paused: true });
   tl6.fromTo('#root .b6-bg', { opacity: 0 }, { opacity: 1, duration: 0.8, ease: 'none' }, 0);
-  tl6.fromTo('#root #b6-grid', { scale: 1.26 }, { scale: 1, duration: 7.5, ease: 'power2.out' }, 0);
+  tl6.fromTo('#root #b6-grid', { scale: 1.26 }, { scale: 1, duration: 6.5, ease: 'power2.out' }, 0);
   tl6.fromTo('#root .tile', { opacity: 0, y: 16, scale: 0.82 },
     { opacity: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.045, ease: 'power2.out' }, 0.25);
-  tl6.fromTo('#root .b6-copy .head', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.9, stagger: 0.55, ease: 'power2.out' }, 1.6);
-  tl6.to('#root .b6-copy', { opacity: 0, duration: 0.5, ease: 'power1.in' }, 6.7);
+  tl6.fromTo('#root .b6-copy .head', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.9, stagger: 0.5, ease: 'power2.out' }, 1.5);
+  tl6.to('#root .b6-copy', { opacity: 0, duration: 0.45, ease: 'power1.in' }, 5.95);
   window.__timelines["beat6"] = tl6;
 </script>
 </template>

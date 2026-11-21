@@ -1,0 +1,12 @@
+{
+  "name": "clay-futures",
+  "private": true,
+  "description": "Many possible futures — a 60s silent clay film authored in OpenMotion, rendered by HyperFrames in CI.",
+  "scripts": {
+    "render": "hyperframes render . -o renders/clay-futures.mp4 --quality looks",
+    "check": "hyperframes check"
+  },
+  "dependencies": {
+    "hyperframes": "0.9.7"
+  }
+}

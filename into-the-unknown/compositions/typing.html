@@ -98,6 +98,7 @@
       const lineLeft = 960 - width / 2;
 
       // split into per-character spans (monospace: every glyph one cell)
+      while (line.firstChild) line.removeChild(line.firstChild);
       const spans = [];
       for (const ch of text) {
         const span = document.createElement("span");

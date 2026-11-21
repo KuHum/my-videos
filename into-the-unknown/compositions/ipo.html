@@ -268,6 +268,7 @@
       const advance = (measureCtx.font = '400 40px "DM Mono"', measureCtx.measureText("M").width);
       const typeWidth = measureCtx.measureText(text).width;
       const typeLeft = 960 - typeWidth / 2;
+      while (typeLine.firstChild) typeLine.removeChild(typeLine.firstChild);
       const spans = [];
       for (const ch of text) {
         const span = document.createElement("span");

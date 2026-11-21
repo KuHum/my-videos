@@ -235,8 +235,8 @@
     font-weight: 800;
     font-size: 196px;
     line-height: 1;
-    letter-spacing: 0.14em;
-    padding-left: 0.14em;
+    letter-spacing: 0.03em;
+    padding-left: 0.03em;
     color: #fff8ee;
     margin: 0;
     display: block;
@@ -497,8 +497,14 @@
     // Before the first chapter the title card owns the screen: only the head
     // fade applies, otherwise the cut dip would cover the opening entirely.
     var first = BEATS[0].start;
+    var last = BEATS[BEATS.length - 1];
     if (t < 0.45) return 1 - t / 0.45;
     if (t < first) return 0;
+    // After the last chapter the end card owns the screen; only the closing
+    // fade applies, or the dip would blacken the card.
+    if (t >= last.start + last.dur) {
+      return clamp((t - (DURATION - 0.9)) / 0.9, 0, 1);
+    }
     var b = beatAt(t);
     var local = t - BEATS[b].start;
     var dur = BEATS[b].dur;

@@ -1,241 +1,90 @@
 <template>
 <style>
-  #root{position:absolute;inset:0;overflow:hidden;background:#0e0d16;font-family:Inter,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;}
-  #stage{position:absolute;inset:0;width:100%;height:100%;}
-  .vignette{position:absolute;inset:0;pointer-events:none;
-    background:radial-gradient(ellipse at 44% 40%,rgba(6,5,10,0) 32%,rgba(6,5,10,.42) 72%,rgba(6,5,10,.78) 100%);}
-  .copy{position:absolute;left:84px;top:70px;width:500px;}
-  .head{font-family:Outfit,Inter,sans-serif;font-weight:600;font-size:42px;line-height:1.1;letter-spacing:-.02em;
-    color:#faf5ec;text-shadow:0 3px 26px rgba(8,9,18,.65);}
+  #root{position:absolute;inset:0;overflow:hidden;background:#100e18;font-family:Inter,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;}
+  .bg{position:absolute;inset:0;background:linear-gradient(180deg,#1c1a2b 0%,#141220 48%,#0b0a12 100%);}
+  .pool{position:absolute;left:22%;top:8%;width:56%;height:70%;
+    background:radial-gradient(ellipse at 50% 50%,rgba(252,214,168,.22) 0%,rgba(252,214,168,.07) 40%,rgba(252,214,168,0) 72%);}
+  .figure{position:absolute;left:380px;top:150px;width:300px;}
+  .table{position:absolute;left:-40px;right:-40px;top:460px;bottom:-40px;
+    background:linear-gradient(180deg,#b38a63 0%,#9a7452 60%,#7d5c40 100%);}
+  .table-edge{position:absolute;left:-40px;right:-40px;top:460px;height:7px;background:#d0a878;opacity:.85;}
+  .paper{position:absolute;left:640px;top:490px;width:400px;height:145px;
+    background:linear-gradient(160deg,#fbf4e4 0%,#f0e5d0 100%);border-radius:3px;
+    box-shadow:0 14px 34px rgba(12,8,16,.45);}
+  .ink{position:absolute;left:640px;top:490px;width:400px;height:145px;}
+  .portal{position:absolute;left:760px;top:170px;width:240px;height:240px;}
+  .copy{position:absolute;left:84px;top:64px;width:430px;}
+  .head{font-family:Outfit,Inter,sans-serif;font-weight:600;font-size:40px;line-height:1.1;letter-spacing:-.02em;
+    color:#faf5ec;text-shadow:0 3px 26px rgba(8,9,18,.6);}
   .head + .head{margin-top:6px;}
 </style>
 <div id="root" data-composition-id="beat2" data-width="1280" data-height="720">
-  <canvas id="stage" width="1280" height="720"></canvas>
-  <div class="vignette"></div>
+  <div class="bg"></div>
+  <div class="pool"></div>
+
+  <img class="figure" src="assets/imported/28a3ecb2-5919-4c40-9e7a-0d1f06a5cba7.png" alt="">
+
+  <div class="table"></div>
+  <div class="table-edge"></div>
+
+  <div class="paper"></div>
+  <svg class="ink" viewBox="0 0 400 145" preserveAspectRatio="none">
+    <path id="inkline" d="M52,92 C104,66 146,104 196,82 C246,60 292,96 348,72"
+          fill="none" stroke="#2b2a3c" stroke-width="2.6" stroke-linecap="round"
+          stroke-dasharray="360" stroke-dashoffset="360"/>
+  </svg>
+
+  <svg class="portal" viewBox="0 0 240 240">
+    <defs>
+      <radialGradient id="pg" cx="50%" cy="42%" r="60%">
+        <stop offset="0%" stop-color="#fff3dc"/>
+        <stop offset="45%" stop-color="#f3c795" stop-opacity="0.72"/>
+        <stop offset="100%" stop-color="#7c6480" stop-opacity="0.18"/>
+      </radialGradient>
+    </defs>
+    <g id="portalg">
+      <circle cx="120" cy="120" r="104" fill="url(#pg)" opacity="0.55"/>
+      <g id="city" fill="#302839" opacity="0.75">
+        <rect x="44"  y="150" width="13" height="46"/>
+        <rect x="62"  y="132" width="13" height="64"/>
+        <rect x="80"  y="158" width="13" height="38"/>
+        <rect x="98"  y="120" width="13" height="76"/>
+        <rect x="116" y="146" width="13" height="50"/>
+        <rect x="134" y="128" width="13" height="68"/>
+        <rect x="152" y="156" width="13" height="40"/>
+        <rect x="170" y="140" width="13" height="56"/>
+      </g>
+      <circle cx="120" cy="120" r="104" fill="none" stroke="#ffd9a8" stroke-width="1.4" opacity="0.5"/>
+    </g>
+  </svg>
+
   <div class="copy">
     <div class="head">A nation is imagined</div>
     <div class="head">long before it is drawn.</div>
   </div>
 </div>
 <script>
-(function () {
-  const cv = document.getElementById('stage');
-  const ctx = cv.getContext('2d');
-  const W = 1280, H = 720, CX = W / 2, CY = H / 2, F = 1000;
+  const tl2 = gsap.timeline({ paused: true });
 
-  const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
-  const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-  const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
-  const norm = (a) => { const l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
-  const clamp01 = (v) => v < 0 ? 0 : v > 1 ? 1 : v;
-  const smooth = (v) => { v = clamp01(v); return v * v * (3 - 2 * v); };
+  tl2.fromTo('#root .bg', { opacity: 0 }, { opacity: 1, duration: 1.1, ease: 'none' }, 0);
+  tl2.fromTo('#root .pool', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 2.4, ease: 'power2.out' }, 0.1);
 
-  function shade(hex, amt) {
-    const n = parseInt(hex.slice(1), 16);
-    let r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
-    if (amt >= 0) { r += (255 - r) * amt; g += (255 - g) * amt; b += (255 - b) * amt; }
-    else { r *= (1 + amt); g *= (1 + amt); b *= (1 + amt); }
-    return 'rgb(' + (r | 0) + ',' + (g | 0) + ',' + (b | 0) + ')';
-  }
+  tl2.fromTo('#root .table', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: 'power2.out' }, 0.25);
+  tl2.fromTo('#root .table-edge', { opacity: 0 }, { opacity: 0.85, duration: 0.9, ease: 'power1.out' }, 0.5);
 
-  const TARGET = [0.32, 1.05, 0.0];
-  function camera(t) {
-    const dolly = 5.55 - 1.05 * smooth((t - 0.15) / 4.8);
-    const pos = [0.30, 1.98, dolly];
-    const fwd = norm(sub(TARGET, pos));
-    const right = norm(cross(fwd, [0, 1, 0]));
-    const up = cross(right, fwd);
-    return { pos: pos, fwd: fwd, right: right, up: up };
-  }
-  function project(p, cam) {
-    const v = sub(p, cam.pos);
-    const z = dot(v, cam.fwd);
-    if (z <= 0.15) return null;
-    return { x: CX + F * dot(v, cam.right) / z, y: CY - F * dot(v, cam.up) / z, z: z };
-  }
+  tl2.fromTo('#root .figure', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 1.3, ease: 'power2.out' }, 0.45);
+  tl2.to('#root .figure', { y: -5, duration: 8.4, ease: 'sine.inOut' }, 1.8);
 
-  /* plinth + paper */
-  const PX0 = -0.55, PX1 = 1.35, PZ0 = -0.75, PZ1 = 0.85, PT = 0.92;
-  const paper = { o: [0.42, PT + 0.015, 0.10], yaw: -0.10, ha: 0.60, hb: 0.37 };
-  function paperPoint(a, b, y) {
-    const ux = Math.cos(paper.yaw), uz = -Math.sin(paper.yaw);
-    const wx = Math.sin(paper.yaw), wz = Math.cos(paper.yaw);
-    return [paper.o[0] + ux * a + wx * b, y, paper.o[2] + uz * a + wz * b];
-  }
-  const INK = [];
-  for (let i = 0; i <= 44; i++) {
-    const a = -0.46 + 0.92 * (i / 44);
-    const b = 0.075 * Math.sin(i * 0.42) + 0.035 * Math.sin(i * 0.17 + 1.2);
-    INK.push({ a: a, b: b });
-  }
+  tl2.fromTo('#root .paper', { opacity: 0, y: 16, rotate: -2.5 }, { opacity: 1, y: 0, rotate: -1.2, duration: 1.0, ease: 'power2.out' }, 1.0);
 
-  function quad(pts, fill, cam) {
-    const ps = pts.map((p) => project(p, cam));
-    if (ps.some((p) => !p)) return;
-    ctx.beginPath();
-    ctx.moveTo(ps[0].x, ps[0].y);
-    for (let i = 1; i < ps.length; i++) ctx.lineTo(ps[i].x, ps[i].y);
-    ctx.closePath();
-    ctx.fillStyle = fill;
-    ctx.fill();
-  }
+  tl2.fromTo('#root #inkline', { strokeDashoffset: 360 }, { strokeDashoffset: 0, duration: 4.9, ease: 'power1.inOut' }, 2.05);
 
-  function roundRect(x, y, w, h, r) {
-    const rr = Math.min(r, w / 2, h / 2);
-    ctx.moveTo(x + rr, y);
-    ctx.lineTo(x + w - rr, y);
-    ctx.quadraticCurveTo(x + w, y, x + w, y + rr);
-    ctx.lineTo(x + w, y + h - rr);
-    ctx.quadraticCurveTo(x + w, y + h, x + w - rr, y + h);
-    ctx.lineTo(x + rr, y + h);
-    ctx.quadraticCurveTo(x, y + h, x, y + h - rr);
-    ctx.lineTo(x, y + rr);
-    ctx.quadraticCurveTo(x, y, x + rr, y);
-    ctx.closePath();
-  }
+  tl2.fromTo('#root .portal', { opacity: 0, scale: 0.55 }, { opacity: 1, scale: 1, duration: 1.9, ease: 'power2.out' }, 7.25);
+  tl2.fromTo('#root #city', { y: 34, opacity: 0 }, { y: 0, opacity: 0.75, duration: 1.7, ease: 'power2.out' }, 7.5);
 
-  /* one silhouette: head circle ∪ shoulders, rim-lit from behind */
-  function drawWriter(cam, t, fade) {
-    const lean = Math.sin(t * 0.9) * 0.014 * clamp01((t - 0.8) / 1.6);
-    const hx = -0.92 + lean, hz = -0.55, hy = 1.60;
-    const head = project([hx, hy, hz], cam);
-    if (!head) return;
-    const R = F * 0.255 / head.z;
-    const shL = project([hx - 0.50, 1.28, hz], cam);
-    const shR = project([hx + 0.52, 1.28, hz], cam);
-    if (!shL || !shR) return;
+  tl2.fromTo('#root .copy .head', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.85, stagger: 0.45, ease: 'power2.out' }, 0.55);
+  tl2.to('#root .copy', { opacity: 0, duration: 0.5, ease: 'power1.in' }, 8.8);
 
-    const bodyY = head.y + R * 0.72;
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(head.x, head.y, R, 0, 6.2832);
-    roundRect(Math.min(shL.x, shR.x), bodyY, Math.abs(shR.x - shL.x), H - bodyY + 40, R * 1.5);
-    ctx.fillStyle = '#16121e';
-    ctx.fill();
-
-    ctx.clip();
-    const rim = ctx.createRadialGradient(head.x - R * 0.5, head.y - R * 1.5, R * 0.2,
-      head.x - R * 0.5, head.y - R * 0.2, R * 3.6);
-    rim.addColorStop(0, 'rgba(255,216,172,' + (0.42 * fade) + ')');
-    rim.addColorStop(0.4, 'rgba(140,110,132,' + (0.12 * fade) + ')');
-    rim.addColorStop(1, 'rgba(20,16,28,0)');
-    ctx.fillStyle = rim;
-    ctx.fillRect(0, 0, W, H);
-    ctx.restore();
-  }
-
-  function drawPlinth(cam) {
-    /* front face */
-    quad([[PX0, PT, PZ1], [PX1, PT, PZ1], [PX1, 0, PZ1], [PX0, 0, PZ1]], '#5d4838', cam);
-    /* top */
-    quad([[PX0, PT, PZ1], [PX1, PT, PZ1], [PX1, PT, PZ0], [PX0, PT, PZ0]], '#8e6d50', cam);
-    /* left cheek, darkened */
-    quad([[PX0, PT, PZ1], [PX0, PT, PZ0], [PX0, 0, PZ0], [PX0, 0, PZ1]], '#3f3227', cam);
-  }
-
-  function renderScene(t) {
-    const cam = camera(t);
-    const fade = smooth(t / 1.2);
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, W, H);
-
-    const bg = ctx.createLinearGradient(0, 0, 0, H);
-    bg.addColorStop(0, '#1a1826');
-    bg.addColorStop(0.5, '#12101d');
-    bg.addColorStop(1, '#08070e');
-    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
-
-    const pool = ctx.createRadialGradient(CX - 60, CY - 90, 40, CX - 60, CY - 90, 520);
-    pool.addColorStop(0, 'rgba(248,208,162,' + (0.32 * fade) + ')');
-    pool.addColorStop(0.5, 'rgba(226,168,124,' + (0.11 * fade) + ')');
-    pool.addColorStop(1, 'rgba(226,168,124,0)');
-    ctx.fillStyle = pool; ctx.fillRect(0, 0, W, H);
-
-    ctx.globalAlpha = fade;
-
-    drawWriter(cam, t, fade);
-    drawPlinth(cam);
-
-    /* paper on the plinth */
-    const pc = [[-paper.ha, -paper.hb], [paper.ha, -paper.hb], [paper.ha, paper.hb], [-paper.ha, paper.hb]];
-    quad(pc.map(([a, b]) => paperPoint(a, b, paper.o[1])), '#f7eedc', cam);
-
-    /* ink grows */
-    const write = smooth((t - 2.05) / 5.20);
-    const upto = write * (INK.length - 1);
-    ctx.save();
-    ctx.lineWidth = 3.6;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.strokeStyle = '#2b2a3c';
-    ctx.beginPath();
-    let started = false;
-    for (let i = 0; i <= Math.floor(upto); i++) {
-      const s = project(paperPoint(INK[i].a, INK[i].b, paper.o[1] + 0.006), cam);
-      if (!s) continue;
-      if (!started) { ctx.moveTo(s.x, s.y); started = true; } else ctx.lineTo(s.x, s.y);
-    }
-    const fi = Math.floor(upto), frac = upto - fi;
-    if (frac > 0.02 && fi < INK.length - 1) {
-      const a = INK[fi], b = INK[fi + 1];
-      const s = project(paperPoint(a.a + (b.a - a.a) * frac, a.b + (b.b - a.b) * frac, paper.o[1] + 0.006), cam);
-      if (s) ctx.lineTo(s.x, s.y);
-    }
-    ctx.stroke();
-    ctx.restore();
-
-    /* the written world, opening as light above the page */
-    const open = smooth((t - 7.20) / 2.05);
-    if (open > 0.001) {
-      const c = project([0.58, 1.52, -0.20], cam);
-      if (c) {
-        const R = (F * 0.58 / c.z) * open;
-        const ry = R * 0.86;
-        ctx.save();
-        ctx.shadowColor = 'rgba(255,204,152,' + (0.7 * open) + ')';
-        ctx.shadowBlur = 70 * open;
-        ctx.beginPath();
-        ctx.ellipse(c.x, c.y, R, ry, 0, 0, 6.2832);
-        ctx.fillStyle = 'rgba(252,220,178,' + (0.12 * open) + ')';
-        ctx.fill();
-        ctx.restore();
-
-        ctx.save();
-        ctx.beginPath(); ctx.ellipse(c.x, c.y, R, ry, 0, 0, 6.2832); ctx.clip();
-        const pg = ctx.createRadialGradient(c.x, c.y - ry * 0.35, R * 0.04, c.x, c.y, R * 1.0);
-        pg.addColorStop(0, 'rgba(255,244,224,' + (0.92 * open) + ')');
-        pg.addColorStop(0.4, 'rgba(246,200,150,' + (0.55 * open) + ')');
-        pg.addColorStop(1, 'rgba(120,96,124,' + (0.14 * open) + ')');
-        ctx.fillStyle = pg;
-        ctx.fillRect(c.x - R, c.y - ry, R * 2, ry * 2);
-
-        /* city profile sitting on the light's horizon */
-        ctx.beginPath();
-        const baseY = c.y + ry * 0.95;
-        ctx.moveTo(c.x - R, baseY);
-        for (let i = 0; i < 10; i++) {
-          const bx = c.x - R * 0.92 + (i / 9) * R * 1.84;
-          const hh = ry * (0.26 + 0.52 * Math.abs(Math.sin(i * 1.63 + 0.4)));
-          const bw = R * 0.16;
-          ctx.lineTo(bx, baseY - hh);
-          ctx.lineTo(bx + bw, baseY - hh);
-        }
-        ctx.lineTo(c.x + R, baseY);
-        ctx.closePath();
-        ctx.fillStyle = 'rgba(52,42,62,' + (0.62 * open) + ')';
-        ctx.fill();
-        ctx.restore();
-      }
-    }
-
-    ctx.globalAlpha = 1;
-  }
-
-  const tl2 = gsap.timeline({ paused: true, onUpdate: function () { renderScene(tl2.time()); } });
-  tl2.fromTo('#root .copy .head', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.95, stagger: 0.5, ease: 'power2.out' }, 0.55);
-  tl2.to('#root .copy', { opacity: 0, duration: 0.5, ease: 'power1.in' }, 8.7);
-  renderScene(0);
   window.__timelines["beat2"] = tl2;
-})();
 </script>
 </template>

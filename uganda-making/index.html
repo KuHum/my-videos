@@ -7,6 +7,12 @@
 <style>
   html,body{margin:0;padding:0;background:#0b0d16;}
   #main{position:relative;width:1280px;height:720px;overflow:hidden;background:#0b0d16;}
+  #grade{position:absolute;inset:0;pointer-events:none;z-index:40;}
+  #grade .grain{position:absolute;inset:0;}
+  #grade .tonal{position:absolute;inset:0;
+    background:
+      radial-gradient(ellipse at 38% 30%, rgba(255,216,170,.10) 0%, rgba(255,216,170,0) 46%),
+      radial-gradient(ellipse at 50% 48%, rgba(0,0,0,0) 42%, rgba(0,0,0,.40) 100%);}
 </style>
 </head>
 <body>
@@ -25,6 +31,17 @@
        data-start="43.5" data-duration="6.5" data-track-index="6" data-track-kind="graphics" data-width="1280" data-height="720"></div>
   <div id="beat7" data-hf-id="hf-b7" data-composition-id="beat7" data-composition-src="compositions/beat7.html"
        data-start="50" data-duration="10" data-track-index="7" data-track-kind="graphics" data-width="1280" data-height="720"></div>
+
+  <div id="grade" data-hf-id="hf-grade" data-layout-allow-occlusion data-layout-ignore>
+    <svg class="grain" width="1280" height="720" viewBox="0 0 1280 720" preserveAspectRatio="none">
+      <filter id="grainF" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" seed="17" stitchTiles="stitch"/>
+        <feColorMatrix type="saturate" values="0"/>
+      </filter>
+      <rect width="1280" height="720" filter="url(#grainF)" opacity="0.085"/>
+    </svg>
+    <div class="tonal"></div>
+  </div>
 </div>
 <script>
   window.__timelines["main"] = gsap.timeline({ paused: true });

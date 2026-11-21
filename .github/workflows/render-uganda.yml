@@ -1,0 +1,73 @@
+name: Render Uganda film
+
+# Separate from render.yml (longform): this builds the OpenMotion/HyperFrames
+# project in uganda-making/ and uploads the MP4 as a workflow artifact.
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "uganda-making/**"
+      - ".github/workflows/render-uganda.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - id: chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Ensure ffmpeg
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          ffmpeg -version | head -1
+
+      - name: Install HyperFrames
+        working-directory: uganda-making
+        run: |
+          npm install --no-audit --no-fund
+          npx hyperframes --version
+
+      - name: Lint composition
+        working-directory: uganda-making
+        run: npx hyperframes check --json
+
+      - name: Render 60s film
+        working-directory: uganda-making
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          PUPPETEER_EXECUTABLE_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
+          mkdir -p renders
+          npx hyperframes render . -o renders/uganda.mp4 --quality looks --workers 4
+
+      - name: Verify output
+        working-directory: uganda-making
+        run: |
+          set -euo pipefail
+          test -s renders/uganda.mp4
+          ffprobe -v error \
+            -show_entries format=duration,size \
+            -show_entries stream=codec_name,width,height,r_frame_rate \
+            -of default=nw=1 renders/uganda.mp4
+          stat -c 'bytes: %s' renders/uganda.mp4
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: uganda-making-film
+          path: uganda-making/renders/uganda.mp4
+          retention-days: 14
+          if-no-files-found: error

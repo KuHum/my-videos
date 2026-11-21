@@ -1,0 +1,12 @@
+{
+  "name": "uganda-making",
+  "private": true,
+  "description": "The Making of Uganda — a 60s silent motion film authored in OpenMotion, rendered by HyperFrames.",
+  "scripts": {
+    "render": "hyperframes render . -o renders/uganda.mp4 --quality looks",
+    "check": "hyperframes check"
+  },
+  "dependencies": {
+    "hyperframes": "0.9.7"
+  }
+}

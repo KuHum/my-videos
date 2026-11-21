@@ -1,0 +1,48 @@
+<template>
+<style>
+  #root{position:absolute;inset:0;font-family:Inter,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;color:#f7f1e6;}
+  .head{font-family:Outfit,Inter,sans-serif;font-weight:600;font-size:52px;line-height:1.08;letter-spacing:-.02em;color:#f9f4ea;text-shadow:0 3px 30px rgba(8,9,18,.5);}
+  .copy{position:absolute;left:88px;bottom:96px;width:680px;}
+  .copy .head + .head{margin-top:8px;}
+  #b2-zoom{position:absolute;inset:0;}
+  .b2-bg{position:absolute;inset:0;background:linear-gradient(160deg,#2c2632 0%,#1c1a25 58%,#13131b 100%);}
+  .b2-table{position:absolute;left:-60px;right:-60px;bottom:-70px;height:440px;
+    background:linear-gradient(180deg,#dcc0a8 0%,#c9a98e 100%);border-radius:50% 50% 0 0/24% 24% 0 0;}
+  .b2-paper{position:absolute;left:50%;top:112px;width:560px;height:404px;margin-left:-280px;
+    background:linear-gradient(160deg,#fdf8ef 0%,#f2e7d6 100%);border-radius:10px;box-shadow:0 30px 60px rgba(0,0,0,.45);}
+  .b2-sheet{position:absolute;inset:0;width:100%;height:100%;}
+  .b2-tag{position:absolute;left:50%;top:452px;margin-left:-280px;width:560px;text-align:center;
+    font-family:Outfit,Inter,sans-serif;font-size:15px;letter-spacing:.3em;text-transform:uppercase;color:#8a6a5d;}
+</style>
+<div id="root" data-composition-id="beat2" data-width="1280" data-height="720">
+  <div id="b2-zoom">
+    <div class="b2-bg"></div>
+    <div class="b2-table"></div>
+    <div class="b2-paper">
+      <svg class="b2-sheet" viewBox="0 0 560 404" preserveAspectRatio="none">
+        <path id="b2-line" d="M78,206 C132,168 178,242 232,204 C286,166 330,236 400,198"
+              fill="none" stroke="#292c45" stroke-width="3.2" stroke-linecap="round"
+              stroke-dasharray="420" stroke-dashoffset="420"/>
+      </svg>
+    </div>
+    <div class="b2-tag">one hand</div>
+  </div>
+  <div class="copy">
+    <div class="head">A nation is imagined</div>
+    <div class="head">long before it is drawn.</div>
+  </div>
+</div>
+<script>
+  const tl2 = gsap.timeline({ paused: true });
+  tl2.fromTo('#root .b2-bg', { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'none' }, 0);
+  tl2.fromTo('#root .b2-table', { opacity: 0, y: 70 }, { opacity: 1, y: 0, duration: 1.1, ease: 'power2.out' }, 0.05);
+  tl2.fromTo('#root .b2-paper', { opacity: 0, y: 40, rotate: -6, scale: 0.94 },
+    { opacity: 1, y: 0, rotate: -2, scale: 1, duration: 1.2, ease: 'power2.out' }, 0.35);
+  tl2.fromTo('#root #b2-line', { strokeDashoffset: 420 }, { strokeDashoffset: 0, duration: 2.1, ease: 'power2.inOut' }, 1.7);
+  tl2.fromTo('#root .b2-tag', { opacity: 0 }, { opacity: 1, duration: 0.8, ease: 'power1.out' }, 3.4);
+  tl2.fromTo('#root .copy .head', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.95, stagger: 0.6, ease: 'power2.out' }, 2.7);
+  tl2.fromTo('#root #b2-zoom', { scale: 1 }, { scale: 1.07, duration: 8.5, ease: 'none' }, 0);
+  tl2.to('#root .copy', { opacity: 0, duration: 0.5, ease: 'power1.in' }, 7.45);
+  window.__timelines["beat2"] = tl2;
+</script>
+</template>

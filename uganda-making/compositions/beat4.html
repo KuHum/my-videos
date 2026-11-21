@@ -1,0 +1,30 @@
+<template>
+<style>
+  #root{position:absolute;inset:0;font-family:Inter,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;color:#f7f1e6;}
+  .head{font-family:Outfit,Inter,sans-serif;font-weight:600;font-size:46px;line-height:1.12;letter-spacing:-.015em;color:#f4ead9;}
+  .b4-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 58%,#1b1d2e 0%,#0e0f19 60%,#07080e 100%);}
+  .b4-horizon{position:absolute;left:0;right:0;top:64%;height:1px;background:linear-gradient(90deg,transparent,rgba(247,241,230,.22),transparent);}
+  .b4-ember{position:absolute;left:50%;top:57%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;
+    background:#f3c894;box-shadow:0 0 24px 8px rgba(243,200,148,.55),0 0 80px 30px rgba(243,200,148,.16);}
+  .b4-center{position:absolute;left:0;right:0;top:41%;text-align:center;}
+  .b4-center .head + .head{margin-top:14px;}
+</style>
+<div id="root" data-composition-id="beat4" data-width="1280" data-height="720">
+  <div class="b4-bg"></div>
+  <div class="b4-horizon"></div>
+  <div class="b4-ember"></div>
+  <div class="b4-center">
+    <div class="head">The dream was tested.</div>
+    <div class="head">It held. Imperfectly.</div>
+  </div>
+</div>
+<script>
+  const tl4 = gsap.timeline({ paused: true });
+  tl4.fromTo('#root .b4-bg', { opacity: 0 }, { opacity: 1, duration: 1.2, ease: 'none' }, 0);
+  tl4.fromTo('#root .b4-horizon', { opacity: 0 }, { opacity: 1, duration: 1.6, ease: 'power1.out' }, 0.8);
+  tl4.fromTo('#root .b4-ember', { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 2.0, ease: 'power2.out' }, 1.0);
+  tl4.fromTo('#root .b4-ember', { y: 0 }, { y: -12, duration: 7.6, ease: 'sine.inOut' }, 2.0);
+  tl4.fromTo('#root .b4-center .head', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 1.5, stagger: 3.6, ease: 'power2.out' }, 1.2);
+  window.__timelines["beat4"] = tl4;
+</script>
+</template>

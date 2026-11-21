@@ -1,0 +1,46 @@
+<template>
+<style>
+  #root{position:absolute;inset:0;font-family:Inter,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;color:#f7f1e6;}
+  .kicker{font-family:Outfit,Inter,sans-serif;font-size:12.5px;letter-spacing:.44em;text-transform:uppercase;color:rgba(247,241,230,.72);}
+  .head{font-family:Outfit,Inter,sans-serif;font-weight:600;font-size:52px;line-height:1.08;letter-spacing:-.02em;color:#f9f4ea;text-shadow:0 3px 30px rgba(8,9,18,.5);}
+  .copy{position:absolute;left:88px;bottom:96px;width:680px;}
+  .copy .head + .head{margin-top:8px;}
+  .b1-sky{position:absolute;inset:0;background:linear-gradient(180deg,#20243d 0%,#3d3a57 32%,#7d5a5f 56%,#c98f6f 76%,#eec39a 90%,#f6d9b4 100%);}
+  .b1-glow{position:absolute;inset:0;background:radial-gradient(circle at 63% 55%,rgba(250,221,178,.95) 0%,rgba(245,201,150,.5) 13%,rgba(233,160,116,.16) 31%,rgba(233,160,116,0) 56%);}
+  .b1-sun{position:absolute;left:calc(63% - 74px);top:calc(55% - 74px);width:148px;height:148px;border-radius:50%;
+    background:radial-gradient(circle at 42% 38%,#fff3d8 0%,#f6d3a4 58%,#eab98a 100%);box-shadow:0 0 90px 28px rgba(248,214,170,.32);}
+  .b1-hills{position:absolute;left:0;bottom:0;width:100%;height:100%;}
+  .b1-lake{position:absolute;left:0;right:0;bottom:0;height:190px;background:linear-gradient(180deg,rgba(117,139,210,0) 0%,rgba(117,139,210,.26) 30%,rgba(56,68,120,.55) 100%);}
+  .k1{position:absolute;left:88px;top:76px;}
+</style>
+<div id="root" data-composition-id="beat1" data-width="1280" data-height="720">
+  <div class="b1-sky"></div>
+  <div class="b1-glow"></div>
+  <svg class="b1-hills" data-layout-allow-overflow viewBox="0 0 1280 720" preserveAspectRatio="none">
+    <path d="M0,452 C180,392 320,440 470,414 C620,388 760,440 900,416 C1040,392 1160,424 1280,404 L1280,720 L0,720 Z" fill="#5b628f" opacity=".5"/>
+    <path d="M0,528 C160,482 340,514 500,492 C660,470 820,512 980,492 C1120,474 1210,500 1280,488 L1280,720 L0,720 Z" fill="#3a3f63" opacity=".92"/>
+    <path d="M0,604 C200,568 380,594 560,578 C740,562 900,594 1060,578 C1170,566 1230,580 1280,572 L1280,720 L0,720 Z" fill="#22243a"/>
+  </svg>
+  <div class="b1-lake"></div>
+  <div class="b1-sun"></div>
+  <div class="kicker k1">The Making of Uganda</div>
+  <div class="copy">
+    <div class="head">Before there was a name,</div>
+    <div class="head">there was a place.</div>
+  </div>
+</div>
+<script>
+  const tl1 = gsap.timeline({ paused: true });
+  tl1.fromTo('#root .b1-sky', { opacity: 0 }, { opacity: 1, duration: 1.0, ease: 'none' }, 0);
+  tl1.fromTo('#root .b1-glow', { opacity: 0, scale: 0.82 }, { opacity: 1, scale: 1, duration: 2.6, ease: 'power2.out' }, 0.2);
+  tl1.fromTo('#root .b1-hills', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 1.9, ease: 'power2.out' }, 0.35);
+  tl1.fromTo('#root .b1-lake', { opacity: 0 }, { opacity: 1, duration: 1.6, ease: 'power1.out' }, 1.1);
+  tl1.fromTo('#root .b1-sun', { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 2.2, ease: 'power2.out' }, 0.5);
+  tl1.fromTo('#root .b1-sun', { y: 0 }, { y: -16, duration: 5.4, ease: 'none' }, 1.4);
+  tl1.fromTo('#root .kicker', { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 1.1, ease: 'power2.out' }, 0.55);
+  tl1.fromTo('#root .copy .head', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.0, stagger: 0.55, ease: 'power2.out' }, 1.55);
+  tl1.to('#root .copy', { opacity: 0, duration: 0.55, ease: 'power1.in' }, 6.25);
+  tl1.fromTo('#root .b1-hills', { scale: 1 }, { scale: 1.05, duration: 7, ease: 'none' }, 0);
+  window.__timelines["beat1"] = tl1;
+</script>
+</template>

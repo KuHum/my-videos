@@ -1,0 +1,51 @@
+<template>
+<style>
+  #root{position:absolute;inset:0;font-family:Inter,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;color:#f7f1e6;}
+  .head{font-family:Outfit,Inter,sans-serif;font-weight:600;font-size:52px;line-height:1.08;letter-spacing:-.02em;color:#f9f4ea;text-shadow:0 3px 30px rgba(8,9,18,.5);}
+  .copy{position:absolute;left:88px;bottom:96px;width:680px;}
+  .copy .head + .head{margin-top:8px;}
+  .label{font-family:Outfit,Inter,sans-serif;font-size:14px;letter-spacing:.26em;text-transform:uppercase;}
+  #b3-zoom{position:absolute;inset:0;}
+  .b3-bg{position:absolute;inset:0;background:linear-gradient(180deg,#1d2338 0%,#33405f 38%,#8d7f7a 72%,#dcb894 100%);}
+  .card{position:absolute;width:236px;height:150px;border-radius:18px;padding:18px;box-sizing:border-box;
+    background:rgba(250,244,232,.95);box-shadow:0 18px 40px rgba(10,12,24,.32);
+    display:flex;flex-direction:column;justify-content:flex-end;gap:10px;}
+  .card .dot{width:34px;height:34px;border-radius:10px;}
+  .card .label{color:#2b2d45;}
+  .c1{left:128px;top:300px;} .c1 .dot{background:#a6bc65;}
+  .c2{left:404px;top:326px;} .c2 .dot{background:#758bd2;}
+  .c3{left:680px;top:296px;} .c3 .dot{background:#f5d9b5;}
+  .c4{left:956px;top:322px;} .c4 .dot{background:#dec3ae;}
+  .b3-sky{position:absolute;left:0;right:0;bottom:0;height:200px;display:flex;align-items:flex-end;gap:18px;padding:0 90px;box-sizing:border-box;}
+  .b3-sky i{display:block;flex:1;border-radius:6px 6px 0 0;background:#2a2c44;opacity:.85;}
+  .b3-copy{top:92px;bottom:auto;}
+</style>
+<div id="root" data-composition-id="beat3" data-width="1280" data-height="720">
+  <div id="b3-zoom">
+    <div class="b3-bg"></div>
+    <div class="b3-sky">
+      <i style="height:120px"></i><i style="height:186px"></i><i style="height:148px"></i>
+      <i style="height:214px"></i><i style="height:132px"></i><i style="height:172px"></i>
+    </div>
+  </div>
+  <div class="copy b3-copy">
+    <div class="head">Then the paper</div>
+    <div class="head">grew into a place.</div>
+  </div>
+  <div class="card c1"><div class="dot"></div><div class="label">markets</div></div>
+  <div class="card c2"><div class="dot"></div><div class="label">roads</div></div>
+  <div class="card c3"><div class="dot"></div><div class="label">schools</div></div>
+  <div class="card c4"><div class="dot"></div><div class="label">homes</div></div>
+</div>
+<script>
+  const tl3 = gsap.timeline({ paused: true });
+  tl3.fromTo('#root .b3-bg', { opacity: 0 }, { opacity: 1, duration: 0.7, ease: 'none' }, 0);
+  tl3.fromTo('#root .copy .head', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.9, stagger: 0.45, ease: 'power2.out' }, 0.4);
+  tl3.fromTo('#root .card', { opacity: 0, y: 44, scale: 0.72 },
+    { opacity: 1, y: 0, scale: 1, duration: 0.85, stagger: 0.38, ease: 'back.out(1.5)' }, 1.1);
+  tl3.fromTo('#root .b3-sky i', { opacity: 0, scaleY: 0.2 }, { opacity: 0.85, scaleY: 1, duration: 1.1, stagger: 0.1, ease: 'power2.out', transformOrigin: '50% 100%' }, 2.9);
+  tl3.fromTo('#root #b3-zoom', { scale: 1 }, { scale: 1.1, duration: 9.5, ease: 'none' }, 0);
+  tl3.to('#root .copy', { opacity: 0, duration: 0.5, ease: 'power1.in' }, 8.3);
+  window.__timelines["beat3"] = tl3;
+</script>
+</template>

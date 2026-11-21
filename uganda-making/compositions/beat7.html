@@ -1,0 +1,38 @@
+<template>
+<style>
+  #root{position:absolute;inset:0;font-family:Inter,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;color:#f7f1e6;}
+  .b7-bg{position:absolute;inset:0;background:linear-gradient(180deg,#10162a 0%,#26324f 24%,#6d6276 50%,#c08f6f 72%,#f0c79c 88%,#fbe3c4 100%);}
+  .b7-sun{position:absolute;left:50%;bottom:96px;width:112px;height:112px;margin-left:-56px;border-radius:50%;
+    background:radial-gradient(circle,#fff6e0,#f8d5a6 62%,#eeae7f);box-shadow:0 0 100px 36px rgba(248,213,166,.34);}
+  .b7-hills{position:absolute;left:0;bottom:0;width:100%;height:230px;}
+  .b7-end{position:absolute;left:0;right:0;top:112px;text-align:center;}
+  .b7-q{font-family:Outfit,Inter,sans-serif;font-weight:600;font-size:44px;letter-spacing:-.015em;color:#f9f4ea;
+    text-shadow:0 3px 26px rgba(8,9,18,.55);}
+  .b7-mark{font-family:Outfit,Inter,sans-serif;font-weight:600;font-size:104px;letter-spacing:.3em;
+    color:#fdf7ec;margin-top:44px;padding-left:.3em;text-shadow:0 6px 40px rgba(20,16,30,.45);}
+  .b7-sub{margin-top:12px;font-size:13px;letter-spacing:.4em;text-transform:uppercase;color:rgba(253,247,236,.72);}
+</style>
+<div id="root" data-composition-id="beat7" data-width="1280" data-height="720">
+  <div class="b7-bg"></div>
+  <div class="b7-sun"></div>
+  <svg class="b7-hills" viewBox="0 0 1280 230" preserveAspectRatio="none">
+    <path d="M0,120 C170,74 330,116 500,96 C670,76 830,118 1000,98 C1130,82 1210,104 1280,92 L1280,230 L0,230 Z" fill="#3c3350" opacity=".85"/>
+    <path d="M0,168 C190,132 370,164 550,146 C730,128 900,166 1080,148 C1180,138 1230,152 1280,144 L1280,230 L0,230 Z" fill="#23243a"/>
+  </svg>
+  <div class="b7-end">
+    <div class="b7-q">What will we make next?</div>
+    <div class="b7-mark">UGANDA</div>
+    <div class="b7-sub">a story still being written</div>
+  </div>
+</div>
+<script>
+  const tl7 = gsap.timeline({ paused: true });
+  tl7.fromTo('#root .b7-bg', { opacity: 0 }, { opacity: 1, duration: 1.3, ease: 'none' }, 0);
+  tl7.fromTo('#root .b7-sun', { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 2.0, ease: 'power2.out' }, 0.2);
+  tl7.fromTo('#root .b7-hills', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 1.6, ease: 'power2.out' }, 0.4);
+  tl7.fromTo('#root .b7-q', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 1.0, ease: 'power2.out' }, 0.9);
+  tl7.fromTo('#root .b7-mark', { opacity: 0, y: 24, scale: 0.98 }, { opacity: 1, y: 0, scale: 1, duration: 1.6, ease: 'power3.out' }, 1.9);
+  tl7.fromTo('#root .b7-sub', { opacity: 0 }, { opacity: 1, duration: 1.0, ease: 'power1.out' }, 3.2);
+  window.__timelines["beat7"] = tl7;
+</script>
+</template>

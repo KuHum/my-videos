@@ -28,6 +28,27 @@
     return ir;
   }
 
+  // cheap stereo feedback-delay reverb: far cheaper than a convolver, still warm
+  function smallReverb(ac, mix, time) {
+    const input = ac.createGain();
+    const wet = ac.createGain(); wet.gain.value = mix;
+    const out = ac.createGain();
+    input.connect(out);
+    const taps = [[0.037, 0.5], [0.061, 0.42], [0.089, 0.34], [0.127, 0.24]];
+    for (const [d, g] of taps) {
+      const dl = ac.createDelay(1.0); dl.delayTime.value = d;
+      const fb = ac.createGain(); fb.gain.value = 0.42;
+      const lp = ac.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 2600;
+      const wetTap = ac.createGain(); wetTap.gain.value = g;
+      input.connect(dl); dl.connect(lp); lp.connect(fb); fb.connect(dl);
+      lp.connect(wetTap); wetTap.connect(wet);
+    }
+    wet.connect(out);
+    const tail = ac.createGain(); tail.gain.value = 1;
+    out.connect(tail);
+    return { input, tail };
+  }
+
   function piano(ac, bus, t, freq, vel, len) {
     const g = ac.createGain();
     const out = ac.createGain();
@@ -111,11 +132,10 @@
   A.buildMusic = function (ac, dur) {
     const master = ac.createGain();
     master.gain.value = 0.9;
-    const verb = ac.createConvolver(); verb.buffer = reverbIR(ac, 2.6, 2.4);
-    const wet = ac.createGain(); wet.gain.value = 0.32;
-    verb.connect(wet); wet.connect(master); master.connect(ac.destination);
+    master.connect(ac.destination);
     const bus = ac.createGain(); bus.gain.value = 1;
-    bus.connect(master); bus.connect(verb);
+    const verb = smallReverb(ac, 0.30);
+    bus.connect(master); bus.connect(verb.input); verb.tail.connect(master);
 
     // room tone
     const rt = ac.createBufferSource(); rt.buffer = noiseBuffer(ac, dur, 4242); rt.loop = true;
@@ -180,10 +200,10 @@
   /* sound effects: badges, transitions, light changes */
   A.buildSfx = function (ac, dur, T) {
     const master = ac.createGain(); master.gain.value = 1;
-    const verb = ac.createConvolver(); verb.buffer = reverbIR(ac, 1.8, 2.6);
-    const wet = ac.createGain(); wet.gain.value = 0.22;
-    verb.connect(wet); wet.connect(master); master.connect(ac.destination);
-    const bus = ac.createGain(); bus.connect(master); bus.connect(verb);
+    master.connect(ac.destination);
+    const bus = ac.createGain();
+    const verb = smallReverb(ac, 0.20);
+    bus.connect(master); bus.connect(verb.input); verb.tail.connect(master);
 
     const sceneStarts = T.sentences.map((s) => s.start + 0.02);
     sceneStarts.forEach((t, i) => { if (t > 0.4 && i > 0) whoosh(ac, bus, t - 0.12, i % 2 === 1, 0.22); });

@@ -36,10 +36,6 @@ jobs:
           fi
           ffmpeg -version | head -1
 
-      - name: Install renderer deps
-        working-directory: ai-garage
-        run: npm install --no-audit --no-fund
-
       - name: Bundle the player
         working-directory: ai-garage
         run: |

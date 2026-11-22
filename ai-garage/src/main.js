@@ -191,25 +191,34 @@
 
   /* ---------- boot ---------- */
   async function boot() {
+    const T0 = performance.now();
+    window.__phaseLog = [];
+    const mark = (p) => { window.__bootPhase = p; window.__phaseLog.push(p + ":" + Math.round(performance.now() - T0)); };
+    mark("font");
     await loadFont();
+    mark("vo");
     const vo = await loadVo();
     voBuffer = vo;
     ac = new AudioContext({ sampleRate: A.SR });
     musicGain = ac.createGain(); musicGain.gain.value = 1;
     sfxGain = ac.createGain(); sfxGain.gain.value = 1;
 
+    mark("music");
     musicBuf = await renderTrack((oac, d) => {
       const master = A.buildMusic(oac, d);
       const duck = A.duck(oac, master, B);
       duck.connect(oac.destination);
     });
+    mark("sfx");
     sfxBuf = await renderTrack((oac, d) => { A.buildSfx(oac, d, B); });
 
+    mark("mix");
     const mix = buildMix();
     baseGains = mix.gains;
     mixWavB64 = A.b64(A.toWav([mix.L, mix.R], A.SR));
     window.__mixStats = { trim: mix.trim, peak: mix.peak, samples: mix.L.length, voiceGain: mix.gains.voiceGain, musicGain: mix.gains.mGain, sfxGain: mix.gains.sGain };
 
+    mark("ready");
     draw(0);
     $("loading").style.display = "none";
     window.__ready = true;

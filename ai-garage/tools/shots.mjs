@@ -70,6 +70,16 @@ async function evaluate(ws, expression, awaitPromise) {
   if (pre) await evaluate(ws, pre);
   const err = await evaluate(ws, "window.__bootError || null").catch(() => null);
   if (err) console.error("boot error:", err);
+  const thumb = opt("thumb", "");
+  if (thumb) {
+    for (const spec of thumb.split(",")) {
+      const [tt, w, h] = spec.split(":");
+      const b64 = await evaluate(ws, `window.__thumbPng(${tt}, ${w || 1280}, ${h || 720})`);
+      const f = path.join(outDir, `thumb_${String(tt).replace(".", "_")}.png`);
+      fs.writeFileSync(f, Buffer.from(b64, "base64"));
+      console.log(f);
+    }
+  }
   for (const t of times) {
     const b64 = await evaluate(ws, `window.__frameJpeg(${t}, 0.95)`);
     const f = path.join(outDir, "t" + String(t.toFixed(2)).padStart(6, "0") + ".jpg");

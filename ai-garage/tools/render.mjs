@@ -13,6 +13,7 @@ const thumbFile = path.resolve(root, arg("thumb", "renders/ai-garage-thumbnail.p
 const stillsDir = path.resolve(root, arg("stills", "renders/stills"));
 const CRF = arg("crf", "18");
 const LIMIT = Number(arg("limit", "0"));
+const ONLY = arg("only", "");
 const FPS = 30;
 fs.mkdirSync(path.dirname(outFile), { recursive: true });
 fs.mkdirSync(stillsDir, { recursive: true });
@@ -107,6 +108,17 @@ if (bootErr) throw new Error("page boot failed: " + bootErr);
 console.log(`ready in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
 
 const dur = await evaluate("window.__duration");
+if (ONLY) {
+  const dir = path.resolve(root, "renders/check");
+  fs.mkdirSync(dir, { recursive: true });
+  for (const t of ONLY.split(",").map(Number)) {
+    const b = await evaluate(`window.__frameJpeg(${t}, 0.95)`);
+    const f = path.join(dir, `t${t.toFixed(2)}.jpg`);
+    fs.writeFileSync(f, Buffer.from(b, "base64"));
+    console.log(f);
+  }
+  ws.close(); chrome.kill("SIGKILL"); server.close(); process.exit(0);
+}
 let frames = Math.ceil(dur * FPS);
 if (LIMIT > 0) frames = Math.min(frames, LIMIT);
 console.log(`duration ${dur}s -> ${frames} frames @ ${FPS}fps`);
@@ -150,7 +162,7 @@ console.log("video:", outFile, (fs.statSync(outFile).size / 1048576).toFixed(1),
 
 /* ---------- thumbnail + QA stills ---------- */
 if (LIMIT === 0) {
-  const png = await evaluate("window.__thumbPng(32.55, 1280, 720)");
+  const png = await evaluate("window.__thumbPng(5.6, 1280, 720)");
   fs.writeFileSync(thumbFile, Buffer.from(png, "base64"));
   console.log("thumbnail:", thumbFile);
   for (const m of [1.4, 4.6, 9.8, 15.5, 20.1, 23.4, 26.2, 29.9, 32.7]) {

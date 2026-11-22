@@ -437,24 +437,23 @@
       // a hand comes in and takes the switch
       const reach = K.ease(K.seq(lt, 0.9, 1.9));
       if (reach > 0.02) {
-        const gx = 690 + reach * 272, gy = 900 - reach * 282;
+        const gx = 700 + reach * 260, gy = 900 - reach * 322;
         ctx.save(); ctx.globalAlpha = K.clamp01(reach * 1.4);
-        ctx.fillStyle = C.ink;
-        ctx.beginPath();
-        ctx.moveTo(400, 1090); ctx.lineTo(628, 1090);
-        ctx.lineTo(gx + 8, gy + 38); ctx.lineTo(gx - 58, gy + 22);
-        ctx.closePath(); ctx.fill();
-        // forearm highlight
-        ctx.strokeStyle = "rgba(79,216,240,0.45)"; ctx.lineWidth = 3;
-        ctx.beginPath(); ctx.moveTo(470, 1010); ctx.lineTo(gx - 46, gy + 26); ctx.stroke();
-        // palm
-        K.rr(ctx, gx - 58, gy - 30, 104, 72, 30); ctx.fill();
-        // fingers over the lever
-        ctx.strokeStyle = C.ink; ctx.lineWidth = 21; ctx.lineCap = "round";
-        for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.moveTo(gx + 18, gy - 20 + i * 24); ctx.lineTo(gx + 52, gy - 24 + i * 24); ctx.stroke(); }
-        ctx.beginPath(); ctx.moveTo(gx - 44, gy - 22); ctx.lineTo(gx - 76, gy - 34); ctx.stroke();
+        // forearm, running in from the bottom-left corner
+        ctx.strokeStyle = C.ink; ctx.lineWidth = 74; ctx.lineCap = "round";
+        ctx.beginPath(); ctx.moveTo(320, 1180); ctx.lineTo(gx - 6, gy + 26); ctx.stroke();
+        // warm edge along the top of the arm
+        ctx.strokeStyle = "rgba(242,178,92,0.55)"; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.moveTo(330, 1136); ctx.lineTo(gx - 16, gy - 18); ctx.stroke();
+        // palm gripping the shaft
+        K.rr(ctx, gx - 46, gy - 34, 92, 66, 26); ctx.fillStyle = C.ink; ctx.fill();
+        // fingers curl over the lever
+        ctx.strokeStyle = C.ink; ctx.lineWidth = 17; ctx.lineCap = "round";
+        for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.moveTo(gx + 4, gy - 18 + i * 18); ctx.lineTo(gx + 36, gy - 22 + i * 18); ctx.stroke(); }
+        ctx.beginPath(); ctx.moveTo(gx - 40, gy - 30); ctx.lineTo(gx - 76, gy - 42); ctx.stroke();
+        // rim light on the hand
         ctx.strokeStyle = "rgba(79,216,240,0.55)"; ctx.lineWidth = 3;
-        ctx.beginPath(); ctx.moveTo(gx - 50, gy - 34); ctx.quadraticCurveTo(gx + 8, gy - 46, gx + 44, gy - 30); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(gx - 46, gy - 40); ctx.quadraticCurveTo(gx + 6, gy - 52, gx + 46, gy - 34); ctx.stroke();
         ctx.restore();
       }
       ctx.restore();
@@ -722,14 +721,35 @@
       const drawP = K.ease(K.seq(lt, 0.5, 1.5));
       if (drawP > 0.01) {
         ctx.save();
-        ctx.translate(1250, 330);
-        ctx.strokeStyle = "rgba(79,216,240,0.94)"; ctx.lineWidth = 11; ctx.lineCap = "round";
-        ctx.shadowColor = C.cyan; ctx.shadowBlur = 36;
-        const p1 = K.clamp01(drawP / 0.6), p2 = K.clamp01((drawP - 0.6) / 0.4);
-        if (p1 > 0) { ctx.beginPath(); ctx.arc(0, -64, 76, Math.PI * 1.2, Math.PI * 1.2 + Math.PI * 1.5 * p1); ctx.stroke(); }
-        if (p2 > 0) {
-          ctx.beginPath(); ctx.moveTo(16, 10); ctx.lineTo(4, 92 * p2); ctx.stroke();
-          ctx.beginPath(); ctx.arc(0, 150, 10, 0, 6.283 * p2); ctx.fillStyle = "rgba(79,216,240,0.95)"; ctx.fill();
+        ctx.translate(1250, 300);
+        ctx.strokeStyle = "rgba(79,216,240,0.95)"; ctx.lineWidth = 11; ctx.lineCap = "round"; ctx.lineJoin = "round";
+        ctx.shadowColor = C.cyan; ctx.shadowBlur = 34;
+        const hookP = K.clamp01(drawP / 0.72), dotP = K.clamp01((drawP - 0.78) / 0.22);
+        // hook: up the left, over the top, down the right, sweeping into the stem
+        const hooks = [
+          { p: hookP },
+        ];
+        if (hookP > 0) {
+          const p1 = K.clamp01(hookP / 0.55), p2 = K.clamp01((hookP - 0.55) / 0.45);
+          ctx.globalAlpha = K.clamp01(hookP * 3);
+          ctx.beginPath();
+          ctx.moveTo(-50, -74);
+          ctx.bezierCurveTo(-50, -148, 48, -148, 48, -76);
+          ctx.stroke();
+          if (p2 > 0) {
+            ctx.beginPath();
+            ctx.moveTo(48, -76);
+            const ex = 0, ey = 20 * p2;
+            ctx.bezierCurveTo(48 + (0 - 48) * p2, -76 + 46 * p2, 4 * p2, -44 * p2, 0, ey);
+            ctx.stroke();
+            ctx.globalAlpha = K.clamp01((hookP - 0.55) * 3);
+            ctx.beginPath(); ctx.moveTo(0, 20 * p2); ctx.lineTo(0, 20 + 34 * p2); ctx.stroke();
+          }
+        }
+        if (dotP > 0) {
+          ctx.globalAlpha = dotP;
+          ctx.beginPath(); ctx.arc(0, 126, 10 * dotP, 0, 6.283);
+          ctx.fillStyle = "rgba(79,216,240,0.95)"; ctx.fill();
         }
         ctx.restore();
       }

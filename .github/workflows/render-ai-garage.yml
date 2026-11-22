@@ -1,0 +1,96 @@
+name: Render AI Garage explainer
+
+# Renders ai-garage/ — a 34 s Cinematic Stickman explainer about AI — and uploads
+# the MP4, the thumbnail and the QA stills. The narration is committed
+# (assets/vo.wav) and the score is synthesised in the page, so CI needs no accounts.
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "ai-garage/**"
+      - ".github/workflows/render-ai-garage.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - id: chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Ensure ffmpeg
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          ffmpeg -version | head -1
+
+      - name: Install renderer deps
+        working-directory: ai-garage
+        run: npm install --no-audit --no-fund
+
+      - name: Bundle the player
+        working-directory: ai-garage
+        run: |
+          set -euo pipefail
+          node tools/bundle.mjs
+          test -s dist/index.html
+          test -s assets/vo.wav
+
+      - name: Render MP4
+        working-directory: ai-garage
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          PUPPETEER_EXECUTABLE_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
+          set -euo pipefail
+          start=$(date +%s)
+          node tools/render.mjs --out renders/ai-garage.mp4
+          echo "render seconds: $(( $(date +%s) - start ))" | tee renders/render-time.txt
+
+      - name: Verify output
+        working-directory: ai-garage
+        run: |
+          set -euo pipefail
+          test -s renders/ai-garage.mp4
+          test -s renders/ai-garage-thumbnail.png
+          ffprobe -v error \
+            -show_entries format=duration,size,bit_rate \
+            -show_entries stream=index,codec_name,width,height,r_frame_rate,sample_rate,channels \
+            -of default=nw=1 renders/ai-garage.mp4 | tee renders/probe.txt
+          dur=$(ffprobe -v error -show_entries format=duration -of csv=p=0 renders/ai-garage.mp4)
+          aud=$(ffprobe -v error -select_streams a -show_entries stream=index -of csv=p=0 renders/ai-garage.mp4 | wc -l)
+          node -e "
+            const d = Number(process.argv[1]);
+            if (!(d > 33.5 && d < 34.2)) { console.error('bad duration', d); process.exit(1); }
+            console.log('duration ok:', d.toFixed(2) + 's');
+          " "$dur"
+          test "$aud" -ge 1 || { echo "no audio stream"; exit 1; }
+          ffmpeg -hide_banner -nostats -i renders/ai-garage.mp4 -af ebur128=peak=true -f null - 2>&1 \
+            | tail -12 | tee renders/loudness.txt
+          stat -c 'bytes: %s' renders/ai-garage.mp4
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ai-garage-video
+          path: |
+            ai-garage/renders/ai-garage.mp4
+            ai-garage/renders/ai-garage-thumbnail.png
+            ai-garage/renders/probe.txt
+            ai-garage/renders/loudness.txt
+            ai-garage/renders/render-time.txt
+            ai-garage/renders/stills/*.jpg
+            ai-garage/dist/index.html
+          retention-days: 30
+          if-no-files-found: error

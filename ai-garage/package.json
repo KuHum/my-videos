@@ -1,0 +1,15 @@
+{
+  "name": "ai-garage",
+  "private": true,
+  "description": "THE AI GARAGE — a 34-second Cinematic Stickman explainer about AI, drawn in Canvas 2D, scored in Web Audio and rendered by headless Chromium + ffmpeg in GitHub Actions.",
+  "type": "module",
+  "scripts": {
+    "bundle": "node tools/bundle.mjs",
+    "serve": "node tools/serve.mjs 8081",
+    "shots": "node tools/shots.mjs",
+    "render": "node tools/render.mjs"
+  },
+  "devDependencies": {
+    "puppeteer-core": "23.11.1"
+  }
+}

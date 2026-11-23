@@ -565,9 +565,9 @@
       });
       // rope
       ctx.strokeStyle = "rgba(232,176,75,0.85)"; ctx.lineWidth = 3;
-      ctx.beginPath(); ctx.moveTo(790, 790); ctx.quadraticCurveTo(850, 806, 920, 796); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(790, 790); ctx.quadraticCurveTo(880, 812, 1000, 800); ctx.stroke();
       // ox
-      ox(ctx, 1010, 924, 1.25, 1, 1);
+      ox(ctx, 1040, 924, 2.0, 1, 1);
       if (t > 15.62) {
         tag(ctx, "THEFT", 740, 560, t, B.word(3, "theft"), C.coral, { size: 30 });
       }
@@ -603,7 +603,7 @@
       ctx.fillStyle = "rgba(16,26,41,0.9)"; ctx.fillRect(1220, 748, 700, 7);
       floorLine(ctx, 898);
       // ox is back, whole
-      ox(ctx, 1550, 924, 1.25, 1, -1);
+      ox(ctx, 1560, 924, 2.0, 1, -1);
       if (t > 19.6) tag(ctx, "STILL HERE", 1500, 560, t, B.word(4, "still"), C.cyan, { size: 28 });
       // singer
       const bounce = Math.sin(lt * 4.2) * 0.03;

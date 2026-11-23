@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Copyright Is Not Holy — a Cinematic Stickman explainer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #05080D; overflow: hidden; }
+  #wrap { position: fixed; inset: 0; display: grid; place-items: center; }
+  #stage { width: 100vw; height: 56.25vw; max-width: 177.78vh; max-height: 100vh; display: block; background: #05080D; }
+  #loading {
+    position: fixed; inset: 0; display: grid; place-items: center; color: #9fb3c8;
+    font: 600 16px/1.5 system-ui, sans-serif; letter-spacing: .04em; background: #05080D; z-index: 5;
+  }
+  #bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 4;
+    display: flex; align-items: center; gap: 14px; padding: 12px 18px;
+    background: linear-gradient(180deg, rgba(5,8,13,0), rgba(5,8,13,.92) 40%);
+    color: #cfe0ee; font: 600 13px/1 system-ui, sans-serif;
+  }
+  button {
+    background: #12203200; border: 1px solid rgba(79,216,240,.35); color: #dcecf7;
+    padding: 9px 14px; border-radius: 999px; font: 700 12px/1 system-ui, sans-serif;
+    letter-spacing: .06em; text-transform: uppercase; cursor: pointer;
+  }
+  button:hover { background: rgba(79,216,240,.12); }
+  button:disabled { opacity: .5; cursor: default; }
+  input[type=range] { accent-color: #4FD8F0; }
+  #seek { flex: 1; min-width: 120px; }
+  .vol { display: flex; align-items: center; gap: 6px; }
+  .vol input { width: 74px; }
+  #time { font-variant-numeric: tabular-nums; color: #8fa7bd; min-width: 150px; text-align: right; }
+  .sep { width: 1px; height: 22px; background: rgba(255,255,255,.12); }
+</style>
+</head>
+<body>
+<div id="wrap"><canvas id="stage" width="1920" height="1080"></canvas></div>
+<div id="loading">LOADING SCORE…</div>
+<div id="bar">
+  <button id="play">Play</button>
+  <button id="restart">Restart</button>
+  <input id="seek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+  <span id="time">0:00.00 / 1:16.80</span>
+  <div class="sep"></div>
+  <label class="vol">Music <input id="music" type="range" min="0" max="100" value="85"></label>
+  <label class="vol">SFX <input id="sfx" type="range" min="0" max="100" value="85"></label>
+  <div class="sep"></div>
+  <button id="thumb">Thumbnail</button>
+  <button id="export">Export video</button>
+</div>
+<script>window.__AUDIO_B64__="__AUDIO__";window.__FONT_B64__="__FONT__";</script>
+<!--SCRIPTS-->
+</body>
+</html>

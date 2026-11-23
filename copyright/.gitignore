@@ -1,0 +1,6 @@
+dist/
+renders/*
+!renders/.gitkeep
+.npmcache/
+shots/
+render.log

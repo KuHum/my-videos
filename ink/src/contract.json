@@ -1,0 +1,339 @@
+{
+  "film": "Your Single Pastor \u2014 Stickman (Ink)",
+  "duration": 75.68,
+  "format": "1920x1080, 30fps, 16:9",
+  "fonts": "Montserrat 800 (bundled; Caveat is unavailable offline \u2014 headline tracking is tightened and every headline carries an ink underline)",
+  "palette": {
+    "paper": "#F4EFE4",
+    "ink": "#1E1E1E",
+    "graphite": "#6B6B6B",
+    "spotA": "#C8452E",
+    "spotB": "#2F5D8A",
+    "wash": "#F2C94C",
+    "rule": "at most two spot colours per scene; wash only behind a word or an object"
+  },
+  "hardRules": [
+    "Do not fill the page: the driver draws paper before your scene. Draw content only.",
+    "Everything draws on: every stroke passes rev from K.seq(t, at, at+len). Nothing pops in.",
+    "Text: headline through K.headline (screen space, x=100, y=128, size 66, ink underline). Labels through K.keyword (size 34). Nothing inside 80 px of any edge.",
+    "Labels are keywords from the script and land on their own word (B.word(si,'word') or B.sentences[si].words[i].t).",
+    "Figures: K.figure with s between 0.85 and 1.25, feet on the floor line you draw. Every pose must read in silhouette.",
+    "One visible change every 2-4 s; nothing static beyond 3 s; eased and overlapping.",
+    "Finish the last draw-on at least 0.25 s before t1. Never leave a stroke half-drawn at a cut.",
+    "Deterministic: no Math.random, no Date, no per-frame object creation for geometry. Precompute point lists at module scope.",
+    "Only K helpers and local closures: do not edit ink-kit.js, beats.js, audio.js, driver.js, main.js, index.html.",
+    "One file per writer: window.SCENES.push({...}) only."
+  ],
+  "sceneObject": "{ id, t0, t1, si, draw(ctx, t) }  (si = sentence index or array; t0/t1 from this table)",
+  "writers": {
+    "1": [
+      "sc01",
+      "sc02",
+      "sc03",
+      "sc04"
+    ],
+    "2": [
+      "sc05",
+      "sc06",
+      "sc07",
+      "sc08",
+      "sc09"
+    ],
+    "3": [
+      "sc10",
+      "sc11",
+      "sc12",
+      "sc13"
+    ],
+    "4": [
+      "sc14",
+      "sc15",
+      "sc16",
+      "sc17"
+    ]
+  },
+  "scenes": [
+    {
+      "id": "sc01",
+      "t0": 0.09,
+      "t1": 4.79,
+      "si": [
+        0
+      ],
+      "headline": [
+        "MARRIAGE ISN'T",
+        "A MUST"
+      ],
+      "labels": [
+        "MUST"
+      ],
+      "change": "A wedding ring doodle beside the pulpit gets struck through on 'must'."
+    },
+    {
+      "id": "sc02",
+      "t0": 4.79,
+      "t1": 13.07,
+      "si": [
+        1
+      ],
+      "headline": [
+        "THE CASE FOR",
+        "SINGLENESS"
+      ],
+      "labels": [
+        "SELF-DISCOVERY",
+        "MATURITY",
+        "STOP PRESSURING"
+      ],
+      "change": "Three signposts ink on one at a time; on 'pressuring' a shoving crowd's arrows retract."
+    },
+    {
+      "id": "sc03",
+      "t0": 13.07,
+      "t1": 15.4,
+      "si": [
+        2
+      ],
+      "headline": [
+        "A QUALIFIER"
+      ],
+      "labels": [
+        "QUALIFIER"
+      ],
+      "change": "A red pencil circles the word and slashes through it."
+    },
+    {
+      "id": "sc04",
+      "t0": 15.41,
+      "t1": 20.2,
+      "si": [
+        3,
+        4
+      ],
+      "headline": [
+        "AUTOMATICALLY? NO.",
+        "PROBABLY? YES."
+      ],
+      "labels": [
+        "NO",
+        "YES"
+      ],
+      "change": "The single pastor's question mark becomes a tick on 'No', then a skewed meter needle swings right on 'Yes'."
+    },
+    {
+      "id": "sc05",
+      "t0": 20.2,
+      "t1": 24.18,
+      "si": [
+        5
+      ],
+      "headline": [
+        "THE QUESTION ISN'T THAT"
+      ],
+      "labels": [
+        "GODLY",
+        "FRUITFUL"
+      ],
+      "change": "Two good things (prayer, fruit) get checked; then a broad slash crosses the whole idea on 'isn't'."
+    },
+    {
+      "id": "sc06",
+      "t0": 24.18,
+      "t1": 28.65,
+      "si": [
+        6
+      ],
+      "headline": [
+        "WHAT THE APOSTLES",
+        "EXPECTED"
+      ],
+      "labels": [
+        "FIT TO PASTOR"
+      ],
+      "change": "A scroll unrolls; a blank silhouette inks into a doorway beside it on 'fit'."
+    },
+    {
+      "id": "sc07",
+      "t0": 28.65,
+      "t1": 34.81,
+      "si": [
+        7
+      ],
+      "headline": [
+        "A ONE-WOMAN MAN"
+      ],
+      "labels": [
+        "CHARACTER",
+        "CERTIFICATE"
+      ],
+      "change": "A marriage certificate draws on and gets a red X on 'not a certificate'; a ring stays inked."
+    },
+    {
+      "id": "sc08",
+      "t0": 34.81,
+      "t1": 41.24,
+      "si": [
+        8
+      ],
+      "headline": [
+        "MANAGE HIS",
+        "HOUSEHOLD"
+      ],
+      "labels": [
+        "HOUSEHOLD"
+      ],
+      "change": "A house cutaway inks on; a table, two chairs and a child appear; the pastor lifts a pot."
+    },
+    {
+      "id": "sc09",
+      "t0": 41.24,
+      "t1": 45.33,
+      "si": [
+        8
+      ],
+      "headline": [
+        "HOW WILL HE CARE",
+        "FOR THE CHURCH?"
+      ],
+      "labels": [
+        "CHURCH"
+      ],
+      "change": "The house grows a steeple and a pew row: house morphs into church, same people inside."
+    },
+    {
+      "id": "sc10",
+      "t0": 45.33,
+      "t1": 47.44,
+      "si": [
+        9
+      ],
+      "headline": [
+        "PROVING GROUND"
+      ],
+      "labels": [
+        "PROVING GROUND"
+      ],
+      "change": "A platform inks on under the figure; two test marks land on it."
+    },
+    {
+      "id": "sc11",
+      "t0": 47.44,
+      "t1": 52.39,
+      "si": [
+        10,
+        11
+      ],
+      "headline": [
+        "NOT A MAGIC CHECKBOX"
+      ],
+      "labels": [
+        "CHECKBOX",
+        "ORDINARY"
+      ],
+      "change": "A checkbox grid draws on; the tick scribbles itself out; then a strip of daily objects (plate, cup, laundry) inks in."
+    },
+    {
+      "id": "sc12",
+      "t0": 52.39,
+      "t1": 53.78,
+      "si": [
+        12
+      ],
+      "headline": [
+        "THE OUTLIER"
+      ],
+      "labels": [
+        "OUTLIER"
+      ],
+      "change": "A bell curve draws itself; one dot lands far outside the hump."
+    },
+    {
+      "id": "sc13",
+      "t0": 53.78,
+      "t1": 57.06,
+      "si": [
+        12
+      ],
+      "headline": [
+        "THE BURDEN OF PROOF"
+      ],
+      "labels": [
+        "BURDEN OF PROOF"
+      ],
+      "change": "A weight is lowered onto the outlier dot; the dot sits lower."
+    },
+    {
+      "id": "sc14",
+      "t0": 57.06,
+      "t1": 62.16,
+      "si": [
+        13
+      ],
+      "headline": [
+        "PAUL: A RARE GIFT"
+      ],
+      "labels": [
+        "RARE",
+        "EXTRAORDINARY"
+      ],
+      "change": "Paul's figure inks on with a small flame cupped in both hands; the flame grows on 'gift'."
+    },
+    {
+      "id": "sc15",
+      "t0": 62.16,
+      "t1": 64.37,
+      "si": [
+        14
+      ],
+      "headline": [
+        "ONE IN A THOUSAND"
+      ],
+      "labels": [
+        "ONE IN A THOUSAND"
+      ],
+      "change": "A grid of 1000 small marks inks on sweep; one mark turns red."
+    },
+    {
+      "id": "sc16",
+      "t0": 64.37,
+      "t1": 69.28,
+      "si": [
+        15
+      ],
+      "headline": [
+        "NOT GIFTED\u2014TICKING"
+      ],
+      "labels": [
+        "TIME BOMB"
+      ],
+      "change": "The figure gets a fuse-and-clock doodle; the fuse burns down on the beat; a red scribble cross."
+    },
+    {
+      "id": "sc17",
+      "t0": 69.28,
+      "t1": 75.68,
+      "si": [
+        16
+      ],
+      "headline": [
+        "LOOK FOR A HUSBAND",
+        "AND A FATHER"
+      ],
+      "labels": [
+        "CHARACTER",
+        "HUSBAND",
+        "FATHER"
+      ],
+      "change": "Character gets a tick, then 'husband' and 'father' are circled one after the other."
+    }
+  ],
+  "review": {
+    "stillsPerScene": 2,
+    "defectBuckets": [
+      "composition",
+      "timing",
+      "text"
+    ],
+    "maxRounds": 2
+  }
+}

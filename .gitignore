@@ -9,3 +9,8 @@ longform/data/voice-cache/
 
 .ghcache/
 ci-out/
+
+# ink build outputs
+ink/renders/*
+ink/dist/*
+ink/.npmcache/*

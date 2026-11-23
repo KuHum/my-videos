@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Your Single Pastor — a Stickman (Ink) explainer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #E9E1D2; overflow: hidden; }
+  #wrap { position: fixed; inset: 0; display: grid; place-items: center; }
+  #stage { width: 100vw; height: 56.25vw; max-width: 177.78vh; max-height: 100vh; display: block; background: #F4EFE4; }
+  #loading {
+    position: fixed; inset: 0; display: grid; place-items: center; color: #4A463E;
+    font: 700 15px/1.5 system-ui, sans-serif; letter-spacing: .08em; background: #F4EFE4; z-index: 5;
+    text-transform: uppercase;
+  }
+  #bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 4;
+    display: flex; align-items: center; gap: 14px; padding: 12px 18px;
+    background: linear-gradient(180deg, rgba(244,239,228,0), rgba(240,234,220,.96) 40%);
+    color: #2C2A26; font: 700 13px/1 system-ui, sans-serif;
+    border-top: 1px solid rgba(30,30,30,.08);
+  }
+  button {
+    background: transparent; border: 1.5px solid #2C2A26; color: #1E1E1E;
+    padding: 9px 14px; border-radius: 999px; font: 800 12px/1 system-ui, sans-serif;
+    letter-spacing: .08em; text-transform: uppercase; cursor: pointer;
+  }
+  button:hover { background: rgba(30,30,30,.07); }
+  button:disabled { opacity: .45; cursor: default; }
+  input[type=range] { accent-color: #C8452E; }
+  #seek { flex: 1; min-width: 120px; }
+  .vol { display: flex; align-items: center; gap: 6px; }
+  .vol input { width: 74px; }
+  #time { font-variant-numeric: tabular-nums; color: #5C574D; min-width: 158px; text-align: right; }
+  .sep { width: 1px; height: 22px; background: rgba(30,30,30,.16); }
+</style>
+</head>
+<body>
+<div id="wrap"><canvas id="stage" width="1920" height="1080"></canvas></div>
+<div id="loading">Inking the page…</div>
+<div id="bar">
+  <button id="play">Play</button>
+  <button id="restart">Restart</button>
+  <input id="seek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+  <span id="time">0:00.00 / 1:15.68</span>
+  <div class="sep"></div>
+  <label class="vol">Music <input id="music" type="range" min="0" max="100" value="85"></label>
+  <label class="vol">SFX <input id="sfx" type="range" min="0" max="100" value="85"></label>
+  <div class="sep"></div>
+  <button id="thumb">Thumbnail</button>
+  <button id="export">Export video</button>
+</div>
+<script>window.__THUMB_T=74.6;window.__AUDIO_B64__="__AUDIO__";window.__FONT_B64__="__FONT__";</script>
+<!--SCRIPTS-->
+</body>
+</html>

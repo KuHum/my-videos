@@ -1,0 +1,123 @@
+name: Render ink explainer
+
+# Renders ink/ — the Stickman (Ink) explainer "Your Single Pastor" — and uploads
+# the MP4, thumbnail and QA stills. The narration is committed and the score is
+# synthesised in the page, so CI needs no accounts.
+#
+# The smoke test runs first in stills mode (audio is not needed to prove frames),
+# so a broken bundle fails in seconds. The render boots the full mix once.
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "ink/**"
+      - ".github/workflows/render-ink.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: render-ink-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CHROME_NO_SANDBOX: "1"
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+
+      - id: chrome
+        uses: browser-actions/setup-chrome@v2
+
+      - name: Ensure ffmpeg
+        timeout-minutes: 5
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          ffmpeg -version | head -1
+
+      - name: Bundle the player
+        working-directory: ink
+        timeout-minutes: 2
+        run: |
+          set -euo pipefail
+          node tools/bundle.mjs
+          test -s dist/index.html
+          test -s assets/vo.wav
+
+      - name: Smoke test (serve, boot in stills mode, draw)
+        working-directory: ink
+        timeout-minutes: 6
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          STILLS: "1"
+        run: node tools/check.mjs
+
+      - name: Render MP4
+        working-directory: ink
+        timeout-minutes: 30
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
+          set -euo pipefail
+          mkdir -p renders
+          start=$(date +%s)
+          node tools/render.mjs --out renders/ink.mp4 --thumb renders/ink-thumbnail.png
+          echo "render seconds: $(( $(date +%s) - start ))" | tee renders/render-time.txt
+
+      - name: Verify output
+        working-directory: ink
+        timeout-minutes: 3
+        run: |
+          set -euo pipefail
+          test -s renders/ink.mp4
+          test -s renders/ink-thumbnail.png
+          ffprobe -v error \
+            -show_entries format=duration,size,bit_rate \
+            -show_entries stream=index,codec_name,width,height,r_frame_rate,sample_rate,channels \
+            -of default=nw=1 renders/ink.mp4 | tee renders/probe.txt
+          dur=$(ffprobe -v error -show_entries format=duration -of csv=p=0 renders/ink.mp4)
+          aud=$(ffprobe -v error -select_streams a -show_entries stream=index -of csv=p=0 renders/ink.mp4 | wc -l)
+          node -e "
+            const d = Number(process.argv[1]);
+            if (!(d > 75.3 && d < 76.2)) { console.error('bad duration', d); process.exit(1); }
+            console.log('duration ok:', d.toFixed(2) + 's');
+          " "$dur"
+          test "$aud" -ge 1 || { echo "no audio stream"; exit 1; }
+          ffmpeg -hide_banner -nostats -i renders/ink.mp4 -af ebur128=peak=true -f null - 2>&1 \
+            | grep -E "^    I:|^    Peak:" | tee renders/loudness.txt
+          {
+            echo "### Render summary"
+            echo ""
+            echo "- duration: $(echo "$dur" | cut -c1-5) s"
+            echo "- file: $(du -h renders/ink.mp4 | cut -f1)"
+            echo "- render time: $(cat renders/render-time.txt 2>/dev/null | tr -d '\n')"
+            sed 's/^/    /' renders/loudness.txt
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ink-video
+          path: |
+            ink/renders/ink.mp4
+            ink/renders/ink-thumbnail.png
+            ink/renders/probe.txt
+            ink/renders/loudness.txt
+            ink/renders/render-time.txt
+            ink/renders/stills/*.jpg
+            ink/dist/index.html
+          retention-days: 30
+          if-no-files-found: warn

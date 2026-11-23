@@ -123,7 +123,7 @@
     ctx.letterSpacing = (o.tracking || 0) + "px";
     ctx.textAlign = o.align || "left";
     ctx.textBaseline = o.base || "alphabetic";
-    ctx.globalAlpha = o.alpha == null ? 1 : o.alpha;
+    ctx.globalAlpha = ctx.globalAlpha * (o.alpha == null ? 1 : o.alpha);
     if (o.glow) { ctx.shadowColor = o.glow; ctx.shadowBlur = o.blur || 26; }
     if (o.shadow) { ctx.shadowColor = "rgba(0,0,0,0.55)"; ctx.shadowBlur = 18; ctx.shadowOffsetY = 3; }
     ctx.fillStyle = o.color || K.C.white;

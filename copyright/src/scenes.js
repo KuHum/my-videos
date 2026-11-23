@@ -761,14 +761,6 @@
         { t: 31.9, x: 1240, y: 300, label: "LICENCES", icon: "stamp" },
         { t: 33.5, x: 1560, y: 250, label: "EXPIRY", icon: "hour" },
       ];
-      const cardsA = rv(t, 28.4, 0.4);
-      if (cardsA > 0.01) {
-        ctx.save(); ctx.globalAlpha = cardsA;
-        K.rr(ctx, 460, 180, 1300, 470, 26);
-        ctx.fillStyle = "rgba(10,18,32,0.55)"; ctx.fill();
-        ctx.strokeStyle = "rgba(79,216,240,0.18)"; ctx.lineWidth = 2; ctx.stroke();
-        ctx.restore();
-      }
       for (const cd of cards) {
         const p = rv(t, cd.t, 0.4);
         if (p <= 0.01) continue;
@@ -920,9 +912,9 @@
       // small sign
       if (on3 > 0.01) {
         ctx.save(); ctx.globalAlpha = on3;
-        ctx.fillStyle = "rgba(10,18,32,0.95)"; ctx.fillRect(1390, 760, 220, 90);
-        ctx.strokeStyle = C.cyan; ctx.lineWidth = 3; ctx.strokeRect(1390, 760, 220, 90);
-        K.text(ctx, "MARKETING", 1500, 818, { size: 30, weight: 800, color: C.cyan, align: "center", tracking: 2 });
+        ctx.fillStyle = "rgba(10,18,32,0.95)"; ctx.fillRect(1180, 760, 220, 90);
+        ctx.strokeStyle = C.cyan; ctx.lineWidth = 3; ctx.strokeRect(1180, 760, 220, 90);
+        K.text(ctx, "MARKETING", 1290, 818, { size: 30, weight: 800, color: C.cyan, align: "center", tracking: 2 });
         ctx.restore();
       }
       // lever + marketer

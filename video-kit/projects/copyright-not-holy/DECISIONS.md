@@ -118,8 +118,9 @@ exist in both, with `my-videos` canonical.
   Apache-2.0/CC-BY only), downloads, parses the SVG (paths, shapes, transforms) into
   polylines, fits them to the engine's ±100 box and appends a `case` to
   `engine/icons.js`. Provenance in `engine/icons/MANIFEST.json` and `LICENSES.md`.
-- Five imported for this film: `ox` (lucide-lab:bull-head, ISC), `song`, `contract`,
-  `coat`, `gavel` (Tabler, MIT). All stroke sources; no licence requires on-screen credit.
+- Six imported for this film: `ox` (lucide-lab:bull-head, ISC), `song`, `contract`,
+  `coat`, `gavel`, `world` (Tabler, MIT). `world` replaces the book on "differs by
+  country" (a globe with meridians and parallels). All stroke sources; no licence requires on-screen credit.
 - They replace the wrong-glyph workarounds: `coins`→`ox`, `scroll`→`song` for copying,
   `scroll`→`contract` + `coat` for "a legal bargain dressed in moral clothing",
   `book`→`gavel` on the positive-law scale.

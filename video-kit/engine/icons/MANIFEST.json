@@ -1,5 +1,25 @@
 [
   {
+    "name": "calendar",
+    "source": "tabler:calendar-event",
+    "collection": "tabler",
+    "collection_name": "Tabler Icons",
+    "author": "Pawe\u0142 Kuna",
+    "license": "MIT",
+    "license_url": "https://github.com/tabler/tabler-icons/blob/master/LICENSE",
+    "svg_url": "https://api.iconify.design/tabler/calendar-event.svg",
+    "sha256": "e9cb5c807540d983648158732a9f21c736ce308c7627dd72706dd96a729d65fc",
+    "fetched_at": "2026-11-26T23:39:31Z",
+    "bbox": {
+      "x": 4.0,
+      "y": 3.0,
+      "w": 16.0,
+      "h": 18.0
+    },
+    "subpaths": 5,
+    "attribution_required": false
+  },
+  {
     "name": "coat",
     "source": "tabler:shirt",
     "collection": "tabler",
@@ -37,6 +57,26 @@
       "h": 18.0
     },
     "subpaths": 5,
+    "attribution_required": false
+  },
+  {
+    "name": "earth",
+    "source": "lucide:earth",
+    "collection": "lucide",
+    "collection_name": "Lucide",
+    "author": "Lucide Contributors",
+    "license": "ISC",
+    "license_url": "https://github.com/lucide-icons/lucide/blob/main/LICENSE",
+    "svg_url": "https://api.iconify.design/lucide/earth.svg",
+    "sha256": "e9880c40492044d5c783a0e8d80ee93ddd082dfb07f0ef30af99dabbc13ddff7",
+    "fetched_at": "2026-11-26T23:39:29Z",
+    "bbox": {
+      "x": 2.0,
+      "y": 2.0,
+      "w": 20.0,
+      "h": 20.0
+    },
+    "subpaths": 4,
     "attribution_required": false
   },
   {

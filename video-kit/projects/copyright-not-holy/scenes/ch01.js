@@ -42,8 +42,8 @@ SCENES.push(
 
  { from:'s11', to:'s11', template:'compare', headline:'Rules that change',
    lead:{pose:[['s11','think'],['s11:differ','shrug']]},
-   p:{ left:{ title:'every few decades', icon:'scroll', at:'s11:every' },
-       right:{ title:'differs by country', icon:'world', at:'s11:differ' } },
+   p:{ left:{ title:'every few decades', icon:'calendar', at:'s11:every' },
+       right:{ title:'differs by country', icon:'earth', at:'s11:differ' } },
    extras:[ { text:'not intrinsic', x:960, y:250, size:50, col:'red', at:'s11:immoral' } ] },
 
  { from:'s12', to:'s13', template:'list', headline:'The real moral duties',

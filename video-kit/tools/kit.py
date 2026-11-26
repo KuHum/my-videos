@@ -198,6 +198,18 @@ def cmd_preview(a):
     for p in paths: say('  ' + os.path.relpath(p))
 
 # ---------------------------------------------------------------- render
+def last_json(s):
+    """First JSON object at or before the last '}' — ffmpeg may print extra lines after it."""
+    i = s.rfind('{')
+    while i >= 0:
+        try:
+            obj, _ = json.JSONDecoder().raw_decode(s[i:])
+            if isinstance(obj, dict): return obj
+        except ValueError:
+            pass
+        i = s.rfind('{', 0, i)
+    raise ValueError('no JSON object in ffmpeg output')
+
 def lufs(path):
     r = subprocess.run(['ffmpeg', '-hide_banner', '-nostats', '-i', path, '-af', 'ebur128=peak=true', '-f', 'null', '-'], capture_output=True, text=True)
     m = re.findall(r'I:\s+(-?[\d.]+) LUFS', r.stderr)
@@ -266,7 +278,7 @@ def cmd_render(a):
     flt += ';%samix=inputs=%d:normalize=0:duration=first,aformat=channel_layouts=stereo' % (mix, n)
     run(['ffmpeg', '-y', '-loglevel', 'error'] + ins + ['-filter_complex', flt, '-ar', '48000', pre])
     r = subprocess.run(['ffmpeg', '-hide_banner', '-nostats', '-i', pre, '-af', 'loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json', '-f', 'null', '-'], capture_output=True, text=True)
-    j = json.loads(r.stderr[r.stderr.rfind('{'):])
+    j = last_json(r.stderr)
     ln = 'loudnorm=I=-14:TP=-1.5:LRA=11:measured_I=%s:measured_TP=%s:measured_LRA=%s:measured_thresh=%s:offset=%s:linear=true' % (j['input_i'], j['input_tp'], j['input_lra'], j['input_thresh'], j['target_offset'])
     run(['ffmpeg', '-y', '-loglevel', 'error', '-i', pre, '-af', ln, '-ar', '48000', fin])
     # join + mux

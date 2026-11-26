@@ -23,10 +23,10 @@ Paste this file (or point your AI tool at it) together with the project folder. 
    * Text on screen: 1 to 4 words, taken from the article. Numbers exactly as written in the article.
 3. **Check** (fast, no browser): `python3 tools/kit.py check projects/<name>`
    Fix every `ERROR`. Read every `WARN` and fix it unless you have a reason. The messages name the scene, the sentence and the word.
-4. **Look** (only if you can view images): `python3 tools/kit.py preview projects/<name> --chapter ch01`
+4. **Look** (only if you can view images): `python3 tools/kit.py cloud preview projects/<name> --push --chapter ch01`
    Open the sheets it prints. Each scene shows three frames. Look for: text overlapping a figure, text off the edge, an empty-looking scene, the wrong icon. Fix and re-run preview for that chapter only. Do not preview the whole video again and again.
 5. **Repeat steps 2 to 4 for each chapter.**
-6. **Render**: if the kit is in a GitHub repository and `gh` is logged in, use `python3 tools/kit.py cloud render projects/<name> --push`. The master renders on GitHub Actions and the MP4, thumbnail and player page are downloaded into `projects/<name>/out/`; nothing heavy runs on this computer. Without GitHub, use `python3 tools/kit.py render projects/<name> --workers 1` (add `--small` for a 720p copy). Rendering is chapter by chapter, so an interrupted run resumes; finished chapters are skipped. `python3 tools/kit.py build projects/<name>` makes the playable HTML page, and `python3 tools/kit.py verify projects/<name>` checks the finished file.
+6. **Render**: `python3 tools/kit.py cloud render projects/<name> --push`. Rendering happens on GitHub Actions only; `render`, `preview` and `thumb` refuse to run on this machine. The MP4, the 720p copy, the thumbnail and the player page are downloaded into `projects/<name>/out/`; `python3 tools/kit.py build projects/<name>` makes the playable HTML page locally, and `python3 tools/kit.py verify projects/<name>` checks the finished file. Stills are `python3 tools/kit.py cloud preview projects/<name> --push --chapter chNN`.
 
 ## Parallel mode (optional, for long projects)
 One chapter per file means several writers can work at once without merging code:

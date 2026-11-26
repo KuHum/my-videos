@@ -74,10 +74,11 @@ Sheets land in `projects/my-article/work/preview/`.
 
 - Change the scenes, run `cloud render ... --push` again. The runner starts clean, so
   it renders the whole film again; a 60-second film is only a few minutes.
-- Locally, `python3 tools/kit.py render projects/my-article --chapters 2` re-renders
-  one chapter for a quick look, and `--force` redoes everything.
-- For a cheap visual pass, use `cloud preview` or `preview --chapter ch01` (last one
-  needs local Playwright).
+- There is no local re-render: `render`, `preview` and `thumb` refuse to run outside
+  GitHub Actions. Use `cloud preview` for a quick look at one chapter, and `--force`
+  is a runner-side option for redoing every chapter.
+- A partial render is a cheap check: `cloud render ... --push --chapters 1` produces a
+  chapter-only MP4 and skips verification, which is useful before a full run.
 
 ## Reading a failed run
 
@@ -111,14 +112,16 @@ partial output to download; the full logs stay on the run page.
   `setup-node@v7`, `upload-artifact@v7`); older majors emit Node 20 deprecation
   warnings on every run.
 
-## Local fallback
+## No local fallback (by design)
 
-If GitHub is unavailable, render locally with as many workers as the machine can
-sustain:
+This fork has no local render path. `render`, `preview` and `thumb` exit with an error
+unless `GITHUB_ACTIONS=true`, which only the runner sets. If GitHub is unavailable the
+work waits; it does not fall back to the laptop.
 
-```bash
-python3 tools/kit.py render projects/my-article --workers 1 --small
-```
+Why: a 2-core laptop draws about 1 frame per second at 1080p (25–30 minutes for a 75 s
+film, longer for a real one), the machine stops being usable while it runs, and the
+result depends on the local Chromium build. The runner is faster, cleaner and free on
+public repositories.
 
-On 2 cores expect roughly 1 frame per second at 1080p. Interrupted renders resume:
-finished chapters are skipped because their scene hash is unchanged.
+CI-side interruption handling still applies: a re-submitted run starts clean, and a
+cancelled run uploads whatever artifacts it has.

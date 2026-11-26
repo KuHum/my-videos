@@ -28,7 +28,7 @@
 | `unknown template / icon` | Names are listed in `docs/TEMPLATES.md`. |
 | Syntax error in a scene file | Check commas and quotes; the message gives the file and line. |
 
-## Looks wrong (`preview`)
+## Looks wrong (`cloud preview`)
 | Symptom | Fix |
 |---|---|
 | Text overlaps the lead character | Move the lead (`lead:{slot:'R'}`), or hide it (`lead:false`), or move your `extras`. |
@@ -39,10 +39,10 @@
 ## Render
 | Symptom | Fix |
 |---|---|
-| Render interrupted | Run the same command again; finished chapters are skipped (`--force` redoes all). |
-| Changed one chapter's scenes | Re-run `render`; only changed chapters are redrawn. |
+| Render interrupted | Re-submit `cloud render ... --push`; the runner starts clean, artifacts from a cancelled run are still uploaded. |
+| Changed one chapter's scenes | Re-submit; the runner redraws the whole film (a few minutes). |
 | Out of disk space | Delete `work/seg/` frames and old `out/` files. |
-| Too slow | Use `cloud render` (see below). Locally, `--workers 1` on a 2-core machine is often as fast as 2 and uses less memory. |
+| Too slow / refuses to run | Expected: local rendering is disabled. Use `cloud render` (see below). |
 | Audio too quiet or loud | Output is normalised to −14 LUFS; check the voice recording is not clipped or very noisy. |
 | File over an upload limit | Use the `--small` copy, or re-encode: `ffmpeg -i in.mp4 -vf scale=1280:-2 -crf 28 out.mp4`. |
 | `verify` says duration differs | The voiceover and `work/timing.json` disagree. Re-run `prep`. |

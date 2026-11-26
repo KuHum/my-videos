@@ -10,6 +10,16 @@ WORKFLOW = 'render-kit.yml'
 
 def say(*a): print(*a, flush=True)
 def die(msg): print('\nERROR: ' + msg); sys.exit(1)
+def require_ci(what):
+    """Local frame drawing is disabled in this kit: the master render and the contact
+    sheets run on GitHub Actions, never on this machine. The runner sets GITHUB_ACTIONS."""
+    if os.environ.get('GITHUB_ACTIONS') == 'true': return
+    die('%s does not run on this machine any more. GitHub Actions is the only renderer.\n'
+        '  master:   python3 tools/kit.py cloud render projects/<name> --push\n'
+        '  stills:   python3 tools/kit.py cloud preview projects/<name> --push [--chapter chNN]\n'
+        '  check:    python3 tools/kit.py check projects/<name>   (still local, cheap)\n'
+        '  player:   python3 tools/kit.py build projects/<name>   (local, no frames)\n'
+        '  verify:   python3 tools/kit.py verify projects/<name>  (local, ffprobe only)' % what)
 def rd(p): return open(p, encoding='utf-8').read()
 def run(cmd, **kw): return subprocess.run(cmd, check=True, **kw)
 
@@ -161,6 +171,7 @@ def with_page(html, fn):
 
 # ---------------------------------------------------------------- preview
 def cmd_preview(a):
+    require_ci('preview')
     from PIL import Image, ImageDraw
     P = Project(a.project)
     if not cmd_check(P, quiet=True): cmd_check(P); die('Fix the errors above first.')
@@ -234,6 +245,7 @@ def make_stems(P, html, T, want_music=True):
     return with_page(html, go)
 
 def cmd_render(a):
+    require_ci('render')
     P = Project(a.project); T = P.timing()
     workers = a.workers if a.workers and a.workers > 0 else auto_workers()
     if not cmd_check(P, quiet=True): cmd_check(P); die('Fix the errors above first.')
@@ -296,6 +308,7 @@ def cmd_render(a):
     cmd_thumb(argparse.Namespace(project=a.project, time=None, title=None))
 
 def cmd_thumb(a):
+    require_ci('thumb')
     P = Project(a.project); T = P.timing(); th = P.cfg.get('thumbnail', {}) or {}
     t = a.time if a.time is not None else (th.get('time') if th.get('time') is not None else T['duration'] * .7)
     title = a.title if a.title is not None else (th.get('title') or '')
@@ -532,7 +545,9 @@ def cmd_doctor(a):
     ok = True
     cores, mem = machine()
     say('machine      %d cores, %.1f GB RAM' % (cores, mem))
-    if cores <= 2: say('             this is a small machine: render the master with "cloud render", not locally.')
+    if cores <= 2: say('             this is a small machine: the master renders on GitHub Actions, never here.')
+    if os.environ.get('GITHUB_ACTIONS') != 'true':
+        say('render       GitHub Actions only (local render/preview are disabled in this fork)')
     for name, cmd in [('ffmpeg', ['ffmpeg', '-version']), ('ffprobe', ['ffprobe', '-version']), ('node (18+)', ['node', '--version'])]:
         r = subprocess.run(cmd, capture_output=True, text=True) if shutil.which(cmd[0]) else None
         say('%-12s %s' % (name, (r.stdout.split('\n')[0][:60] if r and r.returncode == 0 else 'MISSING'))); ok &= bool(r and r.returncode == 0)

@@ -5,7 +5,7 @@ Turn a written article plus your own voice recording into a hand-inked "stick fi
 **The expensive part is already done** (drawing engine, 13 scene templates, music, sound effects, timing, video export). What is left per video is cheap: a small AI model writes a scene file (data, not drawing code), the checker catches mistakes, and the render runs on GitHub Actions (or on your computer if you prefer).
 
 ## What you need
-* **Python 3.9+, Node 18+, ffmpeg.** For local previews and renders also **Playwright with Chromium**: `python3 -m pip install -r requirements.txt` then `python3 -m playwright install chromium`. Run `python3 tools/kit.py doctor` to check.
+* **Python 3.9+, Node 18+, ffmpeg**, plus **numpy and scipy** for `prep`: `python3 -m pip install -r requirements.txt`. Only for local previews and renders, also install **Playwright with Chromium**: `python3 -m playwright install chromium`. Run `python3 tools/kit.py doctor` to check.
 * **For rendering on GitHub Actions** (recommended on a 2-core computer): the kit in a GitHub repository and the GitHub CLI (`gh`) logged in. See [docs/CLOUD_RENDER.md](docs/CLOUD_RENDER.md).
 * Your article as text and your voice recording (`.mp3`, `.wav`, `.m4a`).
 * Any AI model that can read files and run commands (Claude Haiku, Gemini Flash, GPT mini, etc.) for the scene-writing step.

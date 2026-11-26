@@ -118,9 +118,11 @@ exist in both, with `my-videos` canonical.
   Apache-2.0/CC-BY only), downloads, parses the SVG (paths, shapes, transforms) into
   polylines, fits them to the engine's ±100 box and appends a `case` to
   `engine/icons.js`. Provenance in `engine/icons/MANIFEST.json` and `LICENSES.md`.
-- Six imported for this film: `ox` (lucide-lab:bull-head, ISC), `song`, `contract`,
-  `coat`, `gavel`, `world` (Tabler, MIT). `world` replaces the book on "differs by
-  country" (a globe with meridians and parallels). All stroke sources; no licence requires on-screen credit.
+- Imported for this film: `ox` (lucide-lab:bull-head, ISC), `song`, `contract`, `coat`,
+  `gavel`, `world`, `earth` (Tabler/Lucide, MIT/ISC) and `calendar` (Tabler, MIT).
+  `earth` (continents) is the final glyph for "differs by country" — a gridded globe
+  (`world`) was tried first and replaced on the user's note; `calendar` replaces the
+  scroll on "every few decades". `world` is kept in the set but no longer used. All stroke sources; no licence requires on-screen credit.
 - They replace the wrong-glyph workarounds: `coins`→`ox`, `scroll`→`song` for copying,
   `scroll`→`contract` + `coat` for "a legal bargain dressed in moral clothing",
   `book`→`gavel` on the positive-law scale.

@@ -1,0 +1,11 @@
+A while back, a Ugandan pastor said marriage isn't a must for ministers. Singleness, he argued, offers self-discovery and spiritual maturity — and the church should stop pressuring pastors to marry.
+
+I disagree — with a qualifier. Is your single pastor automatically a problem? No. Probably a problem? Yes.
+
+The question isn't whether a single man can be godly or fruitful. It's what the apostles expected when they described the man fit to pastor. Paul says a pastor must be "a one-woman man" — that's about character, not a marriage certificate. But he immediately adds that a pastor must manage his own household well — because if he can't run his family, how will he care for God's church? The household is God's proving ground for shepherds.
+
+So marriage isn't a magic checkbox. It's the ordinary training ground. That's why the single candidate should be the outlier — the burden of proof is on him.
+
+What about Paul? He was single — but he calls his celibacy a rare, extraordinary gift. Luther said one in a thousand. A single man burning with passion isn't gifted; he's a ticking time bomb.
+
+So: character is the real qualification — but ordinarily, look for a husband and a father.

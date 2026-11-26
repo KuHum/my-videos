@@ -1,0 +1,47 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>/*TITLE*/</title>
+<style>
+/* layout: one stage, two control rows beneath, status line */
+:root{--bg:#EDE7D8;--fg:#1E1E1E;--mut:#5f5a4e;--pan:#F7F2E6;--line:#cfc6b0;--acc:#C8452E;--accfg:#fff;--ctl:Segoe UI,system-ui,sans-serif}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1d1b17;--fg:#efe9da;--mut:#a9a293;--pan:#27241e;--line:#3d392f;--acc:#e0644a;--accfg:#1d1b17;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1d1b17;--fg:#efe9da;--mut:#a9a293;--pan:#27241e;--line:#3d392f;--acc:#e0644a;--accfg:#1d1b17;color-scheme:dark}
+@font-face{font-family:Caveat;font-weight:700;src:url(data:font/woff2;base64,/*FONT*/) format('woff2')}
+body{background:var(--bg);color:var(--fg);font:14px/1.45 var(--ctl);padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:1100px;margin:0 auto;display:grid;gap:12px}
+h1{font:700 30px/1.1 Caveat,cursive;margin:0}
+.stage{border:1px solid var(--line);background:#F4EFE4;line-height:0}
+canvas{width:100%;height:auto;aspect-ratio:16/9;display:block}
+.row{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;background:var(--pan);border:1px solid var(--line);padding:10px 12px}
+.row>*{min-width:0}
+button,.file{font:600 13px var(--ctl);color:var(--fg);background:transparent;border:1px solid var(--fg);padding:7px 14px;cursor:pointer}
+button.pri{background:var(--acc);border-color:var(--acc);color:var(--accfg)}
+button:disabled{opacity:.4;cursor:default}
+button:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+input[type=range]{accent-color:var(--acc)}
+#seek{flex:1 1 220px}
+label{display:flex;gap:8px;align-items:center;color:var(--mut)}
+input[type=file]{max-width:230px;font-size:12px;color:var(--mut)}
+#tm{font-variant-numeric:tabular-nums;color:var(--mut)}
+#msg{margin:0;color:var(--mut);min-height:1.4em}
+video{width:100%;aspect-ratio:16/9;background:#000}
+</style>
+<main>
+<h1>/*TITLE*/</h1>
+<div class="stage"><canvas id="cv" width="1920" height="1080"></canvas></div>
+<div class="row"><button id="pp" class="pri">Play</button><button id="rs">Restart</button><input id="seek" type="range" min="0" max="7568" value="0" aria-label="Seek"><span id="tm">0:00 / 1:15</span></div>
+<div class="row"><label>Music <input id="mvol" type="range" min="0" max="1" step=".01" value=".5"></label><label>Effects <input id="svol" type="range" min="0" max="1" step=".01" value=".7"></label><label>Voiceover <input id="vo" type="file" accept="audio/*"></label></div>
+<div class="row"><button id="ex">Export video</button><button id="dl" disabled>Download</button><button id="th">Thumbnail PNG</button></div>
+<p id="msg">Press Play.</p>
+<video id="prev" controls hidden></video>
+</main>
+<script>const TIMING=/*TIMING*/;window.VO_B64="/*VO*/";const LEAD_DEFAULT="/*LEAD*/";const THUMB_T=/*THUMB_T*/,THUMB_TITLE="/*THUMB_TITLE*/";</script>
+<script>/*CORE*/</script>
+<script>/*ICONS*/</script>
+<script>/*TEMPLATES*/</script>
+<script>const SCENES=[];</script>
+<script>/*SCENE_FILES*/</script>
+<script>/*SCENES_RT*/</script>
+<script>/*AUDIO*/</script>
+<script>/*UI*/</script>

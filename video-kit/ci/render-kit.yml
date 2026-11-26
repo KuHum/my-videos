@@ -1,0 +1,162 @@
+name: Render video kit
+
+# The master render runs here, on a 4-core runner, so a 2-core laptop only
+# does cheap work: prep, check, and reading the stills. See docs/CLOUD_RENDER.md.
+#
+# Install once from the kit:  python3 tools/kit.py cloud install
+# Submit from the kit:        python3 tools/kit.py cloud render projects/<name> --push
+
+on:
+  workflow_dispatch:
+    inputs:
+      kit_dir:
+        description: Kit folder inside this repository
+        required: true
+        default: video-kit
+      project:
+        description: Project folder relative to the kit (for example projects/my-article)
+        required: true
+        default: examples/pastor
+      mode:
+        description: What to build
+        type: choice
+        options: [render, preview]
+        default: render
+      chapters:
+        description: Render chapters (all, or a list such as 1,2)
+        default: all
+      chapter:
+        description: Preview one chapter (all, or a chapter id such as ch01)
+        default: all
+      workers:
+        description: Chapters rendered in parallel (runner has 4 cores)
+        default: "4"
+      crf:
+        description: H.264 quality, lower is bigger/better
+        default: "18"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: video-kit-${{ github.ref }}-${{ inputs.project }}
+  cancel-in-progress: true
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      PYTHONUNBUFFERED: "1"
+      KIT_DIR: ${{ inputs.kit_dir }}
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: ${{ inputs.kit_dir }}/requirements.txt
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+
+      - name: Check the project path
+        env:
+          PROJECT: ${{ inputs.project }}
+        run: |
+          set -euo pipefail
+          cd "$KIT_DIR"
+          case "$PROJECT" in
+            /*|*..*) echo "::error::project must be a relative path inside the kit"; exit 1 ;;
+          esac
+          test -d "$PROJECT" || { echo "::error::No project folder at $PROJECT"; exit 1; }
+          test -f "$PROJECT/project.json" || { echo "::error::$PROJECT/project.json is missing"; exit 1; }
+          echo "project: $PROJECT"
+
+      - name: Ensure ffmpeg
+        run: |
+          set -euo pipefail
+          cd "$KIT_DIR"
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          ffmpeg -version | head -1
+
+      - name: Install Python dependencies and Chromium
+        run: |
+          set -euo pipefail
+          cd "$KIT_DIR"
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet -r requirements.txt
+          python -m playwright install --with-deps chromium
+
+      - name: Smoke test (browser and encoder)
+        run: |
+          set -euo pipefail
+          cd "$KIT_DIR"
+          node --version
+          python - <<'PY'
+          from playwright.sync_api import sync_playwright
+          with sync_playwright() as p:
+              browser = p.chromium.launch()
+              page = browser.new_page()
+              page.set_content("<h1>ok</h1>")
+              assert page.evaluate("document.querySelector('h1').textContent") == "ok"
+              browser.close()
+          print("chromium OK")
+          PY
+          python tools/kit.py check "${{ inputs.project }}"
+
+      - name: Render master
+        if: inputs.mode == 'render'
+        timeout-minutes: 60
+        run: |
+          set -euo pipefail
+          cd "$KIT_DIR"
+          python tools/kit.py render "${{ inputs.project }}" \
+            --workers "${{ inputs.workers }}" \
+            --crf "${{ inputs.crf }}" \
+            --small
+
+      - name: Build the player page
+        if: inputs.mode == 'render'
+        timeout-minutes: 10
+        run: |
+          cd "$KIT_DIR"
+          python tools/kit.py build "${{ inputs.project }}"
+
+      - name: Verify the finished file
+        if: inputs.mode == 'render'
+        run: |
+          cd "$KIT_DIR"
+          python tools/kit.py verify "${{ inputs.project }}"
+
+      - name: Render preview contact sheets
+        if: inputs.mode == 'preview'
+        timeout-minutes: 20
+        env:
+          PROJECT: ${{ inputs.project }}
+          CHAPTER: ${{ inputs.chapter }}
+        run: |
+          set -euo pipefail
+          cd "$KIT_DIR"
+          if [ -n "$CHAPTER" ] && [ "$CHAPTER" != "all" ]; then
+            python tools/kit.py preview "$PROJECT" --chapter "$CHAPTER"
+          else
+            python tools/kit.py preview "$PROJECT"
+          fi
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: video-kit-${{ github.run_number }}
+          if-no-files-found: warn
+          retention-days: 14
+          path: |
+            ${{ inputs.kit_dir }}/${{ inputs.project }}/out/**
+            ${{ inputs.kit_dir }}/${{ inputs.project }}/work/preview/**

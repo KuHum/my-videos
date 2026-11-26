@@ -1,0 +1,10 @@
+{
+  "name": "single-pastor-example",
+  "title": "Your Single Pastor",
+  "lead": "pastor",
+  "speak_headings": false,
+  "chapter_seconds": 60,
+  "music": true,
+  "sfx": true,
+  "thumbnail": { "time": 55.9, "title": "Your single pastor" }
+}

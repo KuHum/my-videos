@@ -1,0 +1,26 @@
+__pycache__/
+*.pyc
+.DS_Store
+
+# Rendered output and intermediate frames (downloads land in out/ too).
+projects/*/out/
+examples/*/out/
+projects/*/work/seg/
+examples/*/work/seg/
+projects/*/work/preview/
+examples/*/work/preview/
+projects/*/work/cloud-*/
+examples/*/work/cloud-*/
+projects/*/work/agents/
+examples/*/work/agents/
+projects/*/work/check.json
+examples/*/work/check.json
+projects/*/work/*.html
+examples/*/work/*.html
+projects/*/work/*.wav
+examples/*/work/*.wav
+projects/*/work/*.mp4
+examples/*/work/*.mp4
+
+# npm cache workaround for read-only home directories
+.npmcache/

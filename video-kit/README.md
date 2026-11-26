@@ -46,9 +46,9 @@ PROMPT_FOR_CHEAPER_AI.md   paste this to the AI that writes scenes
 4. **render** draws frames in headless Chromium, encodes each chapter, mixes voice, music and effects (loudness normalised to −14 LUFS), and joins everything. If it stops, run it again: finished chapters are skipped. On GitHub Actions the same render runs with 4 workers.
 
 ## Time and size
-* On a **2-core laptop**, local rendering is slow: roughly 1 frame per second at 1080p, about 25–30 minutes for the 75 s example. Use `cloud render` instead (a few minutes on the 4-core runner, including setup).
+* On a **2-core laptop**, local rendering is slow: roughly 1 frame per second at 1080p, about 25–30 minutes for the 75 s example. Use `cloud render` instead: the 75 s example took **3 min 30 s** end to end on the runner (2 min 12 s of that was drawing and encoding).
 * Local `prep`, `check` and `verify` take seconds. Local `preview` is quick but needs Playwright.
-* File size: the full-quality 1080p MP4 (crf 20 locally, crf 18 on the runner) is large because of the paper grain: about 30 MB per minute. The `--small` 720p copy is about 2 MB per minute and is fine for previews and sharing.
+* File size: the full-quality 1080p MP4 (crf 18 on the runner, crf 20 locally) is large because of the paper grain: about 30 MB per minute; the 75 s example is 42 MB on the runner. The `--small` 720p copy is about 2 MB per minute and is fine for previews and sharing.
 
 ## Rendering on a small machine
 The master render is the only expensive step, and it does not have to run on your computer:

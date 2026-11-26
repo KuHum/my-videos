@@ -4,8 +4,10 @@ The kit can render on a GitHub Actions runner (4 cores) and download the finishe
 files, so the heavy 1080p encode never runs on your computer. Local work stays cheap:
 `prep`, `check`, reading stills, and writing scenes.
 
-Use this route on a 2-core laptop. A 75-second film that takes roughly 25–30 minutes
-of local rendering finishes on the runner in a few minutes including setup.
+Use this route on a 2-core laptop. The 75-second example film took **3 min 30 s** wall
+time on the runner (2 min 12 s of that was drawing and encoding; the rest was setup,
+dependency install, build and verification). The same film takes roughly 25–30 minutes
+to render locally on 2 cores.
 
 ## One-time setup
 

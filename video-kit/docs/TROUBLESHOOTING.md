@@ -57,7 +57,7 @@
 | Run fails at "Install Python dependencies and Chromium" | Usually a transient apt/network failure. Re-run from the Actions tab or run the command again. |
 | Run fails at `check` | The scenes do not pass the checker; run `check` locally first. The artifact still uploads `check.json`. |
 | Run is cancelled | A newer run for the same project was queued; `concurrency` cancels the older one by design. |
-| No artifact / empty download | The run failed before any output. Download the partial artifact from the run page; logs are uploaded with `if: always()`. |
+| No artifact / empty download | The run failed before any output. The workflow uploads whatever output exists even after a failure; the full logs stay on the run page. |
 | `gh run view --log` prints nothing | ANSI escapes. Use `gh api .../jobs/<id>/logs --allow-escape-sequences` and strip them (`sed 's/\x1b\[[0-9;]*m//g'`). |
 | Artifact gone | Artifacts are kept 14 days. Re-run the workflow. |
 | It published my voiceover | The repository is public. Make it private, or keep narration out of it. `cloud render` asks before submitting to a public remote; `--yes` skips the question. |

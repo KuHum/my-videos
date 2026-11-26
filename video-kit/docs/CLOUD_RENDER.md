@@ -91,8 +91,8 @@ gh api /repos/<owner>/<repo>/actions/jobs/<job-id>/logs --allow-escape-sequences
 gh api /repos/<owner>/<repo>/check-runs/<job-id>/annotations
 ```
 
-The workflow uploads artifacts with `if: always()`, so a failed run still leaves its
-partial output and logs to download.
+The workflow uploads artifacts with `if: always()`, so a failed run still leaves any
+partial output to download; the full logs stay on the run page.
 
 ## Privacy and cost
 

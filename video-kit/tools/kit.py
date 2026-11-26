@@ -521,9 +521,11 @@ def cmd_cloud(a):
     shutil.rmtree(tmp, ignore_errors=True)
     say('\nDownloaded:')
     for g in sorted(got): say('  ' + os.path.relpath(g))
-    if mode == 'render':
+    if mode == 'render' and a.chapters in ('all', '', None):
         say('')
         cmd_verify(argparse.Namespace(project=P.dir))
+    elif mode == 'render':
+        say('\nPartial render (chapters %s): nothing to verify until every chapter is rendered.' % a.chapters)
 
 def cmd_new(a):
     d = os.path.abspath(a.project)

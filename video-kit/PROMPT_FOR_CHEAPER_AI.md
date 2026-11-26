@@ -39,6 +39,17 @@ One chapter per file means several writers can work at once without merging code
 
 Serial writing (one model, chapter by chapter) is still the right choice for short articles or a single changed chapter.
 
+## Icons (opt-in, and small)
+The kit has a hand-drawn icon set plus an importer for missing nouns:
+`python3 tools/fetch_icon.py search "plough"` and `python3 tools/fetch_icon.py add plough --query plough`.
+* Do not fetch icons unless the project asks for it, and **at most 3 per video**.
+* If two searches produce nothing that honestly depicts the noun, change the template
+  instead (a `list`, `talk`, `story` or `chain` needs no icon). Never substitute a
+  metaphor for the word - that is how `coins` ended up standing for an ox.
+* `check` now warns `unknown icon "x"` when a scene names an icon that does not exist.
+* Imported icons are committed with their license in `engine/icons/MANIFEST.json` and
+  `engine/icons/LICENSES.md`; CC-BY icons need a credit line in the video description.
+
 ## Rules you must not break
 * Do not edit anything in `engine/` or `tools/`. If a template cannot do what you need, use `extras`, a different template, or leave a note in your final message.
 * Do not add facts, names, numbers or quotes that are not in `article.md`.

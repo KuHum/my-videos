@@ -91,3 +91,42 @@ No template is used three times in a row. Every sentence is covered exactly once
   audio is already recorded.
 - The pre-existing `copyright/` project (a different, custom-engine cinematic cut of
   the same script) was not touched.
+
+## Second pass — icons, GitHub-only, and where the kit lives
+
+### Which copy of the kit built this
+The scenes were **written in `/home/humphrey/Downloads/Projects/video-kit`** (the folder
+the session started in). The film was **rendered from the copy in
+`/home/humphrey/Downloads/Projects/my-videos/video-kit`**, because that copy is inside a
+git repository that already had the `Render video kit` workflow, a `gh`-authenticated
+origin (`KuHum/my-videos`) and free public-repo Actions minutes. The workspace copy was
+not a git repository, so it could not render without inventing a second remote.
+The two copies are now kept in step: the project, the icon importer and the engine edits
+exist in both, with `my-videos` canonical.
+
+### GitHub is now the only renderer
+- `tools/kit.py` gained `require_ci()`: `render`, `preview` and `thumb` exit with an
+  error unless `GITHUB_ACTIONS=true`, which only the runner sets. `check`, `build` and
+  `verify` stay local (text, HTML, ffprobe — no frames).
+- README, PROMPT_FOR_CHEAPER_AI.md, docs/CLOUD_RENDER.md and docs/TROUBLESHOOTING.md
+  rewritten around that: no local fallback, stills go through `cloud preview`.
+- Reason: a 2-core laptop draws ~1 frame/s at 1080p; the runner is faster, cleaner and
+  free here.
+
+### On-demand icons
+- `tools/fetch_icon.py`: searches the Iconify API, gates by license (CC0/MIT/ISC/
+  Apache-2.0/CC-BY only), downloads, parses the SVG (paths, shapes, transforms) into
+  polylines, fits them to the engine's ±100 box and appends a `case` to
+  `engine/icons.js`. Provenance in `engine/icons/MANIFEST.json` and `LICENSES.md`.
+- Five imported for this film: `ox` (lucide-lab:bull-head, ISC), `song`, `contract`,
+  `coat`, `gavel` (Tabler, MIT). All stroke sources; no licence requires on-screen credit.
+- They replace the wrong-glyph workarounds: `coins`→`ox`, `scroll`→`song` for copying,
+  `scroll`→`contract` + `coat` for "a legal bargain dressed in moral clothing",
+  `book`→`gavel` on the positive-law scale.
+- Policy to stop this becoming a time sink: fetching is opt-in, at most 3 new icons per
+  video, and if two searches find nothing honest the scene changes template instead.
+  Nothing is ever downloaded during a render.
+
+### Known cosmetic issue
+The ox and music glyphs first sat inside the compare cards and collided with the
+sub-labels. They now sit below the card frames, with the red X on the ox.

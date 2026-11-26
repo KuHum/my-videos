@@ -73,6 +73,20 @@ This writes `work/agents/writer-1.md` … `writer-4.md` and `integrator.md`. Giv
 ## Project settings (`project.json`)
 `title`, `lead` (the recurring character look: `pastor`, `man`, `official`, `scribe`, `elder`, `teacher`, `woman`, `child`), `speak_headings`, `chapter_seconds`, `music`, `sfx`, `thumbnail` (time in seconds for the thumbnail frame).
 
+## Icons
+Built-in hand-drawn icons live in `engine/icons.js`. When an article needs a noun the
+set lacks, import one instead of bending a wrong icon:
+
+```bash
+python3 tools/fetch_icon.py search "plough"              # candidates + licenses
+python3 tools/fetch_icon.py add plough --query plough    # download, convert, vendor
+```
+
+The importer accepts CC0/MIT/ISC/Apache-2.0/CC-BY collections only, strokes the
+outline so it matches the pen style, records provenance in `engine/icons/MANIFEST.json`
+and `engine/icons/LICENSES.md`, and never runs during a render. Budget: a few icons per
+video, not a hunt. If nothing fits, change the template - a scene does not need an icon.
+
 ## Limits to know about
 * Style is fixed. New icons are easy (one `case` in `engine/icons.js`); new templates need an engineer.
 * The kit draws symbols and generic figures, never likenesses of real people, and by default never God, Jesus, the Spirit or angels as figures (see `docs/STYLE.md`).

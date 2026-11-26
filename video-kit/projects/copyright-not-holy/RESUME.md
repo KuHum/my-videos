@@ -26,11 +26,9 @@ into `projects/copyright-not-holy/out/`, then verifies the file.
 - `--no-wait` queues it and returns immediately.
 - A failed run: `gh run view --log-failed --repo KuHum/my-videos`.
 
-Local fallback (slow on this 2-core laptop, ~30 min, resumes by chapter):
-```bash
-cd /home/humphrey/Downloads/Projects/my-videos/video-kit
-python3 tools/kit.py render projects/copyright-not-holy --workers 1 --small
-```
+There is **no local fallback**: `render`, `preview` and `thumb` refuse to run outside
+GitHub Actions in this kit. If Actions is unreachable, wait or fix the network; do not
+render on the laptop. Stills: `python3 tools/kit.py cloud preview projects/copyright-not-holy --push --chapter ch01`.
 
 ## 3. Verify and build
 ```bash

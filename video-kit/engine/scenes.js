@@ -28,6 +28,12 @@ function checkText(o,sc,path){
   if(typeof v==='string'&&['text','label','title','sub','big','name','ref'].includes(k)){const lim=(sc.template==='quote'&&k==='text')||(sc.template==='verdict'&&k==='text')||(sc.template==='title')||(sc.template==='scripture')?14:7;
    if(wordsOf(v)>lim)WARN.push(sc._n+': text too long ('+wordsOf(v)+' words, keep under '+lim+') at '+path+'.'+k+': "'+v.slice(0,40)+'"')}
   else if(typeof v==='object')checkText(v,sc,path+'.'+k)}}
+function checkIcons(o,sc,path){
+ if(Array.isArray(o)){o.forEach((x,i)=>checkIcons(x,sc,path+'['+i+']'));return}
+ if(!o||typeof o!=='object')return;
+ for(const k of Object.keys(o)){const v=o[k];
+  if(k==='icon'&&typeof v==='string'&&ICON_NAMES.indexOf(v)<0)WARN.push(sc._n+': unknown icon "'+v+'" at '+path+'.icon - it will draw nothing. Known icons: '+ICON_NAMES.join(', '));
+  else if(typeof v==='object')checkIcons(v,sc,path+'.'+k)}}
 function compileScenes(){
  ERR.length=WARN.length=SCN.length=FX.length=PK.length=PPOSE.length=0;
  if(!SCENES.length){ERR.push('no scenes defined');return}
@@ -45,7 +51,7 @@ function compileScenes(){
   const cues=[];resolve(sc.p,sc,cues);if(sc.hi){try{sc.hi.at=cue(sc.hi.at===undefined?sc.from+':'+sc.hi.word:sc.hi.at,sc);cues.push({t:sc.hi.at,k:'hi'})}catch(e){ERR.push(sc._n+': highlight: '+e.message)}}
   if(sc.lead&&typeof sc.lead==='object'&&Array.isArray(sc.lead.pose))sc.lead.pose.forEach(q=>{try{q[0]=cue(q[0],sc);cues.push({t:q[0],k:'pose'})}catch(e){ERR.push(sc._n+': lead pose cue: '+e.message)}});
   if(sc.headline&&wordsOf(sc.headline)>7)WARN.push(sc._n+': headline longer than 7 words');
-  if(sc.extras)resolve(sc.extras,sc,cues);checkText(sc.p,sc,'p');checkText(sc.extras||[],sc,'extras');sc.cues=cues;sc.T=T;SCN.push(sc)});
+  if(sc.extras)resolve(sc.extras,sc,cues);checkText(sc.p,sc,'p');checkText(sc.extras||[],sc,'extras');checkIcons(sc.p,sc,'p');checkIcons(sc.extras||[],sc,'extras');sc.cues=cues;sc.T=T;SCN.push(sc)});
  if(prevTo!==SIDS.length-1)ERR.push('last scene ends at '+SIDS[prevTo]+' but the narration ends at '+SIDS[SIDS.length-1]+' - sentences '+SIDS[prevTo+1]+'..'+SIDS[SIDS.length-1]+' are not covered');
  if(ERR.length)return;
  // transitions between scenes

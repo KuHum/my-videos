@@ -8,8 +8,8 @@ SCENES.push(
 
  { from:'s3', to:'s5', template:'compare', headline:'Theft is not copying',
    lead:{pose:[['s3','think'],['s5:sing','say']]},
-   p:{ left:{ title:'theft', sub:'the ox is gone', icon:'coins', at:'s3:theft' },
-       right:{ title:'copying', sub:'the ox is still there', icon:'scroll', at:'s5:learn@-0.1' } },
+   p:{ left:{ title:'theft', sub:'the ox is gone', icon:'ox', at:'s3:theft' },
+       right:{ title:'copying', sub:'the ox is still there', icon:'song', at:'s5:learn@-0.1' } },
    extras:[ { text:'his ox', x:930, y:250, size:56, at:'s4:ox' },
             { icon:'xmark', x:450, y:590, size:130, at:'s4:ox@+0.35' } ] },
 
@@ -29,7 +29,7 @@ SCENES.push(
 
  { from:'s8', to:'s8', template:'scale', headline:'Positive law',
    lead:{pose:[['s8','think'],['s8:foolish','shrug']]},
-   p:{ left:{ label:'wise', icon:'book', at:'s8:wise' },
+   p:{ left:{ label:'wise', icon:'gavel', at:'s8:wise' },
        right:{ label:'foolish', icon:'question', at:'s8:foolish' },
        tip:'level', tipAt:'s8:foolish@+0.4' } },
 
@@ -54,8 +54,9 @@ SCENES.push(
 
  { from:'s14', to:'s14', template:'focus', headline:'Dressed in clothing',
    lead:{pose:[['s14','point']]},
-   p:{ icon:'scroll', label:'a legal bargain', at:'s14:legal@-0.2', labelAt:'s14:legal' },
-   extras:[ { text:'moral clothing', x:980, y:290, size:54, hl:true, at:'s14:clothing' } ] },
+   p:{ icon:'contract', label:'a legal bargain', at:'s14:legal@-0.2', labelAt:'s14:legal' },
+   extras:[ { text:'moral clothing', x:980, y:290, size:54, hl:true, at:'s14:clothing' },
+            { icon:'coat', x:980, y:470, size:70, at:'s14:clothing@+0.15' } ] },
 
  { from:'s15', to:'s15', template:'compare', headline:'Limited monopolies',
    lead:{pose:[['s15','think'],['s15:manufacture','shrug']]},

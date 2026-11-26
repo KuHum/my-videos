@@ -1,0 +1,102 @@
+[
+  {
+    "name": "coat",
+    "source": "tabler:shirt",
+    "collection": "tabler",
+    "collection_name": "Tabler Icons",
+    "author": "Pawe\u0142 Kuna",
+    "license": "MIT",
+    "license_url": "https://github.com/tabler/tabler-icons/blob/master/LICENSE",
+    "svg_url": "https://api.iconify.design/tabler/shirt.svg",
+    "sha256": "bb146b33e36219b70e125a36fa57485cdec0da1acae5d087b0700a6d6203ea43",
+    "fetched_at": "2026-11-26T22:52:03Z",
+    "bbox": {
+      "x": 3.0,
+      "y": 4.0,
+      "w": 18.0,
+      "h": 16.0
+    },
+    "subpaths": 1,
+    "attribution_required": false
+  },
+  {
+    "name": "contract",
+    "source": "tabler:file-text",
+    "collection": "tabler",
+    "collection_name": "Tabler Icons",
+    "author": "Pawe\u0142 Kuna",
+    "license": "MIT",
+    "license_url": "https://github.com/tabler/tabler-icons/blob/master/LICENSE",
+    "svg_url": "https://api.iconify.design/tabler/file-text.svg",
+    "sha256": "6f81a0e3315e5068739b3bfaf019cdaebe478767af4095ff7b32cf15771148ad",
+    "fetched_at": "2026-11-26T22:52:01Z",
+    "bbox": {
+      "x": 5.0,
+      "y": 3.0,
+      "w": 14.0,
+      "h": 18.0
+    },
+    "subpaths": 5,
+    "attribution_required": false
+  },
+  {
+    "name": "gavel",
+    "source": "tabler:gavel",
+    "collection": "tabler",
+    "collection_name": "Tabler Icons",
+    "author": "Pawe\u0142 Kuna",
+    "license": "MIT",
+    "license_url": "https://github.com/tabler/tabler-icons/blob/master/LICENSE",
+    "svg_url": "https://api.iconify.design/tabler/gavel.svg",
+    "sha256": "348ace3db71bd89fc9dca858500ce75f5300aecc450def3b87f08fc997b1d52c",
+    "fetched_at": "2026-11-26T22:52:04Z",
+    "bbox": {
+      "x": 2.9,
+      "y": 2.9,
+      "w": 18.1,
+      "h": 18.1
+    },
+    "subpaths": 5,
+    "attribution_required": false
+  },
+  {
+    "name": "ox",
+    "source": "lucide-lab:bull-head",
+    "collection": "lucide-lab",
+    "collection_name": "Lucide Lab",
+    "author": "Lucide Contributors",
+    "license": "ISC",
+    "license_url": "https://github.com/lucide-icons/lucide-lab/blob/main/LICENSE",
+    "svg_url": "https://api.iconify.design/lucide-lab/bull-head.svg",
+    "sha256": "651c9ca6290b069f8196677faa7f98af3cff6f34dce98f1e285e25bc5afa920c",
+    "fetched_at": "2026-11-26T22:51:58Z",
+    "bbox": {
+      "x": 2.0,
+      "y": 2.0,
+      "w": 20.0,
+      "h": 20.0
+    },
+    "subpaths": 8,
+    "attribution_required": false
+  },
+  {
+    "name": "song",
+    "source": "tabler:music",
+    "collection": "tabler",
+    "collection_name": "Tabler Icons",
+    "author": "Pawe\u0142 Kuna",
+    "license": "MIT",
+    "license_url": "https://github.com/tabler/tabler-icons/blob/master/LICENSE",
+    "svg_url": "https://api.iconify.design/tabler/music.svg",
+    "sha256": "1400120cfd3a821701e59f37374b9b936cf0949f4ae3e65a7612e4e1c2ae5c51",
+    "fetched_at": "2026-11-26T22:52:00Z",
+    "bbox": {
+      "x": 3.0,
+      "y": 4.0,
+      "w": 16.0,
+      "h": 15.6
+    },
+    "subpaths": 4,
+    "attribution_required": false
+  }
+]

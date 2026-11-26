@@ -98,5 +98,25 @@
     },
     "subpaths": 4,
     "attribution_required": false
+  },
+  {
+    "name": "world",
+    "source": "tabler:world",
+    "collection": "tabler",
+    "collection_name": "Tabler Icons",
+    "author": "Pawe\u0142 Kuna",
+    "license": "MIT",
+    "license_url": "https://github.com/tabler/tabler-icons/blob/master/LICENSE",
+    "svg_url": "https://api.iconify.design/tabler/world.svg",
+    "sha256": "29c3fe71ed2b1939e1dacd7d496d34397acb568879a88d86c802befde9c0f7d2",
+    "fetched_at": "2026-11-26T23:25:37Z",
+    "bbox": {
+      "x": 3.0,
+      "y": 3.0,
+      "w": 18.0,
+      "h": 18.0
+    },
+    "subpaths": 5,
+    "attribution_required": false
   }
 ]

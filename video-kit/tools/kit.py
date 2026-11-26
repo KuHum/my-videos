@@ -451,14 +451,6 @@ def cmd_cloud(a):
     P, repo, slug, kit_rel, proj_rel, branch = cloud_context(a.project)
     dst, installed = install_workflow(repo)
     if installed: say('Note: installed %s; include it in the commit (use --push).' % os.path.relpath(dst, repo))
-    vis = (gh('repo', 'view', slug, '--json', 'visibility', '--jq', '.visibility').stdout or '').strip()
-    if vis == 'PUBLIC' and not a.yes:
-        say('\nThis repository is PUBLIC. Submitting uploads the article text, the voiceover and the')
-        say('scene files in %s where anyone can download them. Use a private repo if the' % proj_rel)
-        say('narration or article is not meant to be public.')
-        if sys.stdin.isatty():
-            if input("Type 'yes' to continue: ").strip().lower() != 'yes': die('Cancelled.')
-        else: die('Refusing to publish to a public repo without --yes.')
     if a.push:
         paths = [kit_rel]
         wf_rel = rel(dst, repo)
@@ -579,7 +571,7 @@ def main():
     cs = cloud.add_subparsers(dest='cloud_cmd')
     s = cs.add_parser('install', help='copy the workflow into the repo root .github/workflows/'); s.set_defaults(f=cmd_cloud_install)
     for name, helptext in (('render', 'render the master on GitHub Actions'), ('preview', 'render contact sheets on GitHub Actions')):
-        s = cs.add_parser(name, help=helptext); s.add_argument('project'); s.add_argument('--push', action='store_true', help='commit the kit and push before submitting'); s.add_argument('--yes', action='store_true', help='allow submitting a public repository'); s.add_argument('--no-wait', action='store_true'); s.add_argument('--dry-run', action='store_true'); s.add_argument('--timeout', type=int, default=90, help='minutes to wait')
+        s = cs.add_parser(name, help=helptext); s.add_argument('project'); s.add_argument('--push', action='store_true', help='commit the kit and push before submitting'); s.add_argument('--yes', action='store_true', help=argparse.SUPPRESS); s.add_argument('--no-wait', action='store_true'); s.add_argument('--dry-run', action='store_true'); s.add_argument('--timeout', type=int, default=90, help='minutes to wait')
         if name == 'render':
             s.add_argument('--chapters', default='all'); s.add_argument('--workers', type=int, default=4); s.add_argument('--crf', default='18')
         else: s.add_argument('--chapter', default='')

@@ -58,7 +58,6 @@ Useful options:
 | `--workers 4` | Parallel chapters on the runner (default 4). |
 | `--crf 18` | H.264 quality (default 18 on the runner; local default is 20). |
 | `--dry-run` | Print the `gh` command without submitting. |
-| `--yes` | Allow submitting from a **public** repository without the prompt. |
 
 ## Previews without local Playwright
 
@@ -97,8 +96,8 @@ partial output to download; the full logs stay on the run page.
 ## Privacy and cost
 
 - **A public repository publishes everything you push**: the article text, the
-  voiceover recording and the scene files. `cloud render` stops and asks for `--yes`
-  when the remote is public. Use a private repository for unpublished narration.
+  voiceover recording and the scene files. Use a private repository for unpublished
+  narration.
 - Public repositories use free Actions minutes. Private repositories use the
   account's monthly quota; each run is a few minutes.
 - Artifacts are kept for 14 days. Download what you need; the runner keeps nothing.

@@ -60,4 +60,4 @@
 | No artifact / empty download | The run failed before any output. The workflow uploads whatever output exists even after a failure; the full logs stay on the run page. |
 | `gh run view --log` prints nothing | ANSI escapes. Use `gh api .../jobs/<id>/logs --allow-escape-sequences` and strip them (`sed 's/\x1b\[[0-9;]*m//g'`). |
 | Artifact gone | Artifacts are kept 14 days. Re-run the workflow. |
-| It published my voiceover | The repository is public. Make it private, or keep narration out of it. `cloud render` asks before submitting to a public remote; `--yes` skips the question. |
+| It published my voiceover | The repository is public. Make it private, or keep narration out of it. |

@@ -59,7 +59,7 @@ python3 tools/kit.py cloud render projects/my-article --push
 
 One-time setup and all options are in [docs/CLOUD_RENDER.md](docs/CLOUD_RENDER.md). In short: log in with `gh auth login`, run `python3 tools/kit.py cloud install`, commit and push the workflow. After that, `cloud render` pushes, waits, downloads the MP4/thumbnail/player page into `out/`, and verifies the file. `cloud preview` does the same for contact sheets when Playwright is not installed locally.
 
-A **public** repository publishes the article, the voiceover and the scenes. The command warns and asks before submitting; use a private repository for unpublished narration.
+A **public** repository publishes the article, the voiceover and the scenes. Keep narration you do not want public in a private repository.
 
 ## Writing scenes with several agents
 The chapters are separate files, so several scene writers can work at once:

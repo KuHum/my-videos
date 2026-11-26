@@ -64,8 +64,10 @@ No template is used three times in a row. Every sentence is covered exactly once
   `video-kit/projects/` (public repo → Actions minutes are free). Chosen over a new
   repo because the kit and its workflow already live there.
 - **Mistake, logged:** before the pointer to `my-videos`, a separate private repo
-  `KuHum/video-kit` was created and pushed. It is a duplicate of the kit folder and is
-  deleted once this render succeeds; nothing unique lived only there.
+  `KuHum/video-kit` was created and pushed. It is a duplicate of the kit folder. It was
+  left in place, private and unlisted, as a fallback mirror instead of being deleted —
+  deleting a repository is irreversible and nothing needed it gone. The canonical home
+  is `KuHum/my-videos`.
 - **Earlier local attempt:** a local `render --small` was started and then killed when
   the GitHub route was requested. No frames from it are reused (CI starts clean).
 - **Privacy:** the article and the voice recording are already public in this repo

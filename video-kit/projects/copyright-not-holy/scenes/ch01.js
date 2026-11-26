@@ -8,10 +8,12 @@ SCENES.push(
 
  { from:'s3', to:'s5', template:'compare', headline:'Theft is not copying',
    lead:{pose:[['s3','think'],['s5:sing','say']]},
-   p:{ left:{ title:'theft', sub:'the ox is gone', icon:'ox', at:'s3:theft' },
-       right:{ title:'copying', sub:'the ox is still there', icon:'song', at:'s5:learn@-0.1' } },
+   p:{ left:{ title:'theft', sub:'the ox is gone', at:'s3:theft' },
+       right:{ title:'copying', sub:'the ox is still there', at:'s5:learn@-0.1' } },
    extras:[ { text:'his ox', x:930, y:250, size:56, at:'s4:ox' },
-            { icon:'xmark', x:450, y:590, size:130, at:'s4:ox@+0.35' } ] },
+            { icon:'ox', x:450, y:790, size:78, at:'s3:theft' },
+            { icon:'song', x:1470, y:790, size:78, at:'s5:learn@-0.1' },
+            { icon:'xmark', x:450, y:790, size:104, at:'s4:ox@+0.35' } ] },
 
  { from:'s6', to:'s6', template:'focus', headline:'A granted privilege',
    lead:{pose:[['s6','think'],['s6:privilege','point']]},

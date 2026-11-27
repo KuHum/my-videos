@@ -39,6 +39,20 @@ One chapter per file means several writers can work at once without merging code
 
 Serial writing (one model, chapter by chapter) is still the right choice for short articles or a single changed chapter.
 
+## Icons need approval before the first render
+Every icon a scene shows is proposed to the author first. This is a hard rule, not a
+courtesy.
+1. After the scenes are written, list every scene that shows or needs an icon.
+2. Put up **one batch of questions** (the host's question/choice block), one question
+   per scene: 3-4 options (the current pair, one or two honest alternatives, and
+   "no icon"), with the current choice marked as recommended. Number the scenes by
+   time order so the author knows which moment is meant.
+3. Wait. Apply **only** what was approved. Never swap a glyph on your own judgement,
+   and never add one that was not offered.
+4. Record the approved glyph per scene in the project (`DECISIONS.md`), then render.
+If the author changes an icon later, that is one more approval and one more render -
+not a silent edit.
+
 ## Icons (opt-in, and small)
 The kit has a hand-drawn icon set plus an importer for missing nouns:
 `python3 tools/fetch_icon.py search "plough"` and `python3 tools/fetch_icon.py add plough --query plough`.

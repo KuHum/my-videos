@@ -74,7 +74,9 @@ This writes `work/agents/writer-1.md` … `writer-4.md` and `integrator.md`. Giv
 `title`, `lead` (the recurring character look: `pastor`, `man`, `official`, `scribe`, `elder`, `teacher`, `woman`, `child`), `speak_headings`, `chapter_seconds`, `music`, `sfx`, `thumbnail` (time in seconds for the thumbnail frame).
 
 ## Icons
-Built-in hand-drawn icons live in `engine/icons.js`. When an article needs a noun the
+Built-in hand-drawn icons live in `engine/icons.js`. **Icons are approved by the author,
+scene by scene, before a render** — the scene writer proposes options in one question
+batch and applies only what was ticked (see `PROMPT_FOR_CHEAPER_AI.md`). When an article needs a noun the
 set lacks, import one instead of bending a wrong icon:
 
 ```bash
